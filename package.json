@@ -1,0 +1,9 @@
+{
+  "name": "stockpile-api",
+  "version": "0.0.1",
+  "description": "The API for Stockpile, an app that manages stuff for organizations.",
+  "main": "index.js",
+  "repository": "https://github.com/AdamVig/stockpile-api.git",
+  "author": "Adam Vigneaux <adamvigneaux@gmail.com>",
+  "license": "UNLICENSED"
+}
