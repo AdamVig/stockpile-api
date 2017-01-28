@@ -5,5 +5,22 @@
   "main": "index.js",
   "repository": "https://github.com/AdamVig/stockpile-api.git",
   "author": "Adam Vigneaux <adamvigneaux@gmail.com>",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bunyan": "^1.8.5",
+    "knex": "^0.12.6",
+    "mysql": "^2.13.0",
+    "pm2": "^2.3.0",
+    "restify": "^4.3.0"
+  },
+  "devDependencies": {
+    "ava": "^0.17.0",
+    "chai": "^3.5.0",
+    "docco": "^0.7.0",
+    "eslint": "^3.14.1",
+    "eslint-plugin-ava": "^4.0.1",
+    "eslint-plugin-standard": "^2.0.1",
+    "nodemon": "^1.11.0",
+    "nyc": "^10.1.2"
+  }
 }
