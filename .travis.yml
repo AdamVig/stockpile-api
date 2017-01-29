@@ -3,3 +3,5 @@ node_js:
   # Latest stable release
   - "node"
 cache: yarn
+before_install:
+  - cp .env.example .env
