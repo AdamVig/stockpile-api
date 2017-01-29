@@ -16,3 +16,6 @@ Yarn presents the same API as npm for running scripts. The scripts below are def
 You must define environment variables in a `.env` file in the root directory of the project. Use `.env.example` as a template. The app will fail to start if any of the variables in `.env.example` are undefined.  
 Environment variables are loaded into the app and can be accessed in any file with `process.env.VAR_NAME`.  
 Override variables at run-time by defining them with the command, like `VAR_NAME=value yarn start`.  
+
+## Tests
+Tests are located in `./test` and are run asynchronously in parallel with `yarn test`.  
