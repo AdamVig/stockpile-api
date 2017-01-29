@@ -19,3 +19,27 @@ Override variables at run-time by defining them with the command, like `VAR_NAME
 
 ## Tests
 Tests are located in `./test` and are run asynchronously in parallel with `yarn test`.  
+
+## Adding New Routes
+All route logic is contained in controllers representing individual endpoints. Each controller should contain all of the relevant actions for an endpoint. Example controller:  
+```JavaScript
+// controllers/example.js
+module.exports.get = (req, res, next) => {
+    try {
+        res.send('example')
+    } catch (err) {
+        next(err)
+    }
+}
+```
+
+
+Routes are defined in `./controllers/routes.js`. Example of defining a route:  
+```JavaScript
+// controllers/routes.js
+const example require('../example')
+
+module.exports = (app) => {
+  app.get('/example', example.get)
+}
+```
