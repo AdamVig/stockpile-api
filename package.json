@@ -9,13 +9,14 @@
   "scripts": {
     "start": "pm2 start index.js --name stockpile",
     "stop": "pm2 stop stockpile || true",
-    "dev": "NODE_ENV=dev nodemon index.js",
+    "dev": "nodemon index.js",
     "test": "ava",
     "lint": "eslint .",
     "docs": "docco {index.js,controllers/*.js,services/*.js}"
   },
   "dependencies": {
     "bunyan": "^1.8.5",
+    "dotenv-safe": "^4.0.3",
     "knex": "^0.12.6",
     "mysql": "^2.13.0",
     "pm2": "^2.3.0",
