@@ -1,8 +1,10 @@
 const Knex = require('knex')
 const test = require('ava')
 
-// Load environment variables, throw error if any are undefined
-require('dotenv-safe').load()
+// Load environment variables, throw error if any are missing
+require('dotenv-safe').load({
+  allowEmptyValues: true
+})
 
 const db = require('../services/db')
 

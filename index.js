@@ -3,8 +3,10 @@ const restify = require('restify')
 const log = require('./services/log')
 const config = require('./package')
 
-// Load environment variables, throw error if any are undefined
-require('dotenv-safe').load()
+// Load environment variables, throw error if any variables are missing
+require('dotenv-safe').load({
+  allowEmptyValues: true
+})
 
 // Create application
 const app = restify.createServer({
