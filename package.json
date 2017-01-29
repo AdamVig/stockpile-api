@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "bunyan": "^1.8.5",
+    "coveralls": "^2.11.15",
     "dotenv-safe": "^4.0.3",
     "knex": "^0.12.6",
     "mysql": "^2.13.0",
