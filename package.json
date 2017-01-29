@@ -10,12 +10,13 @@
     "start": "pm2 start index.js --name stockpile",
     "stop": "pm2 stop stockpile || true",
     "dev": "nodemon index.js",
-    "test": "ava",
+    "test": "nyc ava",
     "lint": "eslint .",
     "docs": "docco {index.js,controllers/*.js,services/*.js}"
   },
   "dependencies": {
     "bunyan": "^1.8.5",
+    "coveralls": "^2.11.15",
     "dotenv-safe": "^4.0.3",
     "knex": "^0.12.6",
     "mysql": "^2.13.0",
