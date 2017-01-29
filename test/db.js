@@ -24,6 +24,7 @@ const knex = Knex({
 const testTableName = 'test'
 
 test.before('Set up test table', async t => {
+  await knex.schema.dropTableIfExists(testTableName)
   await knex.schema.createTable(testTableName, (table) => {
     table.string('name')
     table.integer('value')
