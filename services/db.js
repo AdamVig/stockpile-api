@@ -48,13 +48,6 @@ db.delete = (table, primaryKey, id) => {
   return db(table)
     .where(primaryKey, id)
     .delete()
-    .then((rowsAffected) => {
-      if (rowsAffected < 0) {
-        return true
-      } else {
-        throw new restify.NotFoundError('could not find row to delete')
-      }
-    })
 }
 
 /**
