@@ -1,4 +1,5 @@
 const restify = require('restify')
+const restifyJSONHAL = require('restify-json-hal')
 
 const log = require('./services/log')
 const config = require('./package')
@@ -24,6 +25,12 @@ app.pre((req, res, next) => {
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
+
+// Automatically add HATEAOS relations to responses
+app.use(restifyJSONHAL(app, {
+  overrideJSON: true,
+  makeObjects: true
+}))
 
 // Handle CORS
 app.use(restify.CORS())
