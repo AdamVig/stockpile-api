@@ -1,4 +1,5 @@
 const restify = require('restify')
+const restifyJSONHAL = require('restify-json-hal')
 
 const log = require('./services/log')
 const config = require('./package')
@@ -9,7 +10,7 @@ require('dotenv-safe').load({
 })
 
 // Create application
-const app = restify.createServer({
+const app = module.exports = restify.createServer({
   name: config.name,
   log: log,
   version: config.version
@@ -24,6 +25,12 @@ app.pre((req, res, next) => {
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
+
+// Automatically add HATEAOS relations to responses
+app.use(restifyJSONHAL(app, {
+  overrideJSON: true,
+  makeObjects: true
+}))
 
 // Handle CORS
 app.use(restify.CORS())
@@ -40,9 +47,9 @@ app.opts(/.*/, (req, res, next) => {
 // Load all routes
 require('./controllers/routes')(app)
 
-// Start application
-app.listen(process.env.PORT, () => {
-  log.info('%s listening at %s', app.name, app.url)
-})
-
-module.exports = app
+// Start application when not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(process.env.PORT, () => {
+    log.info('%s listening at %s', app.name, app.url)
+  })
+}

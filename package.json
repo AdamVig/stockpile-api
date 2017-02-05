@@ -10,7 +10,7 @@
     "start": "pm2 start index.js --name stockpile",
     "stop": "pm2 stop stockpile || true",
     "dev": "nodemon index.js",
-    "test": "nyc ava",
+    "test": "NODE_ENV=test nyc ava",
     "lint": "eslint .",
     "docs": "docco {index.js,controllers/*.js,services/*.js}"
   },
@@ -21,7 +21,8 @@
     "knex": "^0.12.6",
     "mysql": "^2.13.0",
     "pm2": "^2.3.0",
-    "restify": "^4.3.0"
+    "restify": "^4.3.0",
+    "restify-json-hal": "^0.1.2"
   },
   "devDependencies": {
     "ava": "^0.17.0",
@@ -31,6 +32,7 @@
     "eslint-plugin-ava": "^4.0.1",
     "eslint-plugin-standard": "^2.0.1",
     "nodemon": "^1.11.0",
-    "nyc": "^10.1.2"
+    "nyc": "^10.1.2",
+    "sinon": "1.17.7"
   }
 }

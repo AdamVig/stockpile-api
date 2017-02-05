@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>log.js</title>
+  <title>item.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -78,7 +78,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>log.js</h1>
+                  <h1>item.js</h1>
               </div>
           </li>
         
@@ -93,43 +93,25 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> Bunyan = <span class="hljs-built_in">require</span>(<span class="hljs-string">'bunyan'</span>)
-<span class="hljs-keyword">const</span> restify = <span class="hljs-built_in">require</span>(<span class="hljs-string">'restify'</span>)
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports.getAll = <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> {
+  res.send({})
+}
 
-<span class="hljs-keyword">const</span> config = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../package'</span>)
+<span class="hljs-built_in">module</span>.exports.get = <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> {
+  res.send({})
+}
 
-<span class="hljs-keyword">const</span> streams = [
-  {
-    <span class="hljs-attr">path</span>: <span class="hljs-string">`<span class="hljs-subst">${config.name}</span>.log`</span>,
-    <span class="hljs-attr">level</span>: <span class="hljs-string">'trace'</span>
-  }
-]
+<span class="hljs-built_in">module</span>.exports.create = <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> {
+  res.send({})
+}
 
-<span class="hljs-keyword">if</span> (process.env.NODE_ENV !== <span class="hljs-string">'test'</span>) {
-  streams.push({
-    <span class="hljs-attr">stream</span>: process.stdout,
-    <span class="hljs-attr">level</span>: <span class="hljs-string">'debug'</span>
-  })
+<span class="hljs-built_in">module</span>.exports.update = <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> {
+  res.send({})
+}
+
+<span class="hljs-built_in">module</span>.exports.delete = <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> {
+  res.send({})
 }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>Create a Bunyan logger.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = <span class="hljs-keyword">new</span> Bunyan({
-  <span class="hljs-attr">name</span>: config.name,
-  <span class="hljs-attr">streams</span>: streams,
-  <span class="hljs-attr">serializers</span>: restify.bunyan.serializers
-})</pre></div></div>
             
         </li>
         
