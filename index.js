@@ -10,7 +10,7 @@ require('dotenv-safe').load({
 })
 
 // Create application
-const app = restify.createServer({
+const app = module.exports = restify.createServer({
   name: config.name,
   log: log,
   version: config.version
@@ -51,5 +51,3 @@ require('./controllers/routes')(app)
 app.listen(process.env.PORT, () => {
   log.info('%s listening at %s', app.name, app.url)
 })
-
-module.exports = app
