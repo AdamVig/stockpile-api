@@ -47,7 +47,9 @@ app.opts(/.*/, (req, res, next) => {
 // Load all routes
 require('./controllers/routes')(app)
 
-// Start application
-app.listen(process.env.PORT, () => {
-  log.info('%s listening at %s', app.name, app.url)
-})
+// Start application when not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(process.env.PORT, () => {
+    log.info('%s listening at %s', app.name, app.url)
+  })
+}
