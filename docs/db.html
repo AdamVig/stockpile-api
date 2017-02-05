@@ -20,8 +20,38 @@
             <div id="jump_page">
               
                 
+                <a class="source" href="authentication.html">
+                  authentication.js
+                </a>
+              
+                
+                <a class="source" href="item.html">
+                  item.js
+                </a>
+              
+                
+                <a class="source" href="main.html">
+                  main.js
+                </a>
+              
+                
+                <a class="source" href="organization.html">
+                  organization.js
+                </a>
+              
+                
+                <a class="source" href="rental.html">
+                  rental.js
+                </a>
+              
+                
                 <a class="source" href="routes.html">
                   routes.js
+                </a>
+              
+                
+                <a class="source" href="user.html">
+                  user.js
                 </a>
               
                 
@@ -81,7 +111,7 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> db = <span class="hljs-built_in">module</span>.exports = <span class="hljs-built_in">require</span>(<span class="hljs-string">'knex'</span>)({
   <span class="hljs-attr">client</span>: <span class="hljs-string">'mysql'</span>,
   <span class="hljs-attr">connection</span>: {
-    <span class="hljs-attr">host</span>: <span class="hljs-string">'127.0.0.1'</span>,
+    <span class="hljs-attr">host</span>: process.env.DB_URL,
     <span class="hljs-attr">user</span>: process.env.DB_USER,
     <span class="hljs-attr">password</span>: process.env.DB_PASSWORD,
     <span class="hljs-attr">database</span>: process.env.DB_NAME,
