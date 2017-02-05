@@ -1,19 +1,19 @@
 module.exports.getAll = (req, res, next) => {
-  res.send({routePlaceholder: 'get all items'})
+  res.send({})
 }
 
 module.exports.get = (req, res, next) => {
-  res.send({routePlaceholder: 'get item'})
+  res.send({})
 }
 
 module.exports.create = (req, res, next) => {
-  res.send({routePlaceholder: 'create item'})
+  res.send({})
 }
 
 module.exports.update = (req, res, next) => {
-  res.send({routePlaceholder: 'update item'})
+  res.send({})
 }
 
 module.exports.delete = (req, res, next) => {
-  res.send({routePlaceholder: 'delete item'})
+  res.send({})
 }

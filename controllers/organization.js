@@ -1,15 +1,15 @@
 module.exports.get = (req, res, next) => {
-  res.send({routePlaceholder: 'get organization'})
+  res.send({})
 }
 
 module.exports.create = (req, res, next) => {
-  res.send({routePlaceholder: 'create organization'})
+  res.send({})
 }
 
 module.exports.update = (req, res, next) => {
-  res.send({routePlaceholder: 'update organization'})
+  res.send({})
 }
 
 module.exports.delete = (req, res, next) => {
-  res.send({routePlaceholder: 'delete organization'})
+  res.send({})
 }
