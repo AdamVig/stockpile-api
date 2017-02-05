@@ -1,3 +1,3 @@
 module.exports.get = (req, res, next) => {
-  res.send({})
+  res.send({routePlaceholder: 'main'})
 }
