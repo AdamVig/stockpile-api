@@ -16,18 +16,13 @@ const db = module.exports = require('knex')({
 /**
  * Create row specified by `req.body` in table
  * @param {string} table Name of a database table
- * @param {string} primaryKey Primary key in given database table
- * @param {object} data Row to insert in given database table
+ * @param {object|array} data Row or rows to insert in given database table
  * @return {Promise.<object>} Resolved by result from database
  */
-db.create = (table, primaryKey, data) => {
+db.create = (table, data) => {
   return db(table)
     .insert(data)
-    .then(() => {
-      return db(table)
-        .where(data)
-        .first()
-    }).catch(err => {
+    .catch(err => {
       if (err.code === 'ER_DUP_ENTRY') {
         throw new restify.ConflictError('a row with this id already exists')
       } else {
