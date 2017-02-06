@@ -1,0 +1,21 @@
+{
+  "testTableName": "test",
+  "testRowPrimaryKey": "name",
+  "testRow": {
+    "name": "test1",
+    "value": 5
+  },
+  "modifiedTestRow": {
+    "name": "test2",
+    "value": 10
+  },
+  "nonexistentRowName": "test18",
+  "duplicateRow": {
+    "name": "test3",
+    "value": 15
+  },
+  "wrongColumnsTestRow": {
+    "lastName": "test4",
+    "value": "20"
+  }
+}
