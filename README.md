@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/AdamVig/stockpile-api.svg?branch=master)](https://travis-ci.org/AdamVig/stockpile-api)
+[![Coverage Status](https://coveralls.io/repos/github/AdamVig/stockpile-api/badge.svg)](https://coveralls.io/github/AdamVig/stockpile-api)
 
 # stockpile-api
 The API for Stockpile, an app that manages stuff for organizations.  
