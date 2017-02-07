@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/AdamVig/stockpile-api.svg?branch=master)](https://travis-ci.org/AdamVig/stockpile-api)
+
 # stockpile-api
 The API for Stockpile, an app that manages stuff for organizations.  
 
