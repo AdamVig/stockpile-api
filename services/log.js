@@ -10,13 +10,6 @@ const streams = [
   }
 ]
 
-if (process.env.NODE_ENV !== 'test') {
-  streams.push({
-    stream: process.stdout,
-    level: 'debug'
-  })
-}
-
 // Create a Bunyan logger.
 module.exports = new Bunyan({
   name: config.name,
