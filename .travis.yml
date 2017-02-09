@@ -27,6 +27,6 @@ after_success:
   - "./node_modules/.bin/nyc report --reporter=lcovonly && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
 deploy:
   provider: script
-  script: chmod +x scripts/deploy && ./scripts/deploy
+  script: sh ./scripts/deploy
   on:
     branch: master
