@@ -26,4 +26,4 @@ chmod 600 ~/.ssh/id_rsa
 git remote add prod ssh://git@adamvig.com/opt/stockpile-api.git
 
 # Deploy
-git push prod
+git push prod master
