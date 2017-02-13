@@ -1,28 +1,9 @@
-const Knex = require('knex')
 const test = require('ava')
 
-// Fixtures, shortened to `d` for convenience
 const d = require('./fixtures/db')
-
-// Load environment variables, throw error if any are missing
-require('dotenv-safe').load({
-  allowEmptyValues: true
-})
+const knex = require('./fixtures/knex-instance')
 
 const db = require('../services/db')
-
-// Set up Knex instance for modifying database
-const knex = Knex({
-  client: 'mysql',
-  connection: {
-    host: process.env.DB_URL,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    charset: 'utf8'
-  },
-  useNullAsDefault: true
-})
 
 test.before('Set up test table', async t => {
   await knex.schema.dropTableIfExists(d.testTableName)
