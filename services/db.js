@@ -1,5 +1,10 @@
 const restify = require('restify')
 
+// Load environment variables, throw error if any variables are missing
+require('dotenv-safe').load({
+  allowEmptyValues: true
+})
+
 // Create and export database instance
 const db = module.exports = require('knex')({
   client: 'mysql',
