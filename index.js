@@ -17,10 +17,7 @@ const app = module.exports = restify.createServer({
 })
 
 // Log every incoming request
-app.pre((req, res, next) => {
-  req.log.info({req}, 'start')
-  return next()
-})
+app.pre(log.onRequest)
 
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
@@ -35,9 +32,8 @@ app.use(restifyJSONHAL(app, {
 // Load all routes
 require('./controllers/routes')(app)
 
-// Start application when not in test environment
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(process.env.PORT, () => {
-    log.info('%s listening at %s', app.name, app.url)
-  })
+// Check if application should start
+if (!process.env.NO_START) {
+  // Start application
+  app.listen(process.env.PORT, log.onAppStart.bind(null, app))
 }

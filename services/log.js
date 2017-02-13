@@ -11,8 +11,17 @@ const streams = [
 ]
 
 // Create a Bunyan logger.
-module.exports = new Bunyan({
+const log = module.exports = new Bunyan({
   name: config.name,
   streams: streams,
   serializers: restify.bunyan.serializers
 })
+
+module.exports.onRequest = (req, res, next) => {
+  req.log.info({req}, 'start')
+  return next()
+}
+
+module.exports.onAppStart = (app) => {
+  log.info('%s listening at %s', app.name, app.url)
+}
