@@ -1,8 +1,9 @@
 const restify = require('restify')
 const restifyJSONHAL = require('restify-json-hal')
 
-const log = require('./services/log')
+const auth = require('./controllers/auth')
 const config = require('./package')
+const log = require('./services/log')
 
 // Load environment variables, throw error if any variables are missing
 require('dotenv-safe').load({
@@ -31,6 +32,9 @@ app.use(restifyJSONHAL(app, {
   overrideJSON: true,
   makeObjects: true
 }))
+
+// Parse auth header
+app.use(auth.initialize)
 
 // Load all routes
 require('./controllers/routes')(app)

@@ -1,4 +1,4 @@
-const authentication = require('./authentication')
+const auth = require('./auth')
 const item = require('./item')
 const main = require('./main')
 const organization = require('./organization')
@@ -11,7 +11,9 @@ module.exports = app => {
   app.get({name: 'main', path: '/'}, main.get)
 
   // Authentication
-  app.post({name: 'authenticate', path: '/auth'}, authentication.authenticate)
+  app.post({name: 'authenticate', path: '/auth'}, auth.authenticate)
+  app.post({name: 'register', path: '/auth/register'}, auth.register)
+  app.head({name: 'verify', path: '/auth/verify'}, auth.verify, auth.checkToken)
 
   // Item
   app.get({name: 'get all items', path: '/item'}, item.getAll)
