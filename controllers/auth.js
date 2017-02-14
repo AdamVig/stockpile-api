@@ -35,7 +35,7 @@ module.exports.authenticate = (req, res, next) => {
       })
       .catch(next)
   } else {
-    next(new restify.UnprocessableEntityError('missing required fields'))
+    return next(new restify.UnprocessableEntityError('missing required fields'))
   }
 }
 
@@ -65,7 +65,7 @@ module.exports.register = (req, res, next) => {
       })
       .catch(next)
   } else {
-    next(new restify.UnprocessableEntityError())
+    return next(new restify.UnprocessableEntityError())
   }
 }
 
@@ -92,6 +92,6 @@ module.exports.checkUser = (req, res, next) => {
   if (req.user) {
     res.send(200)
   } else {
-    next(restify.NotFoundError())
+    return next(restify.NotFoundError())
   }
 }
