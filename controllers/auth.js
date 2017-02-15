@@ -23,11 +23,19 @@ module.exports.authenticate = (req, res, next) => {
   if (req.body.email && req.body.password) {
     return db.get('organization', 'email', req.body.email)
       .then(organization => {
-        return bcrypt.compare(req.body.password, organization.password)
+        return [
+          organization.organization_id,
+          bcrypt.compare(req.body.password, organization.password)
+        ]
       })
-      .then(valid => {
+      .then(([organizationID, valid]) => {
         if (valid) {
-          res.send({message: 'organization credentials are valid'})
+          const token = makeToken({sub: organizationID})
+          res.send({
+            id: organizationID,
+            token,
+            message: 'organization credentials are valid'
+          })
         } else {
           throw new restify.UnauthorizedError(
             'email and password combination is not valid')
@@ -59,7 +67,7 @@ module.exports.register = (req, res, next) => {
         const token = makeToken({sub: organizationID})
         res.send(201, {
           id: organizationID,
-          token: token,
+          token,
           message: 'created organization'
         })
       })
