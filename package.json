@@ -15,11 +15,15 @@
     "docs": "docco {index.js,controllers/*.js,services/*.js}"
   },
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "bunyan": "^1.8.5",
     "coveralls": "^2.11.15",
     "dotenv-safe": "^4.0.3",
+    "jwt-simple": "^0.5.1",
     "knex": "^0.12.6",
     "mysql": "^2.13.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
     "pm2": "^2.3.0",
     "restify": "^4.3.0",
     "restify-json-hal": "^0.1.2"

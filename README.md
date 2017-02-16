@@ -61,3 +61,26 @@ module.exports = (app) => {
 ```
 
 Each route *must* have a descriptive, unique `name` property. Route names are used in defining relations, which show up in the `_links` property of responses. Restify removes spaces, special characters, and uppercase letters from route names, so there is no need to camelcase or kebab-case them.  
+
+## API Documentation
+*This section of the README will serve as documentation for the API until a permanent solution is set up.*
+### Authenticating
+When the organization does not exist yet:  
+`POST /register` with body containing:
+```JSON
+{"name": "Name of Organization", "email": "org@example.com", "password": "org123"}
+```
+
+When the organization already exists:  
+`POST /auth` with body containing:
+```JSON
+{"email": "org@example.com", "password": "org123"}
+```
+
+In either situation, you will receive a response like this:  
+```JSON
+{"id": 1, "token": "987234.sdf0982347234.hjgsdf89234", "message": "organization credentials are valid"}
+```
+
+Make all further requests with the following header:  
+`Authorization: Bearer 987234.sdf0982347234.hjgsdf89234`
