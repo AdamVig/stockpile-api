@@ -1,3 +1,5 @@
+const db = require('../services/db')
+
 module.exports.getAll = (req, res, next) => {
   res.send({})
 }
@@ -15,5 +17,13 @@ module.exports.update = (req, res, next) => {
 }
 
 module.exports.delete = (req, res, next) => {
-  res.send({})
+  return db.delete('item', 'itemID', req.params.itemID, req.user.organizationID)
+    .then((rowsAffected) => {
+      if (rowsAffected > 0) {
+        res.send({message: 'item deleted'})
+      } else {
+        res.send(204)
+      }
+    })
+    .catch(next)
 }
