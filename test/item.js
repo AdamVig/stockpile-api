@@ -92,7 +92,7 @@ test('Delete returns a response', async t => {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await item.getAll(null, res, null)
+  await item.getAll(req, res, next)
   await item.delete(req, res, next)
   t.true(res.send.calledTwice, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
