@@ -1,6 +1,6 @@
 {
   "organizationID": 0,
-  "itemID": 0
+  "itemID": 0,
   "organization": {
     "name": "Test Organization for Item",
     "email": "test.item@example.com",
