@@ -1,4 +1,19 @@
 {
   "organizationID": 0,
   "itemID": 0
+  "organization": {
+    "name": "Test Organization for Item",
+    "email": "test.item@example.com",
+    "password": "$2a$10$iWpLbGBdE99lnTTSFOT.u.MgKvGSdzapRpTn4iIqeKrkoEq/308Lq"
+  },
+  "items": [
+    {
+      "organizationID": 0
+    },
+    {
+      "organizationID": 0
+    },
+    {
+      "organizationID": 0
+    }
 }
