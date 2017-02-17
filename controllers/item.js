@@ -13,7 +13,12 @@ module.exports.get = (req, res, next) => {
 }
 
 module.exports.create = (req, res, next) => {
-  res.send({})
+  return db.create('item', req.body)
+    .then(([itemID]) => res.send({
+      itemID,
+      message: 'item created'
+    }))
+    .catch(next)
 }
 
 module.exports.update = (req, res, next) => {

@@ -58,6 +58,7 @@ test('Get returns a response', async t => {
 
 test('Create returns a response', async t => {
   const req = {
+    body: d.items[3],
     user: {organizationID: d.organizationID}
   }
   const res = {
@@ -67,7 +68,7 @@ test('Create returns a response', async t => {
   await item.create(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-                                  'route responds with an object')
+         'route responds with an object')
   t.false(next.called, 'no errors')
 })
 
