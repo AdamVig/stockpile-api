@@ -25,7 +25,8 @@ const db = module.exports = require('knex')({
  * @param {any} [organizationID] ID of organization
  * @return {object} A where clause
  */
-const buildWhere = module.exports.buildWhere = (column, value, organizationID) => {
+const buildWhere = module.exports.buildWhere = (column, value,
+                                                organizationID) => {
   const whereClause = {}
   whereClause[column] = value
 
