@@ -45,15 +45,19 @@ const buildWhere = module.exports.buildWhere = (column, value,
  * @return {Promise.<object>} Resolved by result from database
  */
 db.create = (table, data) => {
-  return db(table)
-    .insert(data)
-    .catch(err => {
-      if (err.code === 'ER_DUP_ENTRY') {
-        throw new restify.ConflictError('a row with this id already exists')
-      } else {
-        throw err
-      }
-    })
+  if (data) {
+    return db(table)
+      .insert(data)
+      .catch(err => {
+        if (err.code === 'ER_DUP_ENTRY') {
+          throw new restify.ConflictError('a row with this id already exists')
+        } else {
+          throw err
+        }
+      })
+  } else {
+    throw new restify.BadRequestError('missing data to insert')
+  }
 }
 
 /**
