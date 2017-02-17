@@ -79,7 +79,7 @@ module.exports.register = (req, res, next) => {
 
 // Authenticate a user given a JWT payload
 const authenticateToken = module.exports.authenticateToken = (payload, done) => {
-  return db.get('organization', 'organization_id', payload.sub)
+  return db.get('organization', 'organizationID', payload.sub)
     .then((user) => {
       if (user) {
         done(null, user)
