@@ -84,13 +84,19 @@ test('Update returns a response', async t => {
 })
 
 test('Delete returns a response', async t => {
+  const req = {
+    params: {itemID: d.itemID},
+    user: {organizationID: d.organizationID}
+  }
   const res = {
     send: sinon.spy()
   }
-  await item.delete(null, res, null)
-  t.true(res.send.calledOnce, 'route sends a response')
+  const next = sinon.spy()
+  await item.getAll(req, res, next)
+  await item.delete(req, res, next)
+  t.true(res.send.calledTwice, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-                                  'route responds with an object')
+         'route responds with an object')
 })
 
 test.after.always('Clean up database', async t => {
