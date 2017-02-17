@@ -59,7 +59,7 @@ test('Get returns a response', async t => {
 
 test('Create returns a response', async t => {
   const req = {
-    body: d.items[3],
+    body: d.items[2],
     user: {organizationID: d.organizationID}
   }
   const res = {
