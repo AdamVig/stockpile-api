@@ -19,9 +19,28 @@ const db = module.exports = require('knex')({
 })
 
 /**
- * Create row specified by `req.body` in table
+ * Build a where clause for a Knex `.where()`
+ * @param {string} column Name of column
+ * @param {any} value Value to match in column
+ * @param {any} [organizationID] ID of organization
+ * @return {object} A where clause
+ */
+const buildWhere = module.exports.buildWhere = (column, value, organizationID) => {
+  const whereClause = {}
+  whereClause[column] = value
+
+  // Add organization ID to where clause if defined
+  if (organizationID) {
+    whereClause.organizationID = organizationID
+  }
+
+  return whereClause
+}
+
+/**
+ * Create a row or rows in a table
  * @param {string} table Name of a database table
- * @param {object|array} data Row or rows to insert in given database table
+ * @param {object|array} data Row or rows to insert
  * @return {Promise.<object>} Resolved by result from database
  */
 db.create = (table, data) => {
@@ -41,31 +60,33 @@ db.create = (table, data) => {
  * @param {string} table Name of a database table
  * @param {string} primaryKey Primary key in given database table
  * @param {string} id ID of row to delete
+ * @param {any} organizationID ID of organization
  * @return {Promise.<boolean>} True if operation completed succesfully
  * @throws restify.NotFoundError when row to delete does not exist
  */
-db.delete = (table, primaryKey, id) => {
+db.delete = (table, primaryKey, id, organizationID) => {
   return db(table)
     .where(primaryKey, id)
+    .andWhere('organizationID', organizationID)
     .delete()
 }
 
 /**
- * Get row specified by `req.params.id` from table
+ * Get row from table
  * @param {string} table Name of a database table
- * @param {string} primaryKey Primary key in given database table
- * @param {string} id ID of row to get
+ * @param {string} column Indexed column in database table
+ * @param {any} value Value in column to look for
+ * @param {any} organizationID ID of organization
  * @return {Promise.<object>} Resolved by retrieved row
  * @throws restify.NotFoundError when row is not in db
  */
-db.get = (table, primaryKey, id) => {
+db.get = (table, column, value, organizationID) => {
   return db(table)
-    .where(primaryKey, id)
+    .where(column, value)
+    .andWhere('organizationID', organizationID)
     .first()
-    .then(row => {
-      if (row) {
-        return row
-      } else {
+    .tap(row => {
+      if (!row) {
         throw new restify.NotFoundError('could not find row')
       }
     })
@@ -76,8 +97,9 @@ db.get = (table, primaryKey, id) => {
  * @param {string} table Name of a database table
  * @return {Promise.<array>} Resolved by all rows from table
  */
-db.getAll = (table) => {
+db.getAll = (table, organizationID) => {
   return db(table)
+    .where('organizationID', organizationID)
 }
 
 /**

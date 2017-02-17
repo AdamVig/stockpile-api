@@ -76,6 +76,22 @@ test('Throws error when updating row with the wrong columns', t => {
                      d.testRow[d.testRowPrimaryKey], d.wrongColumnsTestRow))
 })
 
+test('Builds a where clause without organization ID', t => {
+  const whereClause = db.buildWhere(d.column, d.value)
+  const expectedWhereClause = {}
+  expectedWhereClause[d.column] = d.value
+  t.deepEqual(whereClause, expectedWhereClause)
+})
+
+test('Builds a where clause with an organization ID', t => {
+  const whereClause = db.buildWhere(d.column, d.value, d.organizationID)
+  const expectedWhereClause = {
+    organizationID: d.organizationID
+  }
+  expectedWhereClause[d.column] = d.value
+  t.deepEqual(whereClause, expectedWhereClause)
+})
+
 test.after.always('Remove test table', async t => {
   await knex.schema.dropTable(d.testTableName)
 })

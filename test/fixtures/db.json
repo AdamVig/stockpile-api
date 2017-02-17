@@ -17,5 +17,8 @@
   "wrongColumnsTestRow": {
     "lastName": "test4",
     "value": "20"
-  }
+  },
+  "column": "testColumn",
+  "value": "testValue",
+  "organizationID": 94
 }
