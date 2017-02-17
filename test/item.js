@@ -34,8 +34,9 @@ test('Get all returns a response', async t => {
   t.true(res.send.calledOnce, 'sends one response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'responds with an object')
+  // Two items inserted, so should be two or more in the table
   t.true(res.send.calledWithMatch(sinon.match(({items}) =>
-                                              items.length >= d.items.length)),
+                                              items.length >= 2)),
          'responds with the right number of items')
   t.false(next.called, 'no errors')
 })
