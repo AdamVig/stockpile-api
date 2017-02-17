@@ -66,6 +66,22 @@ test('Authenticates an organization', async t => {
   t.false(next.called, 'no errors')
 })
 
+test('Returns error when email and password do not match', async t => {
+  const req = {
+    body: d.authOrganizationWrong
+  }
+  const res = {
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+
+  await knex(d.table).insert(d.authOrganizationWrongHash)
+  await auth.authenticate(req, res, next)
+
+  t.false(res.send.called, 'does not respond')
+  t.true(next.called, 'returns an error')
+})
+
 test.after.always('Clean up database', async t => {
   // Delete created organizations
   await knex(d.table)
@@ -73,5 +89,8 @@ test.after.always('Clean up database', async t => {
     .del()
   await knex(d.table)
     .where('email', d.authOrganization.email)
+    .del()
+  await knex(d.table)
+    .where('email', d.authOrganizationWrong.email)
     .del()
 })
