@@ -14,7 +14,12 @@ module.exports.get = (req, res, next) => {
 }
 
 module.exports.create = (req, res, next) => {
-  res.send({})
+  return db.create('rental', req.body)
+    .then(([rentalID]) => res.send({
+      rentalID,
+      message: 'rental created'
+    }))
+    .catch(next)
 }
 
 module.exports.update = (req, res, next) => {

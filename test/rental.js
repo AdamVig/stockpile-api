@@ -61,13 +61,20 @@ test('Get returns a response', async t => {
 })
 
 test('Create returns a response', async t => {
+  const req = {
+    body: d.rental,
+    user: {organizationID: d.user.organizationID}
+  }
   const res = {
     send: sinon.spy()
   }
-  await rental.create(null, res, null)
+  const next = sinon.spy()
+
+  await rental.create(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-                                  'route responds with an object')
+         'route responds with an object')
+  t.false(next.called, 'no errors')
 })
 
 test('Update returns a response', async t => {
@@ -91,9 +98,9 @@ test('Delete returns a response', async t => {
 })
 
 test.after.always('Clean up database', async t => {
-  await knex('rental').where('rentalID', d.rentalID).del()
-  await knex('item').where('itemID', d.rental.itemID).del()
-  await knex('user').where('userID', d.rental.userID).del()
-  await knex('organization').where('organizationID', d.user.organizationID).del()
+  await knex('rental').where(d.rental).del()
+  await knex('item').where(d.item).del()
+  await knex('user').where(d.user).del()
+  await knex('organization').where('email', d.organization.email).del()
   await knex('role').where(d.role).del()
 })
