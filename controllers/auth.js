@@ -23,13 +23,13 @@ module.exports.authenticate = (req, res, next) => {
   if (req.body.email && req.body.password) {
     return db.get('organization', 'email', req.body.email)
       .then(organization => {
-        return [
+        return Promise.all([
           organization.organization_id,
           bcrypt.compare(req.body.password, organization.password)
-        ]
+        ])
       })
       .then(([organizationID, valid]) => {
-        if (valid) {
+        if (valid === true) {
           const token = makeToken({sub: organizationID})
           res.send({
             id: organizationID,
