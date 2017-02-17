@@ -10,6 +10,7 @@ test.before('Set up test table', async t => {
   await knex.schema.createTable(d.testTableName, (table) => {
     table.string('name').primary()
     table.integer('value')
+    table.integer('organizationID')
   })
 })
 
@@ -27,7 +28,8 @@ test.serial('Gets a row', async t => {
 
 test.serial('Updates a row', async t => {
   await db.update(d.testTableName, d.testRowPrimaryKey,
-                  d.testRow[d.testRowPrimaryKey], d.modifiedTestRow)
+                  d.testRow[d.testRowPrimaryKey], d.modifiedTestRow,
+                  d.organizationID)
   const updatedRow = await knex(d.testTableName)
           .where(d.testRowPrimaryKey, d.modifiedTestRow[d.testRowPrimaryKey])
           .first()
@@ -48,7 +50,7 @@ test.serial('Creates multiple rows', async t => {
 })
 
 test.serial('Gets all rows', async t => {
-  const testRows = await db.getAll(d.testTableName)
+  const testRows = await db.getAll(d.testTableName, d.organizationID)
   const actualRows = await knex(d.testTableName)
   t.deepEqual(testRows, actualRows)
 })

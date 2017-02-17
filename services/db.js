@@ -58,16 +58,15 @@ db.create = (table, data) => {
 /**
  * Delete row specified by `req.params.id` from table
  * @param {string} table Name of a database table
- * @param {string} primaryKey Primary key in given database table
- * @param {string} id ID of row to delete
+ * @param {string} column Indexed column in database table
+ * @param {any} value Value in column to look for
  * @param {any} organizationID ID of organization
  * @return {Promise.<boolean>} True if operation completed succesfully
  * @throws restify.NotFoundError when row to delete does not exist
  */
-db.delete = (table, primaryKey, id, organizationID) => {
+db.delete = (table, column, value, organizationID) => {
   return db(table)
-    .where(primaryKey, id)
-    .andWhere('organizationID', organizationID)
+    .where(buildWhere(column, value, organizationID))
     .delete()
 }
 
@@ -76,14 +75,13 @@ db.delete = (table, primaryKey, id, organizationID) => {
  * @param {string} table Name of a database table
  * @param {string} column Indexed column in database table
  * @param {any} value Value in column to look for
- * @param {any} organizationID ID of organization
+ * @param {any} [organizationID] ID of organization
  * @return {Promise.<object>} Resolved by retrieved row
  * @throws restify.NotFoundError when row is not in db
  */
 db.get = (table, column, value, organizationID) => {
   return db(table)
-    .where(column, value)
-    .andWhere('organizationID', organizationID)
+    .where(buildWhere(column, value, organizationID))
     .first()
     .tap(row => {
       if (!row) {
@@ -95,6 +93,7 @@ db.get = (table, column, value, organizationID) => {
 /**
  * Get all rows from table
  * @param {string} table Name of a database table
+ * @param {any} organizationID ID of organization
  * @return {Promise.<array>} Resolved by all rows from table
  */
 db.getAll = (table, organizationID) => {
@@ -105,28 +104,29 @@ db.getAll = (table, organizationID) => {
 /**
  * Update row in database
  * @param {string} table Name of a database table
- * @param {string} primaryKey Primary key in given database table
- * @param {string} id ID of row to update
+ * @param {string} column Indexed column in database table
+ * @param {any} value Value in column to look for
  * @param {object} data Data to update row with
+ * @param {any} [organizationID] ID of organization
  * @return {Promise} Resolved when response is sent
  * @throws restify.NotFoundError when row is missing from db
  * @throws restify.UnprocessableEntityError when body is missing
  */
-db.update = (table, primaryKey, id, data) => {
+db.update = (table, column, value, data, organizationID) => {
   return db(table)
-    .where(primaryKey, id)
+    .where(buildWhere(column, value, organizationID))
     .first()
     .tap(row => {
       if (row) {
         return db(table)
-          .where(primaryKey, id)
+          .where(column, value)
           .update(data)
       } else {
         throw new restify.NotFoundError('could not find row')
       }
     }).then(() => {
       return db(table)
-        .where(primaryKey, id)
+        .where(column, value)
         .first()
     }).catch(err => {
       if (err.code === 'ER_BAD_FIELD_ERROR') {
