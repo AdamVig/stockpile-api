@@ -64,10 +64,8 @@ module.exports.register = (req, res, next) => {
       })
       .then(id => {
         const organizationID = id[0]
-        const token = makeToken({sub: organizationID})
         res.send(201, {
           id: organizationID,
-          token,
           message: 'created organization'
         })
       })
