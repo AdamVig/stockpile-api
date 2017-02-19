@@ -12,7 +12,8 @@
     "dev": "nodemon index.js",
     "test": "nyc ava",
     "lint": "eslint .",
-    "docs": "docco {index.js,controllers/*.js,services/*.js}"
+    "docs": "yarn run docco && yarn run apidoc",
+    "docco": "docco {index.js,controllers/*.js,services/*.js} --output docs/docco",
     "apidoc": "apidoc --input controllers/ --output docs/apidoc"
   },
   "dependencies": {
