@@ -40,5 +40,8 @@
     "nodemon": "^1.11.0",
     "nyc": "^10.1.2",
     "sinon": "1.17.7"
+  },
+  "apidoc": {
+    "url": "https://stockpile.adamvig.com/api"
   }
 }
