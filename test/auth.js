@@ -46,7 +46,7 @@ test('Returns error when registering organization with missing data', async t =>
   t.false(res.send.called, 'does not send response')
   t.true(
     next.calledWithMatch(
-      sinon.match.instanceOf(restify.UnprocessableEntityError)),
+      sinon.match.instanceOf(restify.BadRequestError)),
     'returns error')
 })
 

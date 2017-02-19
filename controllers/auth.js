@@ -23,10 +23,16 @@ module.exports.authenticate = (req, res, next) => {
   if (req.body.email && req.body.password) {
     return db.get('organization', 'email', req.body.email)
       .then(organization => {
-        return Promise.all([
-          organization.organization_id,
-          bcrypt.compare(req.body.password, organization.password)
-        ])
+        const {organizationID, password} = organization
+        if (organizationID) {
+          return Promise.all([
+            organizationID,
+            bcrypt.compare(req.body.password, password)
+          ])
+        } else {
+          return next(restify.UnauthorizedError(
+            'email and password combination is invalid'))
+        }
       })
       .then(([organizationID, valid]) => {
         if (valid === true) {
@@ -38,12 +44,12 @@ module.exports.authenticate = (req, res, next) => {
           })
         } else {
           throw new restify.UnauthorizedError(
-            'email and password combination is not valid')
+            'email and password combination is invalid')
         }
       })
       .catch(next)
   } else {
-    return next(new restify.UnprocessableEntityError('missing required fields'))
+    return next(new restify.BadRequestError('missing required fields'))
   }
 }
 
@@ -64,14 +70,18 @@ module.exports.register = (req, res, next) => {
       })
       .then(id => {
         const organizationID = id[0]
-        res.send(201, {
-          id: organizationID,
-          message: 'created organization'
-        })
+        if (organizationID) {
+          return res.send(201, {
+            id: organizationID,
+            message: 'created organization'
+          })
+        } else {
+          return next(new restify.InternalServerError('organization not created'))
+        }
       })
       .catch(next)
   } else {
-    return next(new restify.UnprocessableEntityError())
+    return next(new restify.BadRequestError())
   }
 }
 
