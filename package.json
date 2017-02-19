@@ -13,6 +13,7 @@
     "test": "nyc ava",
     "lint": "eslint .",
     "docs": "docco {index.js,controllers/*.js,services/*.js}"
+    "apidoc": "apidoc --input controllers/ --output docs/apidoc"
   },
   "dependencies": {
     "apidoc": "^0.17.5",
