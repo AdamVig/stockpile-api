@@ -64,10 +64,14 @@ module.exports.register = (req, res, next) => {
       })
       .then(id => {
         const organizationID = id[0]
-        res.send(201, {
-          id: organizationID,
-          message: 'created organization'
-        })
+        if (organizationID) {
+          return res.send(201, {
+            id: organizationID,
+            message: 'created organization'
+          })
+        } else {
+          return next(new restify.InternalServerError('organization not created'))
+        }
       })
       .catch(next)
   } else {
