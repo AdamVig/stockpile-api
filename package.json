@@ -15,6 +15,7 @@
     "docs": "docco {index.js,controllers/*.js,services/*.js}"
   },
   "dependencies": {
+    "apidoc": "^0.17.5",
     "bcrypt": "^1.0.2",
     "bunyan": "^1.8.5",
     "coveralls": "^2.11.15",
