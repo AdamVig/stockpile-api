@@ -23,10 +23,16 @@ module.exports.authenticate = (req, res, next) => {
   if (req.body.email && req.body.password) {
     return db.get('organization', 'email', req.body.email)
       .then(organization => {
-        return Promise.all([
-          organization.organization_id,
-          bcrypt.compare(req.body.password, organization.password)
-        ])
+        const {organizationID, password} = organization
+        if (organizationID) {
+          return Promise.all([
+            organizationID,
+            bcrypt.compare(req.body.password, password)
+          ])
+        } else {
+          return next(restify.UnauthorizedError(
+            'email and password combination is invalid'))
+        }
       })
       .then(([organizationID, valid]) => {
         if (valid === true) {
@@ -38,7 +44,7 @@ module.exports.authenticate = (req, res, next) => {
           })
         } else {
           throw new restify.UnauthorizedError(
-            'email and password combination is not valid')
+            'email and password combination is invalid')
         }
       })
       .catch(next)
