@@ -7,22 +7,6 @@
 const db = require('../services/db')
 
 /**
- * Make a response object
- * @param {string} prop Property name
- * @param {any} data Arbitrary data
- * @return {object} Response object with data assigned to prop
- */
-const makeResponse = module.exports.makeResponse = (prop, data) => {
-  if (prop && data) {
-    const response = {}
-    response[prop] = data
-    return response
-  } else {
-    throw new Error('cannot make response without both property and data')
-  }
-}
-
-/**
  * Get all rows from a table and return them in an object, assigned to a
  * property with the same name as the table
  * @param {string} tableName Name of a database table
@@ -31,7 +15,7 @@ const makeResponse = module.exports.makeResponse = (prop, data) => {
 module.exports.getAll = (tableName) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID)
-      .then(rows => res.send(makeResponse(tableName, rows)))
+      .then(rows => res.send({results: rows}))
       .catch(next)
   }
 }
