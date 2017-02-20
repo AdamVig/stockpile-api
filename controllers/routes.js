@@ -17,10 +17,10 @@ module.exports = app => {
 
   // Item
   app.get({name: 'get all items', path: 'item'}, auth.verify, item.getAll)
-  app.get({name: 'get item', path: 'item/:itemID'}, auth.verify, item.get)
+  app.get({name: 'get item', path: 'item/:tag'}, auth.verify, item.get)
   app.put({name: 'create item', path: 'item'}, auth.verify, item.create)
-  app.put({name: 'update item', path: 'item/:itemID'}, auth.verify, item.update)
-  app.del({name: 'delete item', path: 'item/:itemID'}, auth.verify, item.delete)
+  app.put({name: 'update item', path: 'item/:tag'}, auth.verify, item.update)
+  app.del({name: 'delete item', path: 'item/:tag'}, auth.verify, item.delete)
 
   // Organization
   app.get({name: 'get organization', path: 'organization/:organizationID'},
