@@ -95,7 +95,8 @@ module.exports.update = (tableName, columnName, paramName) => {
  */
 module.exports.delete = (tableName, columnName, message, paramName) => {
   return (req, res, next) => {
-    return db.delete(tableName, paramName || columnName, req.params.itemID,
+    return db.delete(tableName, paramName || columnName,
+                     req.params[paramName || columnName],
                      req.user.organizationID)
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
