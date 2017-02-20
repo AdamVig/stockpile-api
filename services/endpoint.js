@@ -69,12 +69,18 @@ module.exports.create = (tableName, message) => {
 /**
  * Update a row in a table, returning the updated row
  * @param {string} tableName Name of a database table
+ * @param {string} columnName Name of a column in the table
+ * @param {string} [paramName] Name of request parameter containing value to
+ *   look for in column, if different from columnName
  * @return {function} Endpoint handler
- * TODO implement
  */
-module.exports.update = (tableName) => {
+module.exports.update = (tableName, columnName, paramName) => {
   return (req, res, next) => {
-    res.send({})
+    return db.update(tableName, paramName || columnName,
+                     req.body[paramName || columnName],
+                     req.body, req.user.organizationID)
+      .then(updatedRow => { return res.send(updatedRow) })
+      .catch(next)
   }
 }
 
