@@ -12,10 +12,14 @@ const db = require('../services/db')
  * @param {any} data Arbitrary data
  * @return {object} Response object with data assigned to prop
  */
-const makeResponse = (prop, data) => {
-  const response = {}
-  response[prop] = data
-  return response
+const makeResponse = module.exports.makeResponse = (prop, data) => {
+  if (prop && data) {
+    const response = {}
+    response[prop] = data
+    return response
+  } else {
+    throw new Error('cannot make response without both property and data')
+  }
 }
 
 /**
