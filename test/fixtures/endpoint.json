@@ -1,0 +1,55 @@
+{
+  "table": "endpointTest",
+  "organizationID": 43,
+  "primaryKey": "name",
+  "multipleRows": [
+    {
+      "name": "row1",
+      "value": 15,
+      "organizationID": 43
+    },
+    {
+      "name": "row2",
+      "value": 178,
+      "organizationID": 43
+    }
+  ],
+  "singleRow": {
+    "name": "row3",
+    "value": 234,
+    "organizationID": 43
+  },
+  "rowToCreate": {
+    "name": "row4",
+    "value": 234,
+    "organizationID": 43
+  },
+  "rowToUpdate": {
+    "name": "row5",
+    "value": 234,
+    "organizationID": 43
+  },
+  "updatedRow": {
+    "name": "row5",
+    "value": 235,
+    "organizationID": 43
+  },
+  "rowToDelete": {
+    "name": "row6",
+    "value": 623,
+    "organizationID": 43
+  },
+  "makeResponse": {
+    "prop": "testProp",
+    "data": {
+      "test": "data"
+    },
+    "expected": {
+      "testProp": {
+        "test": "data"
+      }
+    }
+  },
+  "createMessage": "row created",
+  "deleteMessage": "row deleted"
+}
