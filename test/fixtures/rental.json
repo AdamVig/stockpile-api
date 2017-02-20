@@ -1,0 +1,27 @@
+{
+  "rentalID": 0,
+  "role": {
+    "name": "Test Role"
+  },
+  "organization": {
+    "name": "Test Organization for Rental",
+    "email": "test.org.rental@example.com",
+    "password": "$2a$10$iWpLbGBdE99lnTTSFOT.u.MgKvGSdzapRpTn4iIqeKrkoEq/308Lq"
+  },
+  "user": {
+    "email": "test.user@example.com",
+    "firstName": "Test",
+    "lastName": "User",
+    "password": "$2a$10$iWpLbGBdE99lnTTSFOT.u.MgKvGSdzapRpTn4iIqeKrkoEq/308Lq",
+    "roleID": 0
+  },
+  "item": {
+    "organizationID": 0
+  },
+  "rental": {
+    "userID": 0,
+    "itemID": 0,
+    "startDate": "2017-02-17 16:05:45",
+    "endDate": "2017-02-22 16:05:45"
+  }
+}

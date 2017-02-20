@@ -1,13 +1,25 @@
+const db = require('../services/db')
+
 module.exports.getAll = (req, res, next) => {
-  res.send({})
+  return db.getAll('rental', req.user.organizationID)
+    .then(rentals => res.send({rentals}))
+    .catch(next)
 }
 
 module.exports.get = (req, res, next) => {
-  res.send({})
+  return db.get('rental', 'rentalID', req.params.rentalID,
+                req.user.organizationID)
+    .then(rental => res.send(rental))
+    .catch(next)
 }
 
 module.exports.create = (req, res, next) => {
-  res.send({})
+  return db.create('rental', req.body)
+    .then(([rentalID]) => res.send({
+      rentalID,
+      message: 'rental created'
+    }))
+    .catch(next)
 }
 
 module.exports.update = (req, res, next) => {
