@@ -14,13 +14,6 @@ test.before('Set up test table', async t => {
   })
 })
 
-test('Make response', t => {
-  const actualResponse = endpoint.makeResponse(d.makeResponse.prop,
-                                               d.makeResponse.data)
-  t.deepEqual(actualResponse, d.makeResponse.expected,
-              'makes response correctly')
-})
-
 test('Get all', async t => {
   // Insert multiple rows
   await knex(d.table).insert(d.multipleRows)
