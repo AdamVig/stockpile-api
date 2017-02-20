@@ -1,31 +1,10 @@
-const db = require('../services/db')
+const endpoint = require('../services/endpoint')
 
-module.exports.getAll = (req, res, next) => {
-  return db.getAll('rental', req.user.organizationID)
-    .then(rentals => res.send({rentals}))
-    .catch(next)
-}
+const table = 'rental'
+const key = 'rentalID'
 
-module.exports.get = (req, res, next) => {
-  return db.get('rental', 'rentalID', req.params.rentalID,
-                req.user.organizationID)
-    .then(rental => res.send(rental))
-    .catch(next)
-}
-
-module.exports.create = (req, res, next) => {
-  return db.create('rental', req.body)
-    .then(([rentalID]) => res.send({
-      rentalID,
-      message: 'rental created'
-    }))
-    .catch(next)
-}
-
-module.exports.update = (req, res, next) => {
-  res.send({})
-}
-
-module.exports.delete = (req, res, next) => {
-  res.send({})
-}
+module.exports.getAll = endpoint.getAll(table)
+module.exports.get = endpoint.get(table, key)
+module.exports.create = endpoint.create(table, 'rental created')
+module.exports.update = endpoint.update(table, key)
+module.exports.delete = endpoint.delete(table, key, 'rental deleted')
