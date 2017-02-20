@@ -61,6 +61,11 @@ module.exports.get = (tableName, columnName, paramName) => {
  */
 module.exports.create = (tableName, message) => {
   return (req, res, next) => {
+    // Add organization ID if it is missing
+    if (!req.body.organizationID) {
+      req.body.organizationID = req.user.organizationID
+    }
+
     return db.create(tableName, req.body)
       .then(([id]) => res.send({
         id,
