@@ -1,16 +1,9 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
-const table = 'model'
-const key = 'modelID'
-
 const model = module.exports = {}
 
-model.getAll = endpoint.getAll(table)
-model.get = endpoint.get(table, key)
-model.create = endpoint.create(table, 'model created')
-model.update = endpoint.update(table, key)
-model.delete = endpoint.delete(table, key, 'model deleted')
+endpoint.addAllMethods(model, 'model', 'modelID')
 
 model.mount = app => {
   app.get({name: 'get all models', path: 'model'}, auth.verify, model.getAll)
