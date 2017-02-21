@@ -3,6 +3,7 @@ const brand = require('./brand')
 const category = require('./category')
 const item = require('./item')
 const main = require('./main')
+const model = require('./model')
 const organization = require('./organization')
 const rental = require('./rental')
 const status = require('./status')
@@ -45,6 +46,15 @@ module.exports = app => {
   app.put({name: 'create item', path: 'item'}, auth.verify, item.create)
   app.put({name: 'update item', path: 'item/:tag'}, auth.verify, item.update)
   app.del({name: 'delete item', path: 'item/:tag'}, auth.verify, item.delete)
+
+  // Model
+  app.get({name: 'get all models', path: 'model'}, auth.verify, model.getAll)
+  app.get({name: 'get model', path: 'model/:modelID'}, auth.verify, model.get)
+  app.put({name: 'create model', path: 'model'}, auth.verify, model.create)
+  app.put({name: 'update model', path: 'model/:modelID'},
+          auth.verify, model.update)
+  app.del({name: 'delete model', path: 'model/:modelID'},
+          auth.verify, model.delete)
 
   // Organization
   app.get({name: 'get organization', path: 'organization/:organizationID'},
