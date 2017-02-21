@@ -1,6 +1,8 @@
 const restify = require('restify')
 
-module.exports = (req, res, next) => {
+const options = module.exports
+
+options.handle = (req, res, next) => {
   // Handle OPTIONS requests
   if (req.method.toLowerCase() === 'options') {
     return res.send(204)

@@ -6,13 +6,15 @@
 
 const db = require('../services/db')
 
+const endpoint = module.exports = {}
+
 /**
  * Get all rows from a table and return them in an object, assigned to a
  * property with the same name as the table
  * @param {string} tableName Name of a database table
  * @return {function} Endpoint handler
  */
-module.exports.getAll = (tableName) => {
+endpoint.getAll = (tableName) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID)
       .then(rows => res.send({results: rows}))
@@ -28,7 +30,7 @@ module.exports.getAll = (tableName) => {
  *   look for in column, if different from columnName
  * @return {function} Endpoint handler
  */
-module.exports.get = (tableName, columnName, paramName) => {
+endpoint.get = (tableName, columnName, paramName) => {
   return (req, res, next) => {
     return db.get(tableName, columnName, req.params[paramName || columnName],
                   req.user.organizationID)
@@ -43,7 +45,7 @@ module.exports.get = (tableName, columnName, paramName) => {
  * @param {string} message Message describing what the endpoint did
  * @return {function} Endpoint handler
  */
-module.exports.create = (tableName, message) => {
+endpoint.create = (tableName, message) => {
   return (req, res, next) => {
     // Add organization ID if it is missing
     if (!req.body.organizationID) {
@@ -67,7 +69,7 @@ module.exports.create = (tableName, message) => {
  *   look for in column, if different from columnName
  * @return {function} Endpoint handler
  */
-module.exports.update = (tableName, columnName, paramName) => {
+endpoint.update = (tableName, columnName, paramName) => {
   return (req, res, next) => {
     return db.update(tableName, paramName || columnName,
                      req.body[paramName || columnName],
@@ -86,7 +88,7 @@ module.exports.update = (tableName, columnName, paramName) => {
  *   look for in column, if different from columnName
  * @return {function} Endpoint handler
  */
-module.exports.delete = (tableName, columnName, message, paramName) => {
+endpoint.delete = (tableName, columnName, message, paramName) => {
   return (req, res, next) => {
     return db.delete(tableName, paramName || columnName,
                      req.params[paramName || columnName],
@@ -100,4 +102,29 @@ module.exports.delete = (tableName, columnName, message, paramName) => {
       })
       .catch(next)
   }
+}
+
+/**
+ * Default endpoint handler for new endpoints
+ * @return {function} Endpoint handler
+ */
+endpoint.default = () => {
+  return (req, res, next) => {
+    res.send({})
+  }
+}
+
+/**
+ *
+ * @param {object} controller A module to define methods on
+ * @param {string} table Name of a database table, assumed to also be
+ *   name of entity
+ * @param {string} key Name of a column in a table
+ */
+endpoint.addAllMethods = (controller, table, key) => {
+  controller.getAll = endpoint.getAll(table)
+  controller.get = endpoint.get(table, key)
+  controller.create = endpoint.create(table, `${table} created`)
+  controller.update = endpoint.update(table, key)
+  controller.delete = endpoint.delete(table, key, `${table} deleted`)
 }

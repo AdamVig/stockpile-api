@@ -3,7 +3,7 @@ const restifyJSONHAL = require('restify-json-hal')
 
 const auth = require('./controllers/auth')
 const config = require('./package')
-const handleOptions = require('./controllers/options')
+const options = require('./controllers/options')
 const log = require('./services/log')
 
 // Load environment variables, throw error if any variables are missing
@@ -26,7 +26,7 @@ app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
 
 // Handle OPTIONS requests and method not allowed errors
-app.on('MethodNotAllowed', handleOptions)
+app.on('MethodNotAllowed', options.handle)
 
 // Automatically add HATEAOS relations to responses
 app.use(restifyJSONHAL(app, {

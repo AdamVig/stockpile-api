@@ -1,10 +1,19 @@
+const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
-const table = 'category'
-const key = 'categoryID'
+const category = module.exports
 
-module.exports.getAll = endpoint.getAll(table)
-module.exports.get = endpoint.get(table, key)
-module.exports.create = endpoint.create(table, 'category created')
-module.exports.update = endpoint.update(table, key)
-module.exports.delete = endpoint.delete(table, key, 'category deleted')
+endpoint.addAllMethods(category, 'category', 'categoryID')
+
+category.mount = app => {
+  app.get({name: 'get all categories', path: 'category'},
+          auth.verify, category.getAll)
+  app.get({name: 'get category', path: 'category/:categoryID'},
+          auth.verify, category.get)
+  app.put({name: 'create category', path: 'category'},
+          auth.verify, category.create)
+  app.put({name: 'update category', path: 'category/:categoryID'},
+          auth.verify, category.update)
+  app.del({name: 'delete category', path: 'category/:categoryID'},
+          auth.verify, category.delete)
+}

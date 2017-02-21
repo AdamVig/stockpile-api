@@ -2,16 +2,17 @@
 engines:
   duplication:
     enabled: true
-    exclude_fingerprints:
-      # Ignore duplication in controllers/rental.js
-      - 59151d08891bace2374e2bd457eb4275
-      # Ignore duplication in controllers/item.js
-      - 18b636ce1e11b51b085a8a252df79a5d
-      # Ignore duplication in controllers/user.js
-      - 0a5906593e0f167c03593abfebf985c8
     config:
       languages:
       - javascript
+    exclude_fingerprints:
+      # Ignore `const name = module.exports` similarity
+      - d086ad6ceb5ccf8802dde6f1b56c5dde
+      - 3e085ff0c42851c02f9c18a807bcc689
+      - b4fb5a6eec37a4890270a1a77d63d16a
+      - 20460ce63345d783e61638f988fc3532
+      - 919b0c5a930fb244d31242e853eae50c
+      - f8556df2d7e5db2f34837cd65c01be3c
   eslint:
     enabled: true
   fixme:

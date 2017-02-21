@@ -1,10 +1,14 @@
+const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
-const table = 'item'
-const key = 'tag'
+const item = module.exports
 
-module.exports.getAll = endpoint.getAll(table)
-module.exports.get = endpoint.get(table, key)
-module.exports.create = endpoint.create(table, 'item created')
-module.exports.update = endpoint.update(table, key)
-module.exports.delete = endpoint.delete(table, key, 'item deleted')
+endpoint.addAllMethods(item, 'item', 'tag')
+
+item.mount = app => {
+  app.get({name: 'get all items', path: 'item'}, auth.verify, item.getAll)
+  app.get({name: 'get item', path: 'item/:tag'}, auth.verify, item.get)
+  app.put({name: 'create item', path: 'item'}, auth.verify, item.create)
+  app.put({name: 'update item', path: 'item/:tag'}, auth.verify, item.update)
+  app.del({name: 'delete item', path: 'item/:tag'}, auth.verify, item.delete)
+}

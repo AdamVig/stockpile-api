@@ -117,6 +117,23 @@ test('Delete', async t => {
          'route responds with an object')
 })
 
+test('Default', async t => {
+  const res = {
+    send: sinon.spy()
+  }
+  await endpoint.default()(null, res, null)
+  t.true(res.send.calledOnce, 'route sends a response')
+  t.true(res.send.calledWithMatch(sinon.match.object),
+                                  'route responds with an object')
+})
+
+test('Add all methods', t => {
+  const controller = {}
+  endpoint.addAllMethods(controller, d.table, d.primaryKey)
+  t.deepEqual(Object.keys(controller), d.allMethodNames,
+         'all methods are defined on controller')
+})
+
 test.after.always('Remove test table', async t => {
   await knex.schema.dropTable(d.table)
 })
