@@ -1,7 +1,7 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
-const rental = module.exports = {}
+const rental = module.exports
 
 endpoint.addAllMethods(rental, 'rental', 'rentalID')
 

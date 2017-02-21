@@ -1,7 +1,7 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
-const organization = module.exports = {}
+const organization = module.exports
 
 organization.get = endpoint.default()
 organization.create = endpoint.default()

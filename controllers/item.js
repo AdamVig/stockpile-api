@@ -1,7 +1,7 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
-const item = module.exports = {}
+const item = module.exports
 
 endpoint.addAllMethods(item, 'item', 'tag')
 

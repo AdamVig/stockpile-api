@@ -1,6 +1,6 @@
 const endpoint = require('../services/endpoint')
 
-const main = module.exports = {}
+const main = module.exports
 
 main.mount = app => {
   app.get({name: 'main', path: '/'}, main.get)

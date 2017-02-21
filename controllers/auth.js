@@ -18,7 +18,7 @@ const makeToken = module.exports.makeToken = (payload) => {
   return jwt.encode(payload, process.env.JWT_SECRET)
 }
 
-const auth = module.exports = {}
+const auth = module.exports
 
 auth.mount = app => {
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)

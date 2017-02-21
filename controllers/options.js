@@ -1,6 +1,6 @@
 const restify = require('restify')
 
-const options = module.exports = {}
+const options = module.exports
 
 options.handle = (req, res, next) => {
   // Handle OPTIONS requests

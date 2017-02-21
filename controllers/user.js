@@ -1,7 +1,7 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
-const user = module.exports = {}
+const user = module.exports
 
 user.getAll = endpoint.default()
 user.get = endpoint.default()
