@@ -18,8 +18,16 @@ const makeToken = module.exports.makeToken = (payload) => {
   return jwt.encode(payload, process.env.JWT_SECRET)
 }
 
+const auth = module.exports = {}
+
+auth.mount = app => {
+  app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
+  app.post({name: 'register', path: 'auth/register'}, auth.register)
+  app.head({name: 'verify', path: 'auth/verify'}, auth.verify, auth.checkUser)
+}
+
 // Check user credentials and return token if valid
-module.exports.authenticate = (req, res, next) => {
+auth.authenticate = (req, res, next) => {
   if (req.body.email && req.body.password) {
     return db.get('organization', 'email', req.body.email)
       .then(organization => {
@@ -57,7 +65,7 @@ module.exports.authenticate = (req, res, next) => {
 module.exports.initialize = passport.initialize()
 
 // Register an organization
-module.exports.register = (req, res, next) => {
+auth.register = (req, res, next) => {
   if (req.body.name && req.body.email && req.body.password) {
     return bcrypt.hash(req.body.password, saltRounds)
       .then(hash => {
@@ -86,7 +94,7 @@ module.exports.register = (req, res, next) => {
 }
 
 // Authenticate a user given a JWT payload
-const authenticateToken = module.exports.authenticateToken = (payload, done) => {
+auth.authenticateToken = (payload, done) => {
   return db.get('organization', 'organizationID', payload.sub)
     .then((user) => {
       if (user) {
@@ -98,13 +106,13 @@ const authenticateToken = module.exports.authenticateToken = (payload, done) => 
     .catch(done)
 }
 
-passport.use(new passportJWT.Strategy(jwtStrategyOptions, authenticateToken))
+passport.use(new passportJWT.Strategy(jwtStrategyOptions, auth.authenticateToken))
 
 // Verify that user is authenticated on a given path
-module.exports.verify = passport.authenticate('jwt', { session: false })
+auth.verify = passport.authenticate('jwt', { session: false })
 
 // Check if user is attached to the request object
-module.exports.checkUser = (req, res, next) => {
+auth.checkUser = (req, res, next) => {
   if (req.user) {
     res.send(200)
   } else {

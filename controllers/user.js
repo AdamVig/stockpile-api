@@ -1,19 +1,30 @@
-module.exports.getAll = (req, res, next) => {
+const auth = require('./auth')
+const user = module.exports = {}
+
+user.getAll = (req, res, next) => {
   res.send({})
 }
 
-module.exports.get = (req, res, next) => {
+user.get = (req, res, next) => {
   res.send({})
 }
 
-module.exports.create = (req, res, next) => {
+user.create = (req, res, next) => {
   res.send({})
 }
 
-module.exports.update = (req, res, next) => {
+user.update = (req, res, next) => {
   res.send({})
 }
 
-module.exports.delete = (req, res, next) => {
+user.delete = (req, res, next) => {
   res.send({})
+}
+
+user.mount = app => {
+  app.get({name: 'get all users', path: 'user'}, auth.verify, user.getAll)
+  app.get({name: 'get user', path: 'user/:userID'}, auth.verify, user.get)
+  app.put({name: 'create user', path: 'user'}, auth.verify, user.create)
+  app.put({name: 'update user', path: 'user/:userID'}, auth.verify, user.update)
+  app.del({name: 'delete user', path: 'user/userID'}, auth.verify, user.delete)
 }
