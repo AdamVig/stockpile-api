@@ -1,21 +1,12 @@
 const auth = require('./auth')
+const endpoint = require('../services/endpoint')
+
 const organization = module.exports = {}
 
-organization.get = (req, res, next) => {
-  res.send({})
-}
-
-organization.create = (req, res, next) => {
-  res.send({})
-}
-
-organization.update = (req, res, next) => {
-  res.send({})
-}
-
-organization.delete = (req, res, next) => {
-  res.send({})
-}
+organization.get = endpoint.default()
+organization.create = endpoint.default()
+organization.update = endpoint.default()
+organization.delete = endpoint.default()
 
 organization.mount = app => {
   app.get({name: 'get organization', path: 'organization/:organizationID'},

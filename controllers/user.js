@@ -1,25 +1,13 @@
 const auth = require('./auth')
+const endpoint = require('../services/endpoint')
+
 const user = module.exports = {}
 
-user.getAll = (req, res, next) => {
-  res.send({})
-}
-
-user.get = (req, res, next) => {
-  res.send({})
-}
-
-user.create = (req, res, next) => {
-  res.send({})
-}
-
-user.update = (req, res, next) => {
-  res.send({})
-}
-
-user.delete = (req, res, next) => {
-  res.send({})
-}
+user.getAll = endpoint.default()
+user.get = endpoint.default()
+user.create = endpoint.default()
+user.update = endpoint.default()
+user.delete = endpoint.default()
 
 user.mount = app => {
   app.get({name: 'get all users', path: 'user'}, auth.verify, user.getAll)

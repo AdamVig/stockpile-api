@@ -2,13 +2,6 @@
 engines:
   duplication:
     enabled: true
-    exclude_fingerprints:
-      # Ignore duplication in controllers/rental.js
-      - 59151d08891bace2374e2bd457eb4275
-      # Ignore duplication in controllers/item.js
-      - 18b636ce1e11b51b085a8a252df79a5d
-      # Ignore duplication in controllers/user.js
-      - 0a5906593e0f167c03593abfebf985c8
     config:
       languages:
       - javascript
