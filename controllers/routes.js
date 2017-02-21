@@ -3,6 +3,7 @@ const item = require('./item')
 const main = require('./main')
 const organization = require('./organization')
 const rental = require('./rental')
+const status = require('./status')
 const user = require('./user')
 
 // Define endpoints on application
@@ -41,6 +42,16 @@ module.exports = app => {
           auth.verify, rental.update)
   app.del({name: 'delete rental', path: 'rental/:rentalID'},
           auth.verify, rental.delete)
+
+  // Status
+  app.get({name: 'get all statuses', path: 'status'}, auth.verify, status.getAll)
+  app.get({name: 'get status', path: 'status/:statusID'},
+          auth.verify, status.get)
+  app.put({name: 'create status', path: 'status'}, auth.verify, status.create)
+  app.put({name: 'update status', path: 'status/:statusID'},
+          auth.verify, status.update)
+  app.del({name: 'delete status', path: 'status/:statusID'},
+          auth.verify, status.delete)
 
   // User
   app.get({name: 'get all users', path: 'user'}, auth.verify, user.getAll)
