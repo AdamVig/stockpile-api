@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const category = require('./category')
 const item = require('./item')
 const main = require('./main')
 const organization = require('./organization')
@@ -15,6 +16,18 @@ module.exports = app => {
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
   app.post({name: 'register', path: 'auth/register'}, auth.register)
   app.head({name: 'verify', path: 'auth/verify'}, auth.verify, auth.checkUser)
+
+  // Category
+  app.get({name: 'get all categories', path: 'category'},
+          auth.verify, category.getAll)
+  app.get({name: 'get category', path: 'category/:categoryID'},
+          auth.verify, category.get)
+  app.put({name: 'create category', path: 'category'},
+          auth.verify, category.create)
+  app.put({name: 'update category', path: 'category/:categoryID'},
+          auth.verify, category.update)
+  app.del({name: 'delete category', path: 'category/:categoryID'},
+          auth.verify, category.delete)
 
   // Item
   app.get({name: 'get all items', path: 'item'}, auth.verify, item.getAll)
