@@ -127,6 +127,13 @@ test('Default', async t => {
                                   'route responds with an object')
 })
 
+test('Add all methods', t => {
+  const controller = {}
+  endpoint.addAllMethods(controller, d.table, d.primaryKey)
+  t.deepEqual(Object.keys(controller), d.allMethodNames,
+         'all methods are defined on controller')
+})
+
 test.after.always('Remove test table', async t => {
   await knex.schema.dropTable(d.table)
 })

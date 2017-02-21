@@ -51,5 +51,12 @@
     }
   },
   "createMessage": "row created",
-  "deleteMessage": "row deleted"
+  "deleteMessage": "row deleted",
+  "allMethodNames": [
+    "getAll",
+    "get",
+    "create",
+    "update",
+    "delete"
+  ]
 }
