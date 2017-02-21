@@ -101,3 +101,13 @@ module.exports.delete = (tableName, columnName, message, paramName) => {
       .catch(next)
   }
 }
+
+/**
+ * Default endpoint handler for new endpoints
+ * @return {function} Endpoint handler
+ */
+module.exports.default = () => {
+  return (req, res, next) => {
+    res.send({})
+  }
+}
