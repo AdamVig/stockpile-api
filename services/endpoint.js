@@ -12,11 +12,12 @@ const endpoint = module.exports = {}
  * Get all rows from a table and return them in an object, assigned to a
  * property with the same name as the table
  * @param {string} tableName Name of a database table
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.getAll = (tableName) => {
+endpoint.getAll = (tableName, modify) => {
   return (req, res, next) => {
-    return db.getAll(tableName, req.user.organizationID)
+    return db.getAll(tableName, req.user.organizationID, modify)
       .then(rows => res.send({results: rows}))
       .catch(next)
   }
@@ -26,14 +27,13 @@ endpoint.getAll = (tableName) => {
  * Get a row from a table, identified by a column and value from the request
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
- * @param {string} [paramName] Name of request parameter containing value to
- *   look for in column, if different from columnName
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.get = (tableName, columnName, paramName) => {
+endpoint.get = (tableName, columnName, modify) => {
   return (req, res, next) => {
-    return db.get(tableName, columnName, req.params[paramName || columnName],
-                  req.user.organizationID)
+    return db.get(tableName, columnName, req.params[columnName],
+                  req.user.organizationID, modify)
       .then(row => res.send(row))
       .catch(next)
   }
@@ -43,16 +43,17 @@ endpoint.get = (tableName, columnName, paramName) => {
  * Create a row in a table, returning a descriptive message
  * @param {string} tableName Name of a database table
  * @param {string} message Message describing what the endpoint did
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.create = (tableName, message) => {
+endpoint.create = (tableName, message, modify) => {
   return (req, res, next) => {
     // Add organization ID if it is missing
     if (!req.body.organizationID) {
       req.body.organizationID = req.user.organizationID
     }
 
-    return db.create(tableName, req.body)
+    return db.create(tableName, req.body, modify)
       .then(([id]) => res.send({
         id,
         message
@@ -65,15 +66,13 @@ endpoint.create = (tableName, message) => {
  * Update a row in a table, returning the updated row
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
- * @param {string} [paramName] Name of request parameter containing value to
- *   look for in column, if different from columnName
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.update = (tableName, columnName, paramName) => {
+endpoint.update = (tableName, columnName, modify) => {
   return (req, res, next) => {
-    return db.update(tableName, paramName || columnName,
-                     req.body[paramName || columnName],
-                     req.body, req.user.organizationID)
+    return db.update(tableName, columnName, req.body[columnName], req.body,
+                     req.user.organizationID, modify)
       .then(updatedRow => { return res.send(updatedRow) })
       .catch(next)
   }
@@ -84,15 +83,13 @@ endpoint.update = (tableName, columnName, paramName) => {
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
  * @param {string} message Message describing what the endpoint did
- * @param {string} [paramName] Name of request parameter containing value to
- *   look for in column, if different from columnName
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.delete = (tableName, columnName, message, paramName) => {
+endpoint.delete = (tableName, columnName, message, modify) => {
   return (req, res, next) => {
-    return db.delete(tableName, paramName || columnName,
-                     req.params[paramName || columnName],
-                     req.user.organizationID)
+    return db.delete(tableName, columnName, req.params[columnName],
+                     req.user.organizationID, modify)
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
           res.send({message})

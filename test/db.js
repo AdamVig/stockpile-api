@@ -79,19 +79,22 @@ test('Throws error when updating row with the wrong columns', t => {
 })
 
 test('Builds a where clause without organization ID', t => {
-  const whereClause = db.buildWhere(d.column, d.value)
+  const whereClause = db.buildWhere(d.testTableName, d.column, d.value)
   const expectedWhereClause = {}
   expectedWhereClause[d.column] = d.value
   t.deepEqual(whereClause, expectedWhereClause)
 })
 
 test('Builds a where clause with an organization ID', t => {
-  const whereClause = db.buildWhere(d.column, d.value, d.organizationID)
-  const expectedWhereClause = {
-    organizationID: d.organizationID
-  }
-  expectedWhereClause[d.column] = d.value
-  t.deepEqual(whereClause, expectedWhereClause)
+  const whereClause = db.buildWhere(d.testTableName, d.column, d.value,
+                                    d.organizationID)
+  t.deepEqual(whereClause, d.expectedWhereClause)
+})
+
+test('Builds a where clause with only organization ID', t => {
+  const whereClause = db.buildWhere(d.testTableName, null, null,
+                                    d.organizationID)
+  t.deepEqual(whereClause, d.expectedWhereClauseOrg)
 })
 
 test.after.always('Remove test table', async t => {

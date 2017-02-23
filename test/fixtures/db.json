@@ -22,5 +22,12 @@
   },
   "column": "testColumn",
   "value": "testValue",
-  "organizationID": 94
+  "organizationID": 94,
+  "expectedWhereClause": {
+    "test.organizationID": 94,
+    "testColumn": "testValue"
+  },
+  "expectedWhereClauseOrg": {
+    "test.organizationID": 94
+  }
 }
