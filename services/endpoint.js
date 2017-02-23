@@ -43,16 +43,17 @@ endpoint.get = (tableName, columnName, modify) => {
  * Create a row in a table, returning a descriptive message
  * @param {string} tableName Name of a database table
  * @param {string} message Message describing what the endpoint did
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.create = (tableName, message) => {
+endpoint.create = (tableName, message, modify) => {
   return (req, res, next) => {
     // Add organization ID if it is missing
     if (!req.body.organizationID) {
       req.body.organizationID = req.user.organizationID
     }
 
-    return db.create(tableName, req.body)
+    return db.create(tableName, req.body, modify)
       .then(([id]) => res.send({
         id,
         message
@@ -65,12 +66,13 @@ endpoint.create = (tableName, message) => {
  * Update a row in a table, returning the updated row
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.update = (tableName, columnName) => {
+endpoint.update = (tableName, columnName, modify) => {
   return (req, res, next) => {
     return db.update(tableName, columnName, req.body[columnName], req.body,
-                     req.user.organizationID)
+                     req.user.organizationID, modify)
       .then(updatedRow => { return res.send(updatedRow) })
       .catch(next)
   }
@@ -81,12 +83,13 @@ endpoint.update = (tableName, columnName) => {
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
  * @param {string} message Message describing what the endpoint did
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.delete = (tableName, columnName, message) => {
+endpoint.delete = (tableName, columnName, message, modify) => {
   return (req, res, next) => {
     return db.delete(tableName, columnName, req.params[columnName],
-                     req.user.organizationID)
+                     req.user.organizationID, modify)
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
           res.send({message})

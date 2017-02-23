@@ -47,9 +47,10 @@ db.buildWhere = (table, column, value, organizationID) => {
  * Create a row or rows in a table
  * @param {string} table Name of a database table
  * @param {object|array} data Row or rows to insert
+ * @param {function} [modify=noop] Modify the query
  * @return {Promise.<object>} Resolved by result from database
  */
-db.create = (table, data) => {
+db.create = (table, data, modify = () => {}) => {
   if (data) {
     return db(table)
       .insert(data)
@@ -70,11 +71,12 @@ db.create = (table, data) => {
  * @param {string} table Name of a database table
  * @param {string} column Indexed column in database table
  * @param {any} value Value in column to look for
- * @param {any} organizationID ID of organization
+ * @param {any} [organizationID] ID of organization
+ * @param {function} [modify=noop] Modify the query
  * @return {Promise.<boolean>} True if operation completed succesfully
  * @throws restify.NotFoundError when row to delete does not exist
  */
-db.delete = (table, column, value, organizationID) => {
+db.delete = (table, column, value, organizationID, modify = () => {}) => {
   return db(table)
     .where(db.buildWhere(table, column, value, organizationID))
     .delete()
@@ -105,7 +107,7 @@ db.get = (table, column, value, organizationID, modify = () => {}) => {
 /**
  * Get all rows from table
  * @param {string} table Name of a database table
- * @param {any} organizationID ID of organization
+ * @param {any} [organizationID] ID of organization
  * @param {function} [modify=noop] Modify the query
  * @return {Promise.<array>} Resolved by all rows from table
  */
@@ -122,11 +124,12 @@ db.getAll = (table, organizationID, modify = () => {}) => {
  * @param {any} value Value in column to look for
  * @param {object} data Data to update row with
  * @param {any} [organizationID] ID of organization
+ * @param {function} [modify=noop] Modify the query
  * @return {Promise} Resolved when response is sent
  * @throws restify.NotFoundError when row is missing from db
  * @throws restify.UnprocessableEntityError when body is missing
  */
-db.update = (table, column, value, data, organizationID) => {
+db.update = (table, column, value, data, organizationID, modify = () => {}) => {
   return db(table)
     .where(db.buildWhere(table, column, value, organizationID))
     .first()
