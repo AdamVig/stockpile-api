@@ -12,11 +12,12 @@ const endpoint = module.exports = {}
  * Get all rows from a table and return them in an object, assigned to a
  * property with the same name as the table
  * @param {string} tableName Name of a database table
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.getAll = (tableName) => {
+endpoint.getAll = (tableName, modify) => {
   return (req, res, next) => {
-    return db.getAll(tableName, req.user.organizationID)
+    return db.getAll(tableName, req.user.organizationID, modify)
       .then(rows => res.send({results: rows}))
       .catch(next)
   }
@@ -26,12 +27,13 @@ endpoint.getAll = (tableName) => {
  * Get a row from a table, identified by a column and value from the request
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
+ * @param {function} modify Modify the query
  * @return {function} Endpoint handler
  */
-endpoint.get = (tableName, columnName) => {
+endpoint.get = (tableName, columnName, modify) => {
   return (req, res, next) => {
     return db.get(tableName, columnName, req.params[columnName],
-                  req.user.organizationID)
+                  req.user.organizationID, modify)
       .then(row => res.send(row))
       .catch(next)
   }
