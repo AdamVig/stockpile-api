@@ -1,0 +1,11 @@
+{
+  "bodyWithLinks": {
+    "_links": {},
+    "test": 4,
+    "value": 3
+  },
+  "bodyWithoutLinks": {
+    "test": 4,
+    "value": 3
+  }
+}
