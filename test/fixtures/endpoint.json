@@ -58,5 +58,24 @@
     "create",
     "update",
     "delete"
+  ],
+  "messageTypes": {
+    "defaultTest": "default",
+    "customTest": "conflict"
+  },
+  "expectedDefaultMessage": "something went wrong",
+  "expectedCustomMessage": "item already exists",
+  "defaultBadRequestMessage": "wrong fields in request body",
+  "customMessages": {
+    "create": "item created",
+    "delete": "item deleted",
+    "conflict": "item already exists",
+    "missing": "item does not exist"
+  },
+  "errors": [
+    {"code": "ER_BAD_FIELD_ERROR"},
+    {"code": "ER_NOT_FOUND"},
+    {"code": "ER_DUP_ENTRY"},
+    {"code": "ER_GENERIC_ERROR"}
   ]
 }

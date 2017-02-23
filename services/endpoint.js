@@ -4,6 +4,8 @@
  * These functions cover the most common use cases for most controllers.
  */
 
+const restify = require('restify')
+
 const db = require('../services/db')
 
 const endpoint = module.exports = {}
@@ -109,6 +111,57 @@ endpoint.default = () => {
   return (req, res, next) => {
     res.send({})
   }
+}
+
+/**
+ * Choose a message from either custom or default messages
+ * @param {string} type Type of message to choose
+ * @param {object} [messages] Custom messages
+ * @return {string} Chosen message
+ */
+endpoint.chooseMessage = (type, messages) => {
+  const defaultMessages = {
+    create: 'created',
+    delete: 'deleted',
+    conflict: 'already exists',
+    missing: 'does not exist',
+    badRequest: 'wrong fields in request body',
+    default: 'something went wrong'
+  }
+  return messages[type] || defaultMessages[type] || defaultMessages.default
+}
+
+/**
+ * Choose Restify error based on database error
+ * @param {error} err Error from database
+ * @param {object} [messages] Messages for endpoint events
+ * @return {error} Restify error
+ */
+endpoint.chooseError = (err, messages) => {
+  switch (err.code) {
+    case 'ER_BAD_FIELD_ERROR':
+      return new restify.BadRequestError(
+        endpoint.chooseMessage('badRequest', messages))
+    case 'ER_DUP_ENTRY':
+      return new restify.ConflictError(
+        endpoint.chooseMessage('conflict', messages))
+    case 'ER_NOT_FOUND':
+      return new restify.NotFoundError(
+        endpoint.chooseMessage('missing', messages))
+    default:
+      return new restify.InternalServerError(
+        endpoint.chooseMessage('default', messages))
+  }
+}
+
+/**
+ * Handle an error in an endpoint handler chain
+ * @param {error} err Error from database
+ * @param {object} [messages] Messages for endpoint events
+ * @param {function} next Next handler in chain; will be given error
+ */
+endpoint.handleError = (err, messages, next) => {
+  next(endpoint.chooseError(err, messages))
 }
 
 /**

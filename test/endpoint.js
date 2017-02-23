@@ -134,6 +134,46 @@ test('Add all methods', t => {
          'all methods are defined on controller')
 })
 
+test('Choose message', t => {
+  // Uses default case when message type is not defined
+  const actualDefaultMessage = endpoint.chooseMessage('doesNotExist',
+                                                      d.customMessages)
+  // Uses custom message when passed object has the type defined
+  const actualCustomMessage = endpoint.chooseMessage('conflict',
+                                                     d.customMessages)
+  // Uses a default message for the type when passed object does not have it
+  const actualMessageDefault = endpoint.chooseMessage('badRequest',
+                                                      d.customMessages)
+  t.is(actualDefaultMessage, d.expectedDefaultMessage,
+          'default message works')
+  t.is(actualCustomMessage, d.expectedCustomMessage, 'custom message works')
+  t.is(actualMessageDefault, d.defaultBadRequestMessage,
+          'message default works')
+})
+
+test('Choose error', t => {
+  const actualBadRequest = endpoint.chooseError(d.errors[0], d.customMessages)
+  const actualMissing = endpoint.chooseError(d.errors[1], d.customMessages)
+  const actualDuplicate = endpoint.chooseError(d.errors[2], d.customMessages)
+  const actualUndefined = endpoint.chooseError(d.errors[3], d.customMessages)
+  t.true(actualBadRequest.message === d.defaultBadRequestMessage,
+         'handles bad request error')
+  t.true(actualMissing.message === d.customMessages.missing,
+         'handles missing error')
+  t.true(actualDuplicate.message === d.customMessages.conflict,
+         'handles duplicate error')
+  t.true(actualUndefined.message === d.expectedDefaultMessage,
+         'handles undefined error')
+})
+
+test('Handle error', t => {
+  const next = sinon.spy()
+
+  endpoint.handleError(d.errors[0], d.customMessages, next)
+
+  t.true(next.calledOnce, 'next handler is called')
+})
+
 test.after.always('Remove test table', async t => {
   await knex.schema.dropTable(d.table)
 })
