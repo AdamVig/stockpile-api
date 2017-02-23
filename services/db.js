@@ -20,19 +20,24 @@ const db = module.exports = require('knex')({
 
 /**
  * Build a where clause for a Knex `.where()`
+ * @param {string} table Name of table
  * @param {string} column Name of column
  * @param {any} value Value to match in column
  * @param {any} [organizationID] ID of organization
  * @return {object} A where clause
  */
-const buildWhere = module.exports.buildWhere = (column, value,
-                                                organizationID) => {
+db.buildWhere = (table, column, value, organizationID) => {
   const whereClause = {}
-  whereClause[column] = value
+
+  // Add column and value to where clause if defined
+  if (column && value) {
+    whereClause[column] = value
+  }
 
   // Add organization ID to where clause if defined
   if (organizationID) {
-    whereClause.organizationID = organizationID
+    // Prefix with table name in case of ambiguity
+    whereClause[`${table}.organizationID`] = organizationID
   }
 
   return whereClause
@@ -71,7 +76,7 @@ db.create = (table, data) => {
  */
 db.delete = (table, column, value, organizationID) => {
   return db(table)
-    .where(buildWhere(column, value, organizationID))
+    .where(db.buildWhere(table, column, value, organizationID))
     .delete()
 }
 
@@ -81,13 +86,15 @@ db.delete = (table, column, value, organizationID) => {
  * @param {string} column Indexed column in database table
  * @param {any} value Value in column to look for
  * @param {any} [organizationID] ID of organization
+ * @param {function} [modify=noop] Modify the query
  * @return {Promise.<object>} Resolved by retrieved row
  * @throws restify.NotFoundError when row is not in db
  */
-db.get = (table, column, value, organizationID) => {
+db.get = (table, column, value, organizationID, modify = () => {}) => {
   return db(table)
-    .where(buildWhere(column, value, organizationID))
+    .where(db.buildWhere(table, column, value, organizationID))
     .first()
+    .modify(modify)
     .tap(row => {
       if (!row) {
         throw new restify.NotFoundError('could not find row')
@@ -99,11 +106,13 @@ db.get = (table, column, value, organizationID) => {
  * Get all rows from table
  * @param {string} table Name of a database table
  * @param {any} organizationID ID of organization
+ * @param {function} [modify=noop] Modify the query
  * @return {Promise.<array>} Resolved by all rows from table
  */
-db.getAll = (table, organizationID) => {
+db.getAll = (table, organizationID, modify = () => {}) => {
   return db(table)
-    .where('organizationID', organizationID)
+    .where(db.buildWhere(table, null, null, organizationID))
+    .modify(modify)
 }
 
 /**
@@ -119,7 +128,7 @@ db.getAll = (table, organizationID) => {
  */
 db.update = (table, column, value, data, organizationID) => {
   return db(table)
-    .where(buildWhere(column, value, organizationID))
+    .where(db.buildWhere(table, column, value, organizationID))
     .first()
     .tap(row => {
       if (row) {
