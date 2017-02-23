@@ -26,13 +26,11 @@ endpoint.getAll = (tableName) => {
  * Get a row from a table, identified by a column and value from the request
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
- * @param {string} [paramName] Name of request parameter containing value to
- *   look for in column, if different from columnName
  * @return {function} Endpoint handler
  */
-endpoint.get = (tableName, columnName, paramName) => {
+endpoint.get = (tableName, columnName) => {
   return (req, res, next) => {
-    return db.get(tableName, columnName, req.params[paramName || columnName],
+    return db.get(tableName, columnName, req.params[columnName],
                   req.user.organizationID)
       .then(row => res.send(row))
       .catch(next)
@@ -65,15 +63,12 @@ endpoint.create = (tableName, message) => {
  * Update a row in a table, returning the updated row
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
- * @param {string} [paramName] Name of request parameter containing value to
- *   look for in column, if different from columnName
  * @return {function} Endpoint handler
  */
-endpoint.update = (tableName, columnName, paramName) => {
+endpoint.update = (tableName, columnName) => {
   return (req, res, next) => {
-    return db.update(tableName, paramName || columnName,
-                     req.body[paramName || columnName],
-                     req.body, req.user.organizationID)
+    return db.update(tableName, columnName, req.body[columnName], req.body,
+                     req.user.organizationID)
       .then(updatedRow => { return res.send(updatedRow) })
       .catch(next)
   }
@@ -84,14 +79,11 @@ endpoint.update = (tableName, columnName, paramName) => {
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
  * @param {string} message Message describing what the endpoint did
- * @param {string} [paramName] Name of request parameter containing value to
- *   look for in column, if different from columnName
  * @return {function} Endpoint handler
  */
-endpoint.delete = (tableName, columnName, message, paramName) => {
+endpoint.delete = (tableName, columnName, message) => {
   return (req, res, next) => {
-    return db.delete(tableName, paramName || columnName,
-                     req.params[paramName || columnName],
+    return db.delete(tableName, columnName, req.params[columnName],
                      req.user.organizationID)
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
