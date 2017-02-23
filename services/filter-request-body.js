@@ -1,5 +1,5 @@
 module.exports = () => {
-  return (req, res, next) => {
+  return function filterRequestBody (req, res, next) {
     if (req && req.body) {
       delete req.body._links
     }
