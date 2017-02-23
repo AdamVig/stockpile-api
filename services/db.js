@@ -1,9 +1,21 @@
-const restify = require('restify')
-
 // Load environment variables, throw error if any variables are missing
 require('dotenv-safe').load({
   allowEmptyValues: true
 })
+
+function MissingDataError () {
+  this.name = 'MissingDataError'
+  this.message = 'data is missing'
+  this.code = 'ER_BAD_REQUEST_ERROR'
+}
+MissingDataError.prototype = Object.create(Error.prototype)
+
+function NotFoundError () {
+  this.name = 'NotFoundError'
+  this.message = 'row does not exist'
+  this.code = 'ER_NOT_FOUND'
+}
+NotFoundError.prototype = Object.create(Error.prototype)
 
 // Create and export database instance
 const db = module.exports = require('knex')({
@@ -54,15 +66,8 @@ db.create = (table, data, modify = () => {}) => {
   if (data) {
     return db(table)
       .insert(data)
-      .catch(err => {
-        if (err.code === 'ER_DUP_ENTRY') {
-          throw new restify.ConflictError('a row with this id already exists')
-        } else {
-          throw err
-        }
-      })
   } else {
-    throw new restify.BadRequestError('missing data to insert')
+    throw new MissingDataError()
   }
 }
 
@@ -99,7 +104,7 @@ db.get = (table, column, value, organizationID, modify = () => {}) => {
     .modify(modify)
     .tap(row => {
       if (!row) {
-        throw new restify.NotFoundError('could not find row')
+        throw new NotFoundError()
       }
     })
 }
@@ -139,18 +144,11 @@ db.update = (table, column, value, data, organizationID, modify = () => {}) => {
           .where(column, value)
           .update(data)
       } else {
-        throw new restify.NotFoundError('could not find row')
+        throw new NotFoundError()
       }
     }).then(() => {
       return db(table)
         .where(column, value)
         .first()
-    }).catch(err => {
-      if (err.code === 'ER_BAD_FIELD_ERROR') {
-        throw new restify.UnprocessableEntityError(
-          `fields ${Object.keys(data)} do not match columns in table`)
-      } else {
-        throw err
-      }
     })
 }

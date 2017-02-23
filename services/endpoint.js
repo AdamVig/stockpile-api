@@ -21,7 +21,7 @@ endpoint.getAll = (tableName, modify) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID, modify)
       .then(rows => res.send({results: rows}))
-      .catch(next)
+      .catch(endpoint.handleError)
   }
 }
 
@@ -37,7 +37,7 @@ endpoint.get = (tableName, columnName, modify) => {
     return db.get(tableName, columnName, req.params[columnName],
                   req.user.organizationID, modify)
       .then(row => res.send(row))
-      .catch(next)
+      .catch(endpoint.handleError)
   }
 }
 
@@ -60,7 +60,7 @@ endpoint.create = (tableName, message, modify) => {
         id,
         message
       }))
-      .catch(next)
+      .catch(endpoint.handleError)
   }
 }
 
@@ -76,7 +76,7 @@ endpoint.update = (tableName, columnName, modify) => {
     return db.update(tableName, columnName, req.body[columnName], req.body,
                      req.user.organizationID, modify)
       .then(updatedRow => { return res.send(updatedRow) })
-      .catch(next)
+      .catch(endpoint.handleError)
   }
 }
 
@@ -99,7 +99,7 @@ endpoint.delete = (tableName, columnName, message, modify) => {
           res.send(204)
         }
       })
-      .catch(next)
+      .catch(endpoint.handleError)
   }
 }
 
