@@ -3,6 +3,7 @@ const restifyJSONHAL = require('restify-json-hal')
 
 const auth = require('./controllers/auth')
 const config = require('./package')
+const filterRequestBody = require('./services/filter-request-body')
 const options = require('./controllers/options')
 const log = require('./services/log')
 
@@ -24,6 +25,7 @@ app.pre(log.onRequest)
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
+app.use(filterRequestBody())
 
 // Handle OPTIONS requests and method not allowed errors
 app.on('MethodNotAllowed', options.handle)
