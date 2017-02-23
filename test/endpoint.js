@@ -68,7 +68,7 @@ test('Create', async t => {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await endpoint.create(d.table, d.createMessage)(req, res, next)
+  await endpoint.create(d.table, d.messagesWithCreate)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
@@ -111,7 +111,7 @@ test('Delete', async t => {
   }
   const next = sinon.spy()
   await endpoint.delete(d.table, d.primaryKey,
-                        d.deleteMessage)(req, res, next)
+                        d.messagesWithDelete)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')

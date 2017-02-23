@@ -12,8 +12,8 @@ rental.withTag = (queryBuilder) => {
 }
 
 endpoint.addAllMethods(rental, 'rental', 'tag')
-rental.getAll = endpoint.getAll('rental', rental.withTag)
-rental.get = endpoint.get('rental', 'tag', rental.withTag)
+rental.getAll = endpoint.getAll('rental', {modify: rental.withTag})
+rental.get = endpoint.get('rental', 'tag', {modify: rental.withTag})
 
 rental.mount = app => {
   app.get({name: 'get all rentals', path: 'rental'}, auth.verify, rental.getAll)

@@ -50,8 +50,16 @@
       }
     }
   },
-  "createMessage": "row created",
-  "deleteMessage": "row deleted",
+  "messagesWithCreate": {
+    "messages": {
+      "create": "row created"
+    }
+  },
+  "messagesWithDelete": {
+    "messages": {
+      "delete": "row deleted"
+    }
+  },
   "allMethodNames": [
     "getAll",
     "get",

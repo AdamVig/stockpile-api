@@ -26,8 +26,8 @@ item.withFields = (queryBuilder) => {
 }
 
 endpoint.addAllMethods(item, 'item', 'tag')
-item.getAll = endpoint.getAll('item', item.withFields)
-item.get = endpoint.get('item', 'tag', item.withFields)
+item.getAll = endpoint.getAll('item', {modify: item.withFields})
+item.get = endpoint.get('item', 'tag', {modify: item.withFields})
 
 item.mount = app => {
   app.get({name: 'get all items', path: 'item'}, auth.verify, item.getAll)

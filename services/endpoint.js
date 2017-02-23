@@ -14,14 +14,15 @@ const endpoint = module.exports = {}
  * Get all rows from a table and return them in an object, assigned to a
  * property with the same name as the table
  * @param {string} tableName Name of a database table
- * @param {function} modify Modify the query
+ * @param {function} [modify] Modify the query
+ * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.getAll = (tableName, modify) => {
+endpoint.getAll = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID, modify)
       .then(rows => res.send({results: rows}))
-      .catch(endpoint.handleError)
+      .catch(err => endpoint.handleError(err, messages, next))
   }
 }
 
@@ -29,26 +30,27 @@ endpoint.getAll = (tableName, modify) => {
  * Get a row from a table, identified by a column and value from the request
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
- * @param {function} modify Modify the query
+ * @param {function} [modify] Modify the query
+ * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.get = (tableName, columnName, modify) => {
+endpoint.get = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.get(tableName, columnName, req.params[columnName],
                   req.user.organizationID, modify)
       .then(row => res.send(row))
-      .catch(endpoint.handleError)
+      .catch(err => endpoint.handleError(err, messages, next))
   }
 }
 
 /**
  * Create a row in a table, returning a descriptive message
  * @param {string} tableName Name of a database table
- * @param {string} message Message describing what the endpoint did
- * @param {function} modify Modify the query
+ * @param {function} [modify] Modify the query
+ * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.create = (tableName, message, modify) => {
+endpoint.create = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     // Add organization ID if it is missing
     if (!req.body.organizationID) {
@@ -58,9 +60,9 @@ endpoint.create = (tableName, message, modify) => {
     return db.create(tableName, req.body, modify)
       .then(([id]) => res.send({
         id,
-        message
+        message: endpoint.chooseMessage('create', messages)
       }))
-      .catch(endpoint.handleError)
+      .catch(err => endpoint.handleError(err, messages, next))
   }
 }
 
@@ -68,15 +70,16 @@ endpoint.create = (tableName, message, modify) => {
  * Update a row in a table, returning the updated row
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
- * @param {function} modify Modify the query
+ * @param {function} [modify] Modify the query
+ * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.update = (tableName, columnName, modify) => {
+endpoint.update = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.update(tableName, columnName, req.body[columnName], req.body,
                      req.user.organizationID, modify)
       .then(updatedRow => { return res.send(updatedRow) })
-      .catch(endpoint.handleError)
+      .catch(err => endpoint.handleError(err, messages, next))
   }
 }
 
@@ -84,22 +87,22 @@ endpoint.update = (tableName, columnName, modify) => {
  * Delete a row in a table, returning a descriptive message
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
- * @param {string} message Message describing what the endpoint did
- * @param {function} modify Modify the query
+ * @param {function} [modify] Modify the query
+ * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.delete = (tableName, columnName, message, modify) => {
+endpoint.delete = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.delete(tableName, columnName, req.params[columnName],
                      req.user.organizationID, modify)
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
-          res.send({message})
+          res.send({message: endpoint.chooseMessage('delete', messages)})
         } else {
           res.send(204)
         }
       })
-      .catch(endpoint.handleError)
+      .catch(err => endpoint.handleError(err, messages, next))
   }
 }
 
@@ -119,7 +122,7 @@ endpoint.default = () => {
  * @param {object} [messages] Custom messages
  * @return {string} Chosen message
  */
-endpoint.chooseMessage = (type, messages) => {
+endpoint.chooseMessage = (type, messages = {}) => {
   const defaultMessages = {
     create: 'created',
     delete: 'deleted',
@@ -169,12 +172,13 @@ endpoint.handleError = (err, messages, next) => {
  * @param {object} controller A module to define methods on
  * @param {string} table Name of a database table, assumed to also be
  *   name of entity
+ * @param {object} [messages] Messages for endpoint events
  * @param {string} key Name of a column in a table
  */
-endpoint.addAllMethods = (controller, table, key) => {
-  controller.getAll = endpoint.getAll(table)
-  controller.get = endpoint.get(table, key)
-  controller.create = endpoint.create(table, `${table} created`)
-  controller.update = endpoint.update(table, key)
-  controller.delete = endpoint.delete(table, key, `${table} deleted`)
+endpoint.addAllMethods = (controller, table, key, messages = {}) => {
+  controller.getAll = endpoint.getAll(table, {messages})
+  controller.get = endpoint.get(table, key, {messages})
+  controller.create = endpoint.create(table, {messages})
+  controller.update = endpoint.update(table, key, {messages})
+  controller.delete = endpoint.delete(table, key, {messages})
 }
