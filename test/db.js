@@ -18,6 +18,13 @@ test.serial('Creates a row', async t => {
   await db.create(d.testTableName, d.testRow)
   const rows = await knex(d.testTableName)
   t.is(rows.length, 1)
+
+  // Try-catch necessary because t.throws does not work as expected
+  try {
+    db.create(d.testTableName, null)
+  } catch (err) {
+    t.pass('throws error when data is missing')
+  }
 })
 
 test.serial('Gets a row', async t => {
