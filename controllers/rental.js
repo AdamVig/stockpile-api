@@ -13,10 +13,11 @@ rental.withTag = (queryBuilder) => {
 
 const messages = {conflict: 'Cannot rent item, item is already rented'}
 
-endpoint.addAllMethods(rental, 'rental', 'tag')
 rental.getAll = endpoint.getAll('rental', {modify: rental.withTag})
 rental.get = endpoint.get('rental', 'tag', {modify: rental.withTag})
 rental.create = endpoint.create('rental', {messages})
+rental.update = endpoint.update('rental', 'rentalID', {messages})
+rental.delete = endpoint.delete('rental', {modify: rental.withTag})
 
 rental.mount = app => {
   app.get({name: 'get all rentals', path: 'rental'}, auth.verify, rental.getAll)
