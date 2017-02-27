@@ -1,17 +1,21 @@
 const auth = require('./auth')
+const db = require('../services/db')
 const endpoint = require('../services/endpoint')
 
 const status = module.exports
 
-endpoint.addAllMethods(status, 'status', 'statusID')
+status.withItemStatus = queryBuilder => {
+  const statusSelect = db.raw(`if(rental.rentalID is null, ` +
+                              `'available', 'rented') as status`)
+  return queryBuilder
+    .select('item.itemID')
+    .select(statusSelect)
+    .leftJoin('rental', 'item.itemID', 'rental.itemID')
+}
+
+status.get = endpoint.get('item', 'tag', {modify: status.withItemStatus})
 
 status.mount = app => {
-  app.get({name: 'get all statuses', path: 'status'}, auth.verify, status.getAll)
-  app.get({name: 'get status', path: 'status/:statusID'},
+  app.get({name: 'get status', path: 'item/:tag/status'},
           auth.verify, status.get)
-  app.put({name: 'create status', path: 'status'}, auth.verify, status.create)
-  app.put({name: 'update status', path: 'status/:statusID'},
-          auth.verify, status.update)
-  app.del({name: 'delete status', path: 'status/:statusID'},
-          auth.verify, status.delete)
 }

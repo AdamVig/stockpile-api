@@ -8,10 +8,6 @@ item.withFields = (queryBuilder) => {
   return queryBuilder
     .select('item.*')
 
-  // Status
-    .leftJoin('status', 'item.statusID', 'status.statusID')
-    .select('status.name as status')
-
   // Brand
     .leftJoin('brand', 'item.brandID', 'brand.brandID')
     .select('brand.name as brand')
