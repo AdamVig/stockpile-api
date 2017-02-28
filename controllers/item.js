@@ -8,13 +8,13 @@ item.withFields = (queryBuilder) => {
   return queryBuilder
     .select('item.*')
 
-  // Brand
-    .leftJoin('brand', 'item.brandID', 'brand.brandID')
-    .select('brand.name as brand')
-
   // Model
     .leftJoin('model', 'item.modelID', 'model.modelID')
     .select('model.name as model')
+
+  // Brand
+    .leftJoin('brand', 'model.brandID', 'brand.brandID')
+    .select('brand.name as brand')
 
   // Category
     .leftJoin('category', 'item.categoryID', 'category.categoryID')
