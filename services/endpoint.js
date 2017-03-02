@@ -21,7 +21,7 @@ const endpoint = module.exports = {}
 endpoint.getAll = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID, modify)
-      .then(rows => res.send({results: rows}))
+      .then(results => res.send({results}))
       .catch(err => endpoint.handleError(err, messages, next))
   }
 }
