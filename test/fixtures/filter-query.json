@@ -1,0 +1,16 @@
+{
+  "req": {
+    "params": {
+      "fruit": "orange",
+      "color": "brown"
+    }
+  },
+  "wrongNames": {
+    "test": "test",
+    "car": "car"
+  },
+  "names": {
+    "fruit": "fruit",
+    "color": "color"
+  }
+}
