@@ -22,9 +22,9 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
 
   // Mapping between query param fields and database query column names
   const filterParams = {
-    brand: 'brand.brandID',
-    model: 'model.modelID',
-    category: 'category.categoryID'
+    brandID: 'brand.brandID',
+    modelID: 'model.modelID',
+    categoryID: 'category.categoryID'
   }
 
   // Add filters to query
