@@ -1,0 +1,7 @@
+{
+  "req": {
+    "params": {
+      "test": "test.column"
+    }
+  }
+}

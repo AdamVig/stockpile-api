@@ -1,12 +1,11 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
+const filterQuery = require('../services/filter-query')
 
 const item = module.exports
 
-// Join item with all of its fields
-item.withFields = (queryBuilder) => {
-  return queryBuilder
-item.withFields = (req, queryBuilder) => {
+item.withFieldsAndFilters = (req, queryBuilder) => {
+  queryBuilder
     .select('item.*')
 
   // Model
@@ -20,11 +19,23 @@ item.withFields = (req, queryBuilder) => {
   // Category
     .leftJoin('category', 'item.categoryID', 'category.categoryID')
     .select('category.name as category')
+
+  // Mapping between query param fields and database query column names
+  const filterParams = {
+    brand: 'brand.brandID',
+    model: 'model.modelID',
+    category: 'category.categoryID'
+  }
+
+  // Add filters to query
+  queryBuilder.modify(filterQuery(req, filterParams))
+
+  return queryBuilder
 }
 
 endpoint.addAllMethods(item, 'item', 'tag')
-item.getAll = endpoint.getAll('item', {modify: item.withFields})
-item.get = endpoint.get('item', 'tag', {modify: item.withFields})
+item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
+item.get = endpoint.get('item', 'tag', {modify: item.withFieldsAndFilters})
 
 item.mount = app => {
   app.get({name: 'get all items', path: 'item'}, auth.verify, item.getAll)
