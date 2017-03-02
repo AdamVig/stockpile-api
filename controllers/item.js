@@ -6,6 +6,7 @@ const item = module.exports
 // Join item with all of its fields
 item.withFields = (queryBuilder) => {
   return queryBuilder
+item.withFields = (req, queryBuilder) => {
     .select('item.*')
 
   // Model
