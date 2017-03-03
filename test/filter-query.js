@@ -9,13 +9,19 @@ test('Filter query', t => {
   const queryBuilderNoEffect = {
     where: sinon.spy()
   }
-  filterQuery(d.req, d.wrongNames)(queryBuilderNoEffect)
+  const wrongParamNames = new Map()
+  wrongParamNames.set(d.wrongNames[0], d.wrongNames[0])
+  wrongParamNames.set(d.wrongNames[1], d.wrongNames[1])
+  filterQuery(d.req, wrongParamNames)(queryBuilderNoEffect)
   t.false(queryBuilderNoEffect.where.called,
           'has no effect when no params match')
   const queryBuilder = {
     where: sinon.spy()
   }
-  filterQuery(d.req, d.names)(queryBuilder)
+  const paramNames = new Map()
+  paramNames.set(d.names[0], d.names[0])
+  paramNames.set(d.names[1], d.names[1])
+  filterQuery(d.req, paramNames)(queryBuilder)
   t.true(queryBuilder.where.calledTwice,
           'each param is added to query')
 })

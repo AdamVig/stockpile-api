@@ -1,14 +1,12 @@
 /**
  * Filter a database query based on request query parameters
  * @param {object} req HTTP request
- * @param {object} paramNames={} Values `req.params` to filter with
+ * @param {map} paramNames Values `req.params` to filter with
  * @return {object} Query builder with `where` clauses appended to it
  */
-module.exports = (req, paramNames = {}) => {
+module.exports = (req, paramNames = new Map()) => {
   return (queryBuilder) => {
-    for (const name in paramNames) {
-      const key = paramNames[name]
-
+    for (const [name, key] of paramNames) {
       // Get value from request query parameters
       const value = req.params[name]
 

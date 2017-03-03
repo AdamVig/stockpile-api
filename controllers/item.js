@@ -21,11 +21,10 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .select('category.name as category')
 
   // Mapping between query param fields and database query column names
-  const filterParams = {
-    brandID: 'brand.brandID',
-    modelID: 'model.modelID',
-    categoryID: 'category.categoryID'
-  }
+  const filterParams = new Map()
+  filterParams.set('brandID', 'brand.brandID')
+  filterParams.set('modelID', 'model.modelID')
+  filterParams.set('categoryID', 'category.categoryID')
 
   // Add filters to query
   queryBuilder.modify(filterQuery(req, filterParams))
