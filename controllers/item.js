@@ -11,6 +11,7 @@ item.withFields = (queryBuilder) => {
   // Model
     .leftJoin('model', 'item.modelID', 'model.modelID')
     .select('model.name as model')
+    .select('model.brandID')
 
   // Brand
     .leftJoin('brand', 'model.brandID', 'brand.brandID')
