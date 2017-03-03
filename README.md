@@ -84,3 +84,14 @@ In either situation, you will receive a response like this:
 
 Make all further requests with the following header:  
 `Authorization: Bearer 987234.sdf0982347234.hjgsdf89234`
+
+### Filtering Items
+To filter items by brand, category, or model, use the following query parameter syntax:  
+```
+/items?brandID=1&modelID=1&categoryID=1
+/items?brandID=3
+/items?modelID=5
+/items?categoryID=18
+```
+
+The values of the query parameters are the IDs of the entities they specify in the database.  

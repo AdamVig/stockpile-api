@@ -20,8 +20,9 @@ const endpoint = module.exports = {}
  */
 endpoint.getAll = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
-    return db.getAll(tableName, req.user.organizationID, modify)
-      .then(rows => res.send({results: rows}))
+    return db.getAll(tableName, req.user.organizationID,
+                     endpoint.bindModify(modify, req))
+      .then(results => res.send({results}))
       .catch(err => endpoint.handleError(err, messages, next))
   }
 }
@@ -37,7 +38,7 @@ endpoint.getAll = (tableName, {modify, messages} = {}) => {
 endpoint.get = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.get(tableName, columnName, req.params[columnName],
-                  req.user.organizationID, modify)
+                  req.user.organizationID, endpoint.bindModify(modify, req))
       .then(row => res.send(row))
       .catch(err => endpoint.handleError(err, messages, next))
   }
@@ -57,7 +58,7 @@ endpoint.create = (tableName, {modify, messages} = {}) => {
       req.body.organizationID = req.user.organizationID
     }
 
-    return db.create(tableName, req.body, modify)
+    return db.create(tableName, req.body, endpoint.bindModify(modify, req))
       .then(([id]) => res.send({
         id,
         message: endpoint.chooseMessage('create', messages)
@@ -77,7 +78,7 @@ endpoint.create = (tableName, {modify, messages} = {}) => {
 endpoint.update = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.update(tableName, columnName, req.body[columnName], req.body,
-                     req.user.organizationID, modify)
+                     req.user.organizationID, endpoint.bindModify(modify, req))
       .then(updatedRow => { return res.send(updatedRow) })
       .catch(err => endpoint.handleError(err, messages, next))
   }
@@ -94,7 +95,7 @@ endpoint.update = (tableName, columnName, {modify, messages} = {}) => {
 endpoint.delete = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.delete(tableName, columnName, req.params[columnName],
-                     req.user.organizationID, modify)
+                     req.user.organizationID, endpoint.bindModify(modify, req))
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
           res.send({message: endpoint.chooseMessage('delete', messages)})
@@ -181,4 +182,18 @@ endpoint.addAllMethods = (controller, table, key, messages = {}) => {
   controller.create = endpoint.create(table, {messages})
   controller.update = endpoint.update(table, key, {messages})
   controller.delete = endpoint.delete(table, key, {messages})
+}
+
+/**
+ * Bind modify function if defined
+ * @param {function} [modify] Query modifier
+ * @param {object} req Restify request
+ * @return {function|undefined} Query modifier or 'undefined'
+ */
+endpoint.bindModify = (modify, req) => {
+  if (modify) {
+    return modify.bind(null, req)
+  } else {
+    return modify
+  }
 }

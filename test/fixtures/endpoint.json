@@ -85,5 +85,8 @@
     {"code": "ER_NOT_FOUND"},
     {"code": "ER_DUP_ENTRY"},
     {"code": "ER_GENERIC_ERROR"}
-  ]
+  ],
+  "req": {
+    "test": "value"
+  }
 }

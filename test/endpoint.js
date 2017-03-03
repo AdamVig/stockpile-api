@@ -177,3 +177,14 @@ test('Handle error', t => {
 test.after.always('Remove test table', async t => {
   await knex.schema.dropTable(d.table)
 })
+
+test('Bind modify', t => {
+  const modify = {
+    bind: sinon.spy()
+  }
+  const actual = endpoint.bindModify(undefined, d.req)
+  t.true(actual === undefined, 'passes value through when undefined')
+
+  endpoint.bindModify(modify, d.req)
+  t.true(modify.bind.calledOnce, 'binds function')
+})
