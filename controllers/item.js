@@ -10,6 +10,7 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
   filterParams.set('brandID', 'brand.brandID')
   filterParams.set('modelID', 'model.modelID')
   filterParams.set('categoryID', 'category.categoryID')
+  filterParams.set('available', 'itemStatus.available')
 
   return queryBuilder
     .select('item.*')
