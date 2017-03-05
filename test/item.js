@@ -10,7 +10,6 @@ test('With fields and filters', t => {
     modify: sinon.spy(),
     select: function () { return this }
   }
-  const actual = item.withFieldsAndFilters(d.req, queryBuilder)
+  item.withFieldsAndFilters(d.req, queryBuilder)
   t.true(queryBuilder.modify.called, 'filters are added to request')
-  t.true(typeof actual === 'object', 'returns an object')
 })
