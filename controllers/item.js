@@ -27,6 +27,10 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .leftJoin('category', 'item.categoryID', 'category.categoryID')
     .select('category.name as category')
 
+  // Status
+    .leftJoin('itemStatus', 'item.itemID', 'itemStatus.itemID')
+    .select('itemStatus.available as available')
+
   // Add filters to query
     .modify(filterQuery(req, filterParams))
 }
