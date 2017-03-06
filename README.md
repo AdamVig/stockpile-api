@@ -95,4 +95,4 @@ To filter items by brand, category, or model, use the following query parameter 
 /items?available=0
 ```
 
-The values of the query parameters ending in `ID` are the IDs of the entities they specify in the database. They value of the `available` parameter is a boolean (`0` or `1`) representing whether the items returned should be available or not.  
+The values of the query parameters ending in `ID` are the IDs of the entities they specify in the database. The value of the `available` parameter is a boolean (`0` or `1`) representing whether the items returned should be available or not.  
