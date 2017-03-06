@@ -5,7 +5,14 @@ const filterQuery = require('../services/filter-query')
 const item = module.exports
 
 item.withFieldsAndFilters = (req, queryBuilder) => {
-  queryBuilder
+  // Mapping between query param fields and database query column names
+  const filterParams = new Map()
+  filterParams.set('brandID', 'brand.brandID')
+  filterParams.set('modelID', 'model.modelID')
+  filterParams.set('categoryID', 'category.categoryID')
+  filterParams.set('available', 'itemStatus.available')
+
+  return queryBuilder
     .select('item.*')
 
   // Model
@@ -21,16 +28,12 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .leftJoin('category', 'item.categoryID', 'category.categoryID')
     .select('category.name as category')
 
-  // Mapping between query param fields and database query column names
-  const filterParams = new Map()
-  filterParams.set('brandID', 'brand.brandID')
-  filterParams.set('modelID', 'model.modelID')
-  filterParams.set('categoryID', 'category.categoryID')
+  // Status
+    .leftJoin('itemStatus', 'item.itemID', 'itemStatus.itemID')
+    .select('itemStatus.available as available')
 
   // Add filters to query
-  queryBuilder.modify(filterQuery(req, filterParams))
-
-  return queryBuilder
+    .modify(filterQuery(req, filterParams))
 }
 
 endpoint.addAllMethods(item, 'item', 'tag')

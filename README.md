@@ -88,10 +88,11 @@ Make all further requests with the following header:
 ### Filtering Items
 To filter items by brand, category, or model, use the following query parameter syntax:  
 ```
-/items?brandID=1&modelID=1&categoryID=1
+/items?brandID=1&modelID=1&categoryID=1&available=0
 /items?brandID=3
 /items?modelID=5
 /items?categoryID=18
+/items?available=0
 ```
 
-The values of the query parameters are the IDs of the entities they specify in the database.  
+The values of the query parameters ending in `ID` are the IDs of the entities they specify in the database. The value of the `available` parameter is a boolean (`0` or `1`) representing whether the items returned should be available or not.  
