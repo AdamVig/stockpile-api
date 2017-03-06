@@ -81,8 +81,13 @@ test('Update', async t => {
 
   const req = {
     body: d.updatedRow,
+    params: {},
     user: {organizationID: d.organizationID}
   }
+
+  // Add the primary key value to the parameters
+  req.params[d.primaryKey] = d.updatedRow[d.primaryKey]
+
   const res = {
     send: sinon.spy()
   }

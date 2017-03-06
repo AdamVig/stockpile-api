@@ -77,7 +77,7 @@ endpoint.create = (tableName, {modify, messages} = {}) => {
  */
 endpoint.update = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
-    return db.update(tableName, columnName, req.body[columnName], req.body,
+    return db.update(tableName, columnName, req.params[columnName], req.body,
                      req.user.organizationID, endpoint.bindModify(modify, req))
       .then(updatedRow => { return res.send(updatedRow) })
       .catch(err => endpoint.handleError(err, messages, next))
