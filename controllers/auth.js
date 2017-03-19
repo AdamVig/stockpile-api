@@ -51,8 +51,8 @@ auth.authenticate = (req, res, next) => {
             message: 'organization credentials are valid'
           })
         } else {
-          throw new restify.UnauthorizedError(
-            'email and password combination is invalid')
+          return next(new restify.UnauthorizedError(
+            'email and password combination is invalid'))
         }
       })
       .catch(next)

@@ -17,6 +17,7 @@
   "dependencies": {
     "bcrypt": "^1.0.2",
     "bunyan": "^1.8.5",
+    "bunyan-format": "^0.2.1",
     "coveralls": "^2.11.15",
     "dotenv-safe": "^4.0.3",
     "jwt-simple": "^0.5.1",
