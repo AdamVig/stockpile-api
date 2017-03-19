@@ -50,6 +50,9 @@ category.mount = app => {
    * @apiGroup Category
    *
    * @apiParam {String{0...255}} name Name of category
+   *
+   * @apiSuccess (200) {String} message Descriptive message
+   * @apiSuccess (200) {Number} id ID of created row
    */
   app.put({name: 'create category', path: 'category'},
           auth.verify, category.create)
@@ -68,6 +71,9 @@ category.mount = app => {
    * @api {delete} /category/:categoryID Delete a category
    * @apiName DeleteCategory
    * @apiGroup Category
+   *
+   * @apiSuccess (200) {String} message Descriptive message
+   * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete category', path: 'category/:categoryID'},
           auth.verify, category.delete)

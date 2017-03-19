@@ -51,6 +51,9 @@ model.mount = app => {
    *
    * @apiParam {String{0...255}} name Name of model
    * @apiParam {Number} brandID ID of a brand
+   *
+   * @apiSuccess (200) {String} message Descriptive message
+   * @apiSuccess (200) {Number} id ID of created row
    */
   app.put({name: 'create model', path: 'model'}, auth.verify, model.create)
   /**
@@ -69,6 +72,9 @@ model.mount = app => {
    * @api {delete} /model/:modelID Delete a model
    * @apiName DeleteModel
    * @apiGroup Model
+   *
+   * @apiSuccess (200) {String} message Descriptive message
+   * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete model', path: 'model/:modelID'},
           auth.verify, model.delete)
