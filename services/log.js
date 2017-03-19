@@ -1,4 +1,5 @@
 const Bunyan = require('bunyan')
+const bunyanFormat = require('bunyan-format')
 const restify = require('restify')
 
 const config = require('../package')
@@ -7,6 +8,10 @@ const streams = [
   {
     path: `${config.name}.log`,
     level: 'trace'
+  },
+  {
+    level: 'trace',
+    stream: bunyanFormat({outputMode: 'long'}, process.stdout)
   }
 ]
 
