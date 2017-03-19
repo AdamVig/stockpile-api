@@ -21,8 +21,42 @@ const makeToken = module.exports.makeToken = (payload) => {
 const auth = module.exports
 
 auth.mount = app => {
+  /**
+   * @api {post} /auth Authenticate
+   * @apiName Authenticate
+   * @apiGroup Authentication
+   *
+   * @apiParam {String} email Organization's email
+   * @apiParam {String} password Organization's password
+   *
+   * @apiSuccess (200) {Number} id ID of organization
+   * @apiSuccess (200) {String} token Authorization token for use in requests
+   * @apiSuccess (200) {String} message Descriptive message
+   */
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
+  /**
+   * @api {post} /auth/register Register an organization
+   * @apiName Register
+   * @apiGroup Authentication
+   *
+   * @apiParam {String} email Organization's email
+   * @apiParam {String} password Organization's password
+   * @apiParam {String} name Organization's name
+   *
+   * @apiSuccess (201) {Number} id ID of organization
+   * @apiSuccess (201) {String} message Descriptive message
+   */
   app.post({name: 'register', path: 'auth/register'}, auth.register)
+  /**
+   * @api {head} /auth/verify Verify authentication
+   * @apiName Verify
+   * @apiGroup Authentication
+   *
+   * @apiParam {String} email User's email
+   * @apiParam {String} password User's password
+   *
+   * @apiSuccess (200) empty No response body
+   */
   app.head({name: 'verify', path: 'auth/verify'}, auth.verify, auth.checkUser)
 }
 
