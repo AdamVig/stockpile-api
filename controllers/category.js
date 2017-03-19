@@ -59,6 +59,8 @@ category.mount = app => {
    * @apiGroup Category
    *
    * @apiParam {String{0...255}} [name] Name of category
+   *
+   * @apiUse CategoryResponse
    */
   app.put({name: 'update category', path: 'category/:categoryID'},
           auth.verify, category.update)
@@ -66,8 +68,6 @@ category.mount = app => {
    * @api {delete} /category/:categoryID Delete a category
    * @apiName DeleteCategory
    * @apiGroup Category
-   *
-   * @apiUse CategoryResponse
    */
   app.del({name: 'delete category', path: 'category/:categoryID'},
           auth.verify, category.delete)
