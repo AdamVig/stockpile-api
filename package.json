@@ -49,6 +49,10 @@
     "template": {
       "withCompare": false,
       "withGenerator": false
+    },
+    "header": {
+      "title": "General",
+      "filename": "./docs/apidoc-header.md"
     }
   }
 }
