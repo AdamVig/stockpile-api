@@ -35,7 +35,7 @@ Any comments beginning with a `//` will be considered "prose" and formatted as t
 ### apiDoc
 Similar to JSDoc, but specifically intended for APIs, it uses [many powerful parameters](http://apidocjs.com/#params) to generate documentation from docstyle comments.  
 
-Comments should be on the controller function that the endpoint uses (`module.exports.getAll`), not the endpoint declaration itself (`app.get(...)`). The root URL that apiDoc will use as a prefix for all paths is located in `package.json` under the `apidoc` property.  
+Comments should be on the endpoint declaration (`app.get(...)`), not the controller function that the endpoint uses (`module.exports.getAll`). Configuration for the ApiDoc generator is located in `package.json` under the `apidoc` property.  
 
 ## Deploying
 Deployments are made directly from the master branch using Travis CI. Commits to master should be made only via merged pull requests.  
@@ -69,38 +69,3 @@ module.exports = (app) => {
 ```
 
 Each route *must* have a descriptive, unique `name` property. Route names are used in defining relations, which show up in the `_links` property of responses. Restify removes spaces, special characters, and uppercase letters from route names, so there is no need to camelcase or kebab-case them.  
-
-## API Documentation
-*This section of the README will serve as documentation for the API until a permanent solution is set up.*
-### Authenticating
-When the organization does not exist yet:  
-`POST /register` with body containing:
-```JSON
-{"name": "Name of Organization", "email": "org@example.com", "password": "org123"}
-```
-
-When the organization already exists:  
-`POST /auth` with body containing:
-```JSON
-{"email": "org@example.com", "password": "org123"}
-```
-
-In either situation, you will receive a response like this:  
-```JSON
-{"id": 1, "token": "987234.sdf0982347234.hjgsdf89234", "message": "organization credentials are valid"}
-```
-
-Make all further requests with the following header:  
-`Authorization: Bearer 987234.sdf0982347234.hjgsdf89234`
-
-### Filtering Items
-To filter items by brand, category, or model, use the following query parameter syntax:  
-```
-/items?brandID=1&modelID=1&categoryID=1&available=0
-/items?brandID=3
-/items?modelID=5
-/items?categoryID=18
-/items?available=0
-```
-
-The values of the query parameters ending in `ID` are the IDs of the entities they specify in the database. The value of the `available` parameter is a boolean (`0` or `1`) representing whether the items returned should be available or not.  
