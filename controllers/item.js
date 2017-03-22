@@ -59,9 +59,18 @@ item.mount = app => {
    * @apiName GetItems
    * @apiGroup Item
    *
+   * @apiDescription This endpoint can be filtered using the query parameters
+   * specified below. Any of the filters can be applied at the same time in
+   * any order.
+   *
    * @apiParam {Number} [brandID] Return items with only this brandID
    * @apiParam {Number} [modelID] Return items with only this modelID
    * @apiParam {Number} [categoryID] Return items with only this categoryID
+   *
+   * @apiParamExample Filter brand and model
+   * /item?brandID=0&modelID=0
+   * @apiParamExample Filter category
+   * /item?categoryID=0
    *
    * @apiExample {json} Response format:
    * {
