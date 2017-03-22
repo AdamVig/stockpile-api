@@ -41,9 +41,91 @@ item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'tag', {modify: item.withFieldsAndFilters})
 
 item.mount = app => {
+  /**
+   * @apiDefine ItemResponse
+   *
+   * @apiExample {json} Response format:
+   * {
+   *   "itemID": 0,
+   *   "organizationID": 0,
+   *   "modelID": 0,
+   *   "categoryID": 0,
+   *   "tag": "234234"
+   * }
+   */
+
+  /**
+   * @api {get} /item Get all items
+   * @apiName GetItems
+   * @apiGroup Item
+   *
+   * @apiDescription This endpoint can be filtered using the query parameters
+   * specified below. Any of the filters can be applied at the same time in
+   * any order.
+   *
+   * @apiParam {Number} [brandID] Return items with only this brandID
+   * @apiParam {Number} [modelID] Return items with only this modelID
+   * @apiParam {Number} [categoryID] Return items with only this categoryID
+   *
+   * @apiParamExample Filter brand and model
+   * /item?brandID=0&modelID=0
+   * @apiParamExample Filter category
+   * /item?categoryID=0
+   *
+   * @apiExample {json} Response format:
+   * {
+   *   results: [
+   *     {
+   *       "itemID": 0,
+   *       "organizationID": 0,
+   *       "modelID": 0,
+   *       "categoryID": 0,
+   *       "tag": "234234"
+   *     }
+   *   ]
+   * }
+   */
   app.get({name: 'get all items', path: 'item'}, auth.verify, item.getAll)
+  /**
+   * @api {get} /item/:tag Get an item
+   * @apiName GetItem
+   * @apiGroup Item
+   *
+   * @apiUse ItemResponse
+   */
   app.get({name: 'get item', path: 'item/:tag'}, auth.verify, item.get)
+  /**
+   * @api {put} /item Create an item
+   * @apiName CreateItem
+   * @apiGroup Item
+   *
+   * @apiParam {Number} [modelID] ID of model
+   * @apiParam {Number} [categoryID] ID of category
+   * @apiParam {String} tag Unique identifier of item
+   *
+   * @apiSuccess (200) {String} message Descriptive message
+   * @apiSuccess (200) {Number} id ID of created row
+   */
   app.put({name: 'create item', path: 'item'}, auth.verify, item.create)
+  /**
+   * @api {put} /item/:tag Update item
+   * @apiName UpdateItem
+   * @apiGroup Item
+   *
+   * @apiParam {Number} [modelID] ID of model
+   * @apiParam {Number} [categoryID] ID of category
+   * @apiParam {String} [tag] Unique identifier of item
+   *
+   * @apiUse ItemResponse
+   */
   app.put({name: 'update item', path: 'item/:tag'}, auth.verify, item.update)
+  /**
+   * @api {delete} /item/:tag Delete item
+   * @apiName DeleteItem
+   * @apiGroup Item
+   *
+   * @apiSuccess (200) {String} message Descriptive message
+   * @apiSuccess (204) empty No body when item was already deleted
+   */
   app.del({name: 'delete item', path: 'item/:tag'}, auth.verify, item.delete)
 }
