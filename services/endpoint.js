@@ -23,7 +23,7 @@ endpoint.getAll = (tableName, {modify, messages} = {}) => {
     return db.getAll(tableName, req.user.organizationID,
                      endpoint.bindModify(modify, req))
       .then(results => res.send({results}))
-      .catch(err => endpoint.handleError(err, messages, next))
+      .catch(err => endpoint.handleError(err, messages, next, req))
   }
 }
 
@@ -40,7 +40,7 @@ endpoint.get = (tableName, columnName, {modify, messages} = {}) => {
     return db.get(tableName, columnName, req.params[columnName],
                   req.user.organizationID, endpoint.bindModify(modify, req))
       .then(row => res.send(row))
-      .catch(err => endpoint.handleError(err, messages, next))
+      .catch(err => endpoint.handleError(err, messages, next, req))
   }
 }
 
@@ -63,7 +63,7 @@ endpoint.create = (tableName, {modify, messages} = {}) => {
         id,
         message: endpoint.chooseMessage('create', messages)
       }))
-      .catch(err => endpoint.handleError(err, messages, next))
+      .catch(err => endpoint.handleError(err, messages, next, req))
   }
 }
 
@@ -80,7 +80,7 @@ endpoint.update = (tableName, columnName, {modify, messages} = {}) => {
     return db.update(tableName, columnName, req.params[columnName], req.body,
                      req.user.organizationID, endpoint.bindModify(modify, req))
       .then(updatedRow => { return res.send(updatedRow) })
-      .catch(err => endpoint.handleError(err, messages, next))
+      .catch(err => endpoint.handleError(err, messages, next, req))
   }
 }
 
@@ -103,7 +103,7 @@ endpoint.delete = (tableName, columnName, {modify, messages} = {}) => {
           res.send(204)
         }
       })
-      .catch(err => endpoint.handleError(err, messages, next))
+      .catch(err => endpoint.handleError(err, messages, next, req))
   }
 }
 
@@ -163,8 +163,10 @@ endpoint.chooseError = (err, messages) => {
  * @param {error} err Error from database
  * @param {object} [messages] Messages for endpoint events
  * @param {function} next Next handler in chain; will be given error
+ * @param {object} req Restify request
  */
-endpoint.handleError = (err, messages, next) => {
+endpoint.handleError = (err, messages, next, req) => {
+  req.log.error(err)
   next(endpoint.chooseError(err, messages))
 }
 
