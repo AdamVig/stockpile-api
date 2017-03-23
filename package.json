@@ -47,7 +47,9 @@
   "apidoc": {
     "url": "https://stockpile.adamvig.com/api",
     "title": "Stockpile API Docs",
-    "order": ["Main"],
+    "order": [
+      "Main"
+    ],
     "template": {
       "withCompare": false,
       "withGenerator": false
