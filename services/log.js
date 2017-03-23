@@ -18,7 +18,7 @@ const streams = [
 // Create a Bunyan logger.
 const log = module.exports = new Bunyan({
   name: config.name,
-  streams: streams,
+  streams,
   serializers: restify.bunyan.serializers
 })
 
