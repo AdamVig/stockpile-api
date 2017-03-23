@@ -1,3 +1,9 @@
+/**
+ * Database service
+ *
+ * @module services/db
+ */
+
 // Load environment variables, throw error if any variables are missing
 require('dotenv-safe').load({
   allowEmptyValues: true
@@ -18,7 +24,7 @@ function NotFoundError () {
 NotFoundError.prototype = Object.create(Error.prototype)
 
 // Create and export database instance
-const db = module.exports = require('knex')({
+const knex = require('knex')({
   client: 'mysql',
   connection: {
     host: process.env.DB_URL,
@@ -30,6 +36,9 @@ const db = module.exports = require('knex')({
   useNullAsDefault: true
 })
 
+/** Knex instance */
+module.exports = knex
+
 /**
  * Build a where clause for a Knex `.where()`
  * @param {string} table Name of table
@@ -38,7 +47,7 @@ const db = module.exports = require('knex')({
  * @param {any} [organizationID] ID of organization
  * @return {object} A where clause
  */
-db.buildWhere = (table, column, value, organizationID) => {
+module.exports.buildWhere = (table, column, value, organizationID) => {
   const whereClause = {}
 
   // Add column and value to where clause if defined
@@ -62,9 +71,9 @@ db.buildWhere = (table, column, value, organizationID) => {
  * @param {function} [modify=noop] Modify the query
  * @return {Promise.<object>} Resolved by result from database
  */
-db.create = (table, data, modify = () => {}) => {
+module.exports.create = (table, data, modify = () => {}) => {
   if (data) {
-    return db(table)
+    return knex(table)
       .insert(data)
   } else {
     throw new MissingDataError()
@@ -81,9 +90,9 @@ db.create = (table, data, modify = () => {}) => {
  * @return {Promise.<boolean>} True if operation completed succesfully
  * @throws restify.NotFoundError when row to delete does not exist
  */
-db.delete = (table, column, value, organizationID, modify = () => {}) => {
-  return db(table)
-    .where(db.buildWhere(table, column, value, organizationID))
+module.exports.delete = (table, column, value, organizationID, modify = () => {}) => {
+  return knex(table)
+    .where(module.exports.buildWhere(table, column, value, organizationID))
     .delete()
 }
 
@@ -97,9 +106,9 @@ db.delete = (table, column, value, organizationID, modify = () => {}) => {
  * @return {Promise.<object>} Resolved by retrieved row
  * @throws restify.NotFoundError when row is not in db
  */
-db.get = (table, column, value, organizationID, modify = () => {}) => {
-  return db(table)
-    .where(db.buildWhere(table, column, value, organizationID))
+module.exports.get = (table, column, value, organizationID, modify = () => {}) => {
+  return knex(table)
+    .where(module.exports.buildWhere(table, column, value, organizationID))
     .first()
     .modify(modify)
     .tap(row => {
@@ -116,9 +125,9 @@ db.get = (table, column, value, organizationID, modify = () => {}) => {
  * @param {function} [modify=noop] Modify the query
  * @return {Promise.<array>} Resolved by all rows from table
  */
-db.getAll = (table, organizationID, modify = () => {}) => {
-  return db(table)
-    .where(db.buildWhere(table, null, null, organizationID))
+module.exports.getAll = (table, organizationID, modify = () => {}) => {
+  return knex(table)
+    .where(module.exports.buildWhere(table, null, null, organizationID))
     .modify(modify)
 }
 
@@ -134,20 +143,20 @@ db.getAll = (table, organizationID, modify = () => {}) => {
  * @throws restify.NotFoundError when row is missing from db
  * @throws restify.UnprocessableEntityError when body is missing
  */
-db.update = (table, column, value, data, organizationID, modify = () => {}) => {
-  return db(table)
-    .where(db.buildWhere(table, column, value, organizationID))
+module.exports.update = (table, column, value, data, organizationID, modify = () => {}) => {
+  return knex(table)
+    .where(module.exports.buildWhere(table, column, value, organizationID))
     .first()
     .tap(row => {
       if (row) {
-        return db(table)
+        return knex(table)
           .where(column, value)
           .update(data)
       } else {
         throw new NotFoundError()
       }
     }).then(() => {
-      return db(table)
+      return knex(table)
         .where(column, value)
         .first()
     })

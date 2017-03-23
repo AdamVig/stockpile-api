@@ -1,5 +1,6 @@
 /**
  * Filter a database query based on request query parameters
+ * @module services/filter-query
  * @param {object} req HTTP request
  * @param {map} paramNames Values `req.params` to filter with
  * @return {object} Query builder with `where` clauses appended to it
