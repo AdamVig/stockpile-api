@@ -1,0 +1,10 @@
+{
+  "opts": {
+    "destination": "docs/jsdoc"
+  },
+  "plugins": ["plugins/markdown"],
+  "source": {
+    "include": ["services"],
+    "includePattern": ".js$"
+  }
+}

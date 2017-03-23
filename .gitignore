@@ -9,4 +9,4 @@ coverage
 
 # Ignore generated docs (but not whole docs directory)
 docs/apidoc
-docs/docco
+docs/jsdoc
