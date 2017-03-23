@@ -173,10 +173,16 @@ test('Choose error', t => {
 
 test('Handle error', t => {
   const next = sinon.spy()
+  const req = {
+    log: {
+      error: sinon.spy()
+    }
+  }
 
-  endpoint.handleError(d.errors[0], d.customMessages, next)
+  endpoint.handleError(d.errors[0], d.customMessages, next, req)
 
   t.true(next.calledOnce, 'next handler is called')
+  t.true(req.log.error.calledOnce, 'error is logged with request logger')
 })
 
 test.after.always('Remove test table', async t => {
