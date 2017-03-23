@@ -2,13 +2,13 @@
  * Generalized endpoint functions
  *
  * These functions cover the most common use cases for most controllers.
+ *
+ * @exports services/endpoint
  */
 
 const restify = require('restify')
 
 const db = require('../services/db')
-
-const endpoint = module.exports = {}
 
 /**
  * Get all rows from a table and return them in an object, assigned to a
@@ -18,12 +18,12 @@ const endpoint = module.exports = {}
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.getAll = (tableName, {modify, messages} = {}) => {
+module.exports.getAll = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID,
-                     endpoint.bindModify(modify, req))
+                     module.exports.bindModify(modify, req))
       .then(results => res.send({results}))
-      .catch(err => endpoint.handleError(err, messages, next, req))
+      .catch(err => module.exports.handleError(err, messages, next, req))
   }
 }
 
@@ -35,12 +35,12 @@ endpoint.getAll = (tableName, {modify, messages} = {}) => {
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.get = (tableName, columnName, {modify, messages} = {}) => {
+module.exports.get = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.get(tableName, columnName, req.params[columnName],
-                  req.user.organizationID, endpoint.bindModify(modify, req))
+                  req.user.organizationID, module.exports.bindModify(modify, req))
       .then(row => res.send(row))
-      .catch(err => endpoint.handleError(err, messages, next, req))
+      .catch(err => module.exports.handleError(err, messages, next, req))
   }
 }
 
@@ -51,19 +51,19 @@ endpoint.get = (tableName, columnName, {modify, messages} = {}) => {
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.create = (tableName, {modify, messages} = {}) => {
+module.exports.create = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     // Add organization ID if it is missing
     if (!req.body.organizationID) {
       req.body.organizationID = req.user.organizationID
     }
 
-    return db.create(tableName, req.body, endpoint.bindModify(modify, req))
+    return db.create(tableName, req.body, module.exports.bindModify(modify, req))
       .then(([id]) => res.send({
         id,
-        message: endpoint.chooseMessage('create', messages)
+        message: module.exports.chooseMessage('create', messages)
       }))
-      .catch(err => endpoint.handleError(err, messages, next, req))
+      .catch(err => module.exports.handleError(err, messages, next, req))
   }
 }
 
@@ -75,12 +75,12 @@ endpoint.create = (tableName, {modify, messages} = {}) => {
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.update = (tableName, columnName, {modify, messages} = {}) => {
+module.exports.update = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.update(tableName, columnName, req.params[columnName], req.body,
-                     req.user.organizationID, endpoint.bindModify(modify, req))
+                     req.user.organizationID, module.exports.bindModify(modify, req))
       .then(updatedRow => { return res.send(updatedRow) })
-      .catch(err => endpoint.handleError(err, messages, next, req))
+      .catch(err => module.exports.handleError(err, messages, next, req))
   }
 }
 
@@ -92,18 +92,18 @@ endpoint.update = (tableName, columnName, {modify, messages} = {}) => {
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @return {function} Endpoint handler
  */
-endpoint.delete = (tableName, columnName, {modify, messages} = {}) => {
+module.exports.delete = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.delete(tableName, columnName, req.params[columnName],
-                     req.user.organizationID, endpoint.bindModify(modify, req))
+                     req.user.organizationID, module.exports.bindModify(modify, req))
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
-          res.send({message: endpoint.chooseMessage('delete', messages)})
+          res.send({message: module.exports.chooseMessage('delete', messages)})
         } else {
           res.send(204)
         }
       })
-      .catch(err => endpoint.handleError(err, messages, next, req))
+      .catch(err => module.exports.handleError(err, messages, next, req))
   }
 }
 
@@ -111,7 +111,7 @@ endpoint.delete = (tableName, columnName, {modify, messages} = {}) => {
  * Default endpoint handler for new endpoints
  * @return {function} Endpoint handler
  */
-endpoint.default = () => {
+module.exports.default = () => {
   return (req, res, next) => {
     res.send({})
   }
@@ -123,7 +123,7 @@ endpoint.default = () => {
  * @param {object} [messages] Custom messages
  * @return {string} Chosen message
  */
-endpoint.chooseMessage = (type, messages = {}) => {
+module.exports.chooseMessage = (type, messages = {}) => {
   const defaultMessages = {
     create: 'created',
     delete: 'deleted',
@@ -141,20 +141,20 @@ endpoint.chooseMessage = (type, messages = {}) => {
  * @param {object} [messages] Messages for endpoint events
  * @return {error} Restify error
  */
-endpoint.chooseError = (err, messages) => {
+module.exports.chooseError = (err, messages) => {
   switch (err.code) {
     case 'ER_BAD_FIELD_ERROR':
       return new restify.BadRequestError(
-        endpoint.chooseMessage('badRequest', messages))
+        module.exports.chooseMessage('badRequest', messages))
     case 'ER_DUP_ENTRY':
       return new restify.ConflictError(
-        endpoint.chooseMessage('conflict', messages))
+        module.exports.chooseMessage('conflict', messages))
     case 'ER_NOT_FOUND':
       return new restify.NotFoundError(
-        endpoint.chooseMessage('missing', messages))
+        module.exports.chooseMessage('missing', messages))
     default:
       return new restify.InternalServerError(
-        endpoint.chooseMessage('default', messages))
+        module.exports.chooseMessage('default', messages))
   }
 }
 
@@ -165,9 +165,9 @@ endpoint.chooseError = (err, messages) => {
  * @param {function} next Next handler in chain; will be given error
  * @param {object} req Restify request
  */
-endpoint.handleError = (err, messages, next, req) => {
+module.exports.handleError = (err, messages, next, req) => {
   req.log.error(err)
-  next(endpoint.chooseError(err, messages))
+  next(module.exports.chooseError(err, messages))
 }
 
 /**
@@ -178,12 +178,12 @@ endpoint.handleError = (err, messages, next, req) => {
  * @param {object} [messages] Messages for endpoint events
  * @param {string} key Name of a column in a table
  */
-endpoint.addAllMethods = (controller, table, key, messages = {}) => {
-  controller.getAll = endpoint.getAll(table, {messages})
-  controller.get = endpoint.get(table, key, {messages})
-  controller.create = endpoint.create(table, {messages})
-  controller.update = endpoint.update(table, key, {messages})
-  controller.delete = endpoint.delete(table, key, {messages})
+module.exports.addAllMethods = (controller, table, key, messages = {}) => {
+  controller.getAll = module.exports.getAll(table, {messages})
+  controller.get = module.exports.get(table, key, {messages})
+  controller.create = module.exports.create(table, {messages})
+  controller.update = module.exports.update(table, key, {messages})
+  controller.delete = module.exports.delete(table, key, {messages})
 }
 
 /**
@@ -192,7 +192,7 @@ endpoint.addAllMethods = (controller, table, key, messages = {}) => {
  * @param {object} req Restify request
  * @return {function|undefined} Query modifier or 'undefined'
  */
-endpoint.bindModify = (modify, req) => {
+module.exports.bindModify = (modify, req) => {
   if (modify) {
     return modify.bind(null, req)
   } else {
