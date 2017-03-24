@@ -39,6 +39,7 @@
     "eslint": "^3.14.1",
     "eslint-plugin-ava": "^4.0.1",
     "eslint-plugin-standard": "^2.0.1",
+    "jsdoc": "^3.4.3",
     "nodemon": "^1.11.0",
     "nyc": "^10.1.2",
     "sinon": "1.17.7"
@@ -46,7 +47,9 @@
   "apidoc": {
     "url": "https://stockpile.adamvig.com/api",
     "title": "Stockpile API Docs",
-    "order": ["Main"],
+    "order": [
+      "Main"
+    ],
     "template": {
       "withCompare": false,
       "withGenerator": false
