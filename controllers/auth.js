@@ -66,15 +66,10 @@ auth.authenticate = (req, res, next) => {
     return db.get('organization', 'email', req.body.email)
       .then(organization => {
         const {organizationID, password} = organization
-        if (organizationID) {
-          return Promise.all([
-            organizationID,
-            bcrypt.compare(req.body.password, password)
-          ])
-        } else {
-          return next(restify.UnauthorizedError(
-            'email and password combination is invalid'))
-        }
+        return Promise.all([
+          organizationID,
+          bcrypt.compare(req.body.password, password)
+        ])
       })
       .then(([organizationID, valid]) => {
         if (valid === true) {
@@ -112,14 +107,10 @@ auth.register = (req, res, next) => {
       })
       .then(id => {
         const organizationID = id[0]
-        if (organizationID) {
-          return res.send(201, {
-            id: organizationID,
-            message: 'created organization'
-          })
-        } else {
-          return next(new restify.InternalServerError('organization not created'))
-        }
+        return res.send(201, {
+          id: organizationID,
+          message: 'created organization'
+        })
       })
       .catch(next)
   } else {
@@ -130,13 +121,7 @@ auth.register = (req, res, next) => {
 // Authenticate a user given a JWT payload
 auth.authenticateToken = (payload, done) => {
   return db.get('organization', 'organizationID', payload.sub)
-    .then((user) => {
-      if (user) {
-        done(null, user)
-      } else {
-        done(null, false)
-      }
-    })
+    .then(user => done(null, user))
     .catch(done)
 }
 

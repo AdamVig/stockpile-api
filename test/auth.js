@@ -64,6 +64,15 @@ test('Authenticates an organization', async t => {
 
   t.true(res.send.calledWithMatch(sinon.match.object), 'responds with an object')
   t.false(next.called, 'no errors')
+
+  const reqNoPassword = {
+    body: d.authOrganizationNoPassword
+  }
+  const nextNoPassword = sinon.spy()
+  await auth.authenticate(reqNoPassword, null, nextNoPassword)
+  t.true(nextNoPassword.calledWithMatch(
+    sinon.match.instanceOf(restify.BadRequestError)),
+         'throws error when request is missing fields')
 })
 
 test('Returns error when email and password do not match', async t => {
@@ -82,6 +91,40 @@ test('Returns error when email and password do not match', async t => {
   t.true(next.called, 'returns an error')
 })
 
+test('Authenticate token', async t => {
+  // Insert organization into db and add ID to test data
+  const [organizationID] = await knex(d.table).insert(d.tokenOrganization)
+  d.payload.sub = organizationID
+  d.tokenOrganization.organizationID = organizationID
+
+  const done = sinon.spy()
+  await auth.authenticateToken(d.payload, done)
+  t.true(done.calledWith(null, d.tokenOrganization), 'authenticates organization')
+
+  const doneNoUser = sinon.spy()
+  await auth.authenticateToken(d.payloadNoUser, doneNoUser)
+  t.true(doneNoUser.calledWithMatch(sinon.match.instanceOf(Error)),
+         'does not authenticate missing organization')
+})
+
+test('Check user', t => {
+  const req = {
+    body: d.authOrganization
+  }
+  const reqWithUser = {
+    body: d.authOrganization,
+    user: {}
+  }
+  const res = {
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+  auth.checkUser(reqWithUser, res, next)
+  t.true(res.send.calledWith(200), 'success response sent')
+  auth.checkUser(req, res, next)
+  t.true(next.calledWith(restify.NotFoundError()), 'error passed to next handler')
+})
+
 test.after.always('Clean up database', async t => {
   // Delete created organizations
   await knex(d.table)
@@ -92,5 +135,8 @@ test.after.always('Clean up database', async t => {
     .del()
   await knex(d.table)
     .where('email', d.authOrganizationWrong.email)
+    .del()
+  await knex(d.table)
+    .where('email', d.tokenOrganization.email)
     .del()
 })
