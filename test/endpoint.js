@@ -1,13 +1,13 @@
 const sinon = require('sinon')
 const test = require('ava')
 
-const d = require('./fixtures/endpoint')
+const fixt = require('./fixtures/endpoint')
 const endpoint = require('../services/endpoint')
 const knex = require('./fixtures/knex-instance')
 
 test.before('Set up test table', async t => {
-  await knex.schema.dropTableIfExists(d.table)
-  await knex.schema.createTable(d.table, table => {
+  await knex.schema.dropTableIfExists(fixt.table)
+  await knex.schema.createTable(fixt.table, table => {
     table.string('name').primary()
     table.integer('value')
     table.integer('organizationID')
@@ -16,16 +16,16 @@ test.before('Set up test table', async t => {
 
 test('Get all', async t => {
   // Insert multiple rows
-  await knex(d.table).insert(d.multipleRows)
+  await knex(fixt.table).insert(fixt.multipleRows)
 
   const req = {
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
   const res = {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await endpoint.getAll(d.table)(req, res, next)
+  await endpoint.getAll(fixt.table)(req, res, next)
   t.true(res.send.calledOnce, 'sends one response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'responds with an object')
@@ -38,10 +38,10 @@ test('Get all', async t => {
   const reqMissingTable = {
     log: {error: sinon.spy()},
     params: {},
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
   const nextMissingTable = sinon.spy()
-  await endpoint.getAll(d.missingTable)(reqMissingTable, null,
+  await endpoint.getAll(fixt.missingTable)(reqMissingTable, null,
                                             nextMissingTable)
   t.true(nextMissingTable.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when getting missing row')
@@ -49,21 +49,21 @@ test('Get all', async t => {
 
 test('Get', async t => {
   // Insert single row
-  await knex(d.table).insert(d.singleRow)
+  await knex(fixt.table).insert(fixt.singleRow)
 
   const req = {
     params: {},
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
 
   // Add the primary key value to the parameters
-  req.params[d.primaryKey] = d.singleRow[d.primaryKey]
+  req.params[fixt.primaryKey] = fixt.singleRow[fixt.primaryKey]
 
   const res = {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await endpoint.get(d.table, d.primaryKey)(req, res, next)
+  await endpoint.get(fixt.table, fixt.primaryKey)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
                                   'route responds with an object')
@@ -72,49 +72,49 @@ test('Get', async t => {
   const reqMissing = {
     log: {error: sinon.spy()},
     params: {},
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
   const nextMissing = sinon.spy()
-  await endpoint.get(d.table, d.primaryKey)(reqMissing, null, nextMissing)
+  await endpoint.get(fixt.table, fixt.primaryKey)(reqMissing, null, nextMissing)
   t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when getting missing row')
 })
 
 test('Create', async t => {
   const req = {
-    body: d.rowToCreate,
-    user: {organizationID: d.organizationID}
+    body: fixt.rowToCreate,
+    user: {organizationID: fixt.organizationID}
   }
   const res = {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await endpoint.create(d.table, d.messagesWithCreate)(req, res, next)
+  await endpoint.create(fixt.table, fixt.messagesWithCreate)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
   t.false(next.called, 'no errors')
 
   const reqMissingFields = {
-    body: d.rowToCreateNoName,
+    body: fixt.rowToCreateNoName,
     log: {error: sinon.spy()},
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
   const nextMissingFields = sinon.spy()
-  await endpoint.create(d.table)(reqMissingFields, null, nextMissingFields)
+  await endpoint.create(fixt.table)(reqMissingFields, null, nextMissingFields)
   t.true(nextMissingFields.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when request body is missing a required field')
 
   const reqNoOrg = {
-    body: d.rowToCreateNoOrg,
+    body: fixt.rowToCreateNoOrg,
     log: {error: sinon.spy()},
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
   const resNoOrg = {
     send: sinon.spy()
   }
   const nextNoOrg = sinon.spy()
-  await endpoint.create(d.table)(reqNoOrg, resNoOrg, nextNoOrg)
+  await endpoint.create(fixt.table)(reqNoOrg, resNoOrg, nextNoOrg)
   t.true(res.send.calledOnce, 'route sends a response when body has no org ID')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object when body has no org ID')
@@ -123,22 +123,22 @@ test('Create', async t => {
 
 test('Update', async t => {
   // Insert row to update
-  await knex(d.table).insert(d.rowToUpdate)
+  await knex(fixt.table).insert(fixt.rowToUpdate)
 
   const req = {
-    body: d.updatedRow,
+    body: fixt.updatedRow,
     params: {},
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
 
   // Add the primary key value to the parameters
-  req.params[d.primaryKey] = d.updatedRow[d.primaryKey]
+  req.params[fixt.primaryKey] = fixt.updatedRow[fixt.primaryKey]
 
   const res = {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await endpoint.update(d.table, d.primaryKey)(req, res, next)
+  await endpoint.update(fixt.table, fixt.primaryKey)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
@@ -146,45 +146,46 @@ test('Update', async t => {
 
   const reqMissing = {
     log: {error: sinon.spy()},
-    params: {name: d.missingRowToUpdate.name},
-    body: d.missingRowToUpdate,
-    user: {organizationID: d.organizationID}
+    params: {name: fixt.missingRowToUpdate.name},
+    body: fixt.missingRowToUpdate,
+    user: {organizationID: fixt.organizationID}
   }
   const nextMissing = sinon.spy()
-  await endpoint.update(d.table, d.primaryKey)(reqMissing, null, nextMissing)
+  await endpoint.update(fixt.table, fixt.primaryKey)(reqMissing, null, nextMissing)
   t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when updating nonexistent row')
 })
 
 test('Delete', async t => {
   // Insert row to delete
-  await knex(d.table).insert(d.rowToDelete)
+  await knex(fixt.table).insert(fixt.rowToDelete)
 
   const req = {
     params: {},
-    user: {organizationID: d.organizationID}
+    user: {organizationID: fixt.organizationID}
   }
 
   // Add the primary key value to the parameters
-  req.params[d.primaryKey] = d.rowToDelete[d.primaryKey]
+  req.params[fixt.primaryKey] = fixt.rowToDelete[fixt.primaryKey]
 
   const res = {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await endpoint.delete(d.table, d.primaryKey,
-                        d.messagesWithDelete)(req, res, next)
+  await endpoint.delete(fixt.table, fixt.primaryKey,
+                        fixt.messagesWithDelete)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
 
   const reqMissing = {
     log: {error: sinon.spy()},
-    params: {name: d.nonNameToDelete},
-    user: {organizationID: d.organizationID}
+    params: {name: fixt.nonNameToDelete},
+    user: {organizationID: fixt.organizationID}
   }
   const nextMissing = sinon.spy()
-  await endpoint.delete(d.table, d.primaryKey)(reqMissing, null, nextMissing)
+  await endpoint.delete(fixt.table, fixt.primaryKey)(reqMissing, null,
+                                                     nextMissing)
   t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when deleting nonexistent row')
 })
@@ -201,40 +202,40 @@ test('Default', async t => {
 
 test('Add all methods', t => {
   const controller = {}
-  endpoint.addAllMethods(controller, d.table, d.primaryKey)
-  t.deepEqual(Object.keys(controller), d.allMethodNames,
+  endpoint.addAllMethods(controller, fixt.table, fixt.primaryKey)
+  t.deepEqual(Object.keys(controller), fixt.allMethodNames,
          'all methods are defined on controller')
 })
 
 test('Choose message', t => {
   // Uses default case when message type is not defined
   const actualDefaultMessage = endpoint.chooseMessage('doesNotExist',
-                                                      d.customMessages)
+                                                      fixt.customMessages)
   // Uses custom message when passed object has the type defined
   const actualCustomMessage = endpoint.chooseMessage('conflict',
-                                                     d.customMessages)
+                                                     fixt.customMessages)
   // Uses a default message for the type when passed object does not have it
   const actualMessageDefault = endpoint.chooseMessage('badRequest',
-                                                      d.customMessages)
-  t.is(actualDefaultMessage, d.expectedDefaultMessage,
+                                                      fixt.customMessages)
+  t.is(actualDefaultMessage, fixt.expectedDefaultMessage,
           'default message works')
-  t.is(actualCustomMessage, d.expectedCustomMessage, 'custom message works')
-  t.is(actualMessageDefault, d.defaultBadRequestMessage,
+  t.is(actualCustomMessage, fixt.expectedCustomMessage, 'custom message works')
+  t.is(actualMessageDefault, fixt.defaultBadRequestMessage,
           'message default works')
 })
 
 test('Choose error', t => {
-  const actualBadRequest = endpoint.chooseError(d.errors[0], d.customMessages)
-  const actualMissing = endpoint.chooseError(d.errors[1], d.customMessages)
-  const actualDuplicate = endpoint.chooseError(d.errors[2], d.customMessages)
-  const actualUndefined = endpoint.chooseError(d.errors[3], d.customMessages)
-  t.true(actualBadRequest.message === d.defaultBadRequestMessage,
+  const actualBadRequest = endpoint.chooseError(fixt.errors[0], fixt.customMessages)
+  const actualMissing = endpoint.chooseError(fixt.errors[1], fixt.customMessages)
+  const actualDuplicate = endpoint.chooseError(fixt.errors[2], fixt.customMessages)
+  const actualUndefined = endpoint.chooseError(fixt.errors[3], fixt.customMessages)
+  t.true(actualBadRequest.message === fixt.defaultBadRequestMessage,
          'handles bad request error')
-  t.true(actualMissing.message === d.customMessages.missing,
+  t.true(actualMissing.message === fixt.customMessages.missing,
          'handles missing error')
-  t.true(actualDuplicate.message === d.customMessages.conflict,
+  t.true(actualDuplicate.message === fixt.customMessages.conflict,
          'handles duplicate error')
-  t.true(actualUndefined.message === d.expectedDefaultMessage,
+  t.true(actualUndefined.message === fixt.expectedDefaultMessage,
          'handles undefined error')
 })
 
@@ -246,23 +247,23 @@ test('Handle error', t => {
     }
   }
 
-  endpoint.handleError(d.errors[0], d.customMessages, next, req)
+  endpoint.handleError(fixt.errors[0], fixt.customMessages, next, req)
 
   t.true(next.calledOnce, 'next handler is called')
   t.true(req.log.error.calledOnce, 'error is logged with request logger')
 })
 
 test.after.always('Remove test table', async t => {
-  await knex.schema.dropTable(d.table)
+  await knex.schema.dropTable(fixt.table)
 })
 
 test('Bind modify', t => {
   const modify = {
     bind: sinon.spy()
   }
-  const actual = endpoint.bindModify(undefined, d.req)
+  const actual = endpoint.bindModify(undefined, fixt.req)
   t.true(actual === undefined, 'passes value through when undefined')
 
-  endpoint.bindModify(modify, d.req)
+  endpoint.bindModify(modify, fixt.req)
   t.true(modify.bind.calledOnce, 'binds function')
 })

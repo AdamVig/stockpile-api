@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const test = require('ava')
 
-const d = require('./fixtures/log')
+const fixt = require('./fixtures/log')
 const log = require('../services/log')
 
 test('Log exports an object', t => {
@@ -24,8 +24,8 @@ test('Logs request', t => {
 
 test('Logs app start', t => {
   const logSpy = sinon.spy(log, 'info')
-  log.onAppStart(d.app)
+  log.onAppStart(fixt.app)
   t.true(logSpy.calledOnce, 'should output to log once')
-  t.true(logSpy.calledWith(sinon.match.string, d.app.name, d.app.url),
+  t.true(logSpy.calledWith(sinon.match.string, fixt.app.name, fixt.app.url),
         'should log application name and URL')
 })
