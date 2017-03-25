@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const test = require('ava')
 
-const d = require('./fixtures/item')
+const fixt = require('./fixtures/item')
 const item = require('../controllers/item')
 
 test('With fields and filters', t => {
@@ -10,6 +10,6 @@ test('With fields and filters', t => {
     modify: sinon.spy(),
     select: function () { return this }
   }
-  item.withFieldsAndFilters(d.req, queryBuilder)
+  item.withFieldsAndFilters(fixt.req, queryBuilder)
   t.true(queryBuilder.modify.called, 'filters are added to request')
 })

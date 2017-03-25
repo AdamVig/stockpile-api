@@ -3,12 +3,12 @@ const sinon = require('sinon')
 const test = require('ava')
 
 const auth = require('../controllers/auth')
-const d = require('./fixtures/auth')
+const fixt = require('./fixtures/auth')
 const knex = require('./fixtures/knex-instance')
 
 test('Registers an organization', async t => {
   const req = {
-    body: d.organization
+    body: fixt.organization
   }
   const res = {
     send: sinon.spy()
@@ -16,8 +16,8 @@ test('Registers an organization', async t => {
   const next = sinon.spy()
   await auth.register(req, res, next)
 
-  const row = await knex(d.table)
-          .where('name', d.organization.name)
+  const row = await knex(fixt.table)
+          .where('name', fixt.organization.name)
           .first()
 
   t.truthy(row, 'organization was created')
@@ -29,7 +29,7 @@ test('Registers an organization', async t => {
 
 test('Returns error when registering organization with missing data', async t => {
   const req = {
-    body: d.organizationIncomplete
+    body: fixt.organizationIncomplete
   }
   const res = {
     send: sinon.spy()
@@ -38,8 +38,8 @@ test('Returns error when registering organization with missing data', async t =>
 
   await auth.register(req, res, next)
 
-  const row = await knex(d.table)
-          .where('name', d.organization.name)
+  const row = await knex(fixt.table)
+          .where('name', fixt.organization.name)
           .first()
 
   t.falsy(row, 'organization not created')
@@ -52,21 +52,21 @@ test('Returns error when registering organization with missing data', async t =>
 
 test('Authenticates an organization', async t => {
   const req = {
-    body: d.authOrganization
+    body: fixt.authOrganization
   }
   const res = {
     send: sinon.spy()
   }
   const next = sinon.spy()
 
-  await knex(d.table).insert(d.authOrganizationHash)
+  await knex(fixt.table).insert(fixt.authOrganizationHash)
   await auth.authenticate(req, res, next)
 
   t.true(res.send.calledWithMatch(sinon.match.object), 'responds with an object')
   t.false(next.called, 'no errors')
 
   const reqNoPassword = {
-    body: d.authOrganizationNoPassword
+    body: fixt.authOrganizationNoPassword
   }
   const nextNoPassword = sinon.spy()
   await auth.authenticate(reqNoPassword, null, nextNoPassword)
@@ -77,14 +77,14 @@ test('Authenticates an organization', async t => {
 
 test('Returns error when email and password do not match', async t => {
   const req = {
-    body: d.authOrganizationWrong
+    body: fixt.authOrganizationWrong
   }
   const res = {
     send: sinon.spy()
   }
   const next = sinon.spy()
 
-  await knex(d.table).insert(d.authOrganizationWrongHash)
+  await knex(fixt.table).insert(fixt.authOrganizationWrongHash)
   await auth.authenticate(req, res, next)
 
   t.false(res.send.called, 'does not respond')
@@ -93,26 +93,27 @@ test('Returns error when email and password do not match', async t => {
 
 test('Authenticate token', async t => {
   // Insert organization into db and add ID to test data
-  const [organizationID] = await knex(d.table).insert(d.tokenOrganization)
-  d.payload.sub = organizationID
-  d.tokenOrganization.organizationID = organizationID
+  const [organizationID] = await knex(fixt.table).insert(fixt.tokenOrganization)
+  fixt.payload.sub = organizationID
+  fixt.tokenOrganization.organizationID = organizationID
 
   const done = sinon.spy()
-  await auth.authenticateToken(d.payload, done)
-  t.true(done.calledWith(null, d.tokenOrganization), 'authenticates organization')
+  await auth.authenticateToken(fixt.payload, done)
+  t.true(done.calledWith(null, fixt.tokenOrganization),
+         'authenticates organization')
 
   const doneNoUser = sinon.spy()
-  await auth.authenticateToken(d.payloadNoUser, doneNoUser)
+  await auth.authenticateToken(fixt.payloadNoUser, doneNoUser)
   t.true(doneNoUser.calledWithMatch(sinon.match.instanceOf(Error)),
          'does not authenticate missing organization')
 })
 
 test('Check user', t => {
   const req = {
-    body: d.authOrganization
+    body: fixt.authOrganization
   }
   const reqWithUser = {
-    body: d.authOrganization,
+    body: fixt.authOrganization,
     user: {}
   }
   const res = {
@@ -122,21 +123,22 @@ test('Check user', t => {
   auth.checkUser(reqWithUser, res, next)
   t.true(res.send.calledWith(200), 'success response sent')
   auth.checkUser(req, res, next)
-  t.true(next.calledWith(restify.NotFoundError()), 'error passed to next handler')
+  t.true(next.calledWith(restify.NotFoundError()),
+         'error passed to next handler')
 })
 
 test.after.always('Clean up database', async t => {
   // Delete created organizations
-  await knex(d.table)
-    .where('email', d.organization.email)
+  await knex(fixt.table)
+    .where('email', fixt.organization.email)
     .del()
-  await knex(d.table)
-    .where('email', d.authOrganization.email)
+  await knex(fixt.table)
+    .where('email', fixt.authOrganization.email)
     .del()
-  await knex(d.table)
-    .where('email', d.authOrganizationWrong.email)
+  await knex(fixt.table)
+    .where('email', fixt.authOrganizationWrong.email)
     .del()
-  await knex(d.table)
-    .where('email', d.tokenOrganization.email)
+  await knex(fixt.table)
+    .where('email', fixt.tokenOrganization.email)
     .del()
 })
