@@ -78,7 +78,8 @@ module.exports.create = (tableName, {modify, messages} = {}) => {
 module.exports.update = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.update(tableName, columnName, req.params[columnName], req.body,
-                     req.user.organizationID, module.exports.bindModify(modify, req))
+                     req.user.organizationID,
+                     module.exports.bindModify(modify, req))
       .then(updatedRow => { return res.send(updatedRow) })
       .catch(err => module.exports.handleError(err, messages, next, req))
   }
@@ -95,7 +96,8 @@ module.exports.update = (tableName, columnName, {modify, messages} = {}) => {
 module.exports.delete = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.delete(tableName, columnName, req.params[columnName],
-                     req.user.organizationID, module.exports.bindModify(modify, req))
+                     req.user.organizationID,
+                     module.exports.bindModify(modify, req))
       .then((rowsAffected) => {
         if (rowsAffected > 0) {
           res.send({message: module.exports.chooseMessage('delete', messages)})

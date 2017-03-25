@@ -151,7 +151,8 @@ test('Update', async t => {
     user: {organizationID: fixt.organizationID}
   }
   const nextMissing = sinon.spy()
-  await endpoint.update(fixt.table, fixt.primaryKey)(reqMissing, null, nextMissing)
+  await endpoint.update(fixt.table, fixt.primaryKey)(reqMissing, null,
+                                                     nextMissing)
   t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when updating nonexistent row')
 })
@@ -225,10 +226,14 @@ test('Choose message', t => {
 })
 
 test('Choose error', t => {
-  const actualBadRequest = endpoint.chooseError(fixt.errors[0], fixt.customMessages)
-  const actualMissing = endpoint.chooseError(fixt.errors[1], fixt.customMessages)
-  const actualDuplicate = endpoint.chooseError(fixt.errors[2], fixt.customMessages)
-  const actualUndefined = endpoint.chooseError(fixt.errors[3], fixt.customMessages)
+  const actualBadRequest = endpoint.chooseError(fixt.errors[0],
+                                                fixt.customMessages)
+  const actualMissing = endpoint.chooseError(fixt.errors[1],
+                                             fixt.customMessages)
+  const actualDuplicate = endpoint.chooseError(fixt.errors[2],
+                                               fixt.customMessages)
+  const actualUndefined = endpoint.chooseError(fixt.errors[3],
+                                               fixt.customMessages)
   t.true(actualBadRequest.message === fixt.defaultBadRequestMessage,
          'handles bad request error')
   t.true(actualMissing.message === fixt.customMessages.missing,
