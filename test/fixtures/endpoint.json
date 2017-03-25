@@ -19,10 +19,22 @@
     "value": 234,
     "organizationID": 43
   },
+  "missingTable": "notATable",
+  "missingRowToGet": {
+    "name": "row67"
+  },
   "rowToCreate": {
     "name": "row4",
     "value": 234,
     "organizationID": 43
+  },
+  "rowToCreateNoName": {
+    "value": 235,
+    "organizationID": 43
+  },
+  "rowToCreateNoOrg": {
+    "name": "row8",
+    "value": 235
   },
   "rowToUpdate": {
     "name": "row5",
@@ -34,11 +46,17 @@
     "value": 235,
     "organizationID": 43
   },
+  "missingRowToUpdate": {
+    "name": "row99",
+    "value": 235,
+    "organizationID": 43
+  },
   "rowToDelete": {
     "name": "row6",
     "value": 623,
     "organizationID": 43
   },
+  "nonNameToDelete": "row99",
   "makeResponse": {
     "prop": "testProp",
     "data": {

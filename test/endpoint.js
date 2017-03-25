@@ -34,6 +34,17 @@ test('Get all', async t => {
                                               response.results.length >= 2)),
          'responds with the right number of items')
   t.false(next.called, 'no errors')
+
+  const reqMissingTable = {
+    log: {error: sinon.spy()},
+    params: {},
+    user: {organizationID: d.organizationID}
+  }
+  const nextMissingTable = sinon.spy()
+  await endpoint.getAll(d.missingTable)(reqMissingTable, null,
+                                            nextMissingTable)
+  t.true(nextMissingTable.calledWithMatch(sinon.match.instanceOf(Error)),
+         'returns error when getting missing row')
 })
 
 test('Get', async t => {
@@ -57,6 +68,16 @@ test('Get', async t => {
   t.true(res.send.calledWithMatch(sinon.match.object),
                                   'route responds with an object')
   t.false(next.called, 'no errors')
+
+  const reqMissing = {
+    log: {error: sinon.spy()},
+    params: {},
+    user: {organizationID: d.organizationID}
+  }
+  const nextMissing = sinon.spy()
+  await endpoint.get(d.table, d.primaryKey)(reqMissing, null, nextMissing)
+  t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
+         'returns error when getting missing row')
 })
 
 test('Create', async t => {
@@ -73,6 +94,31 @@ test('Create', async t => {
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
   t.false(next.called, 'no errors')
+
+  const reqMissingFields = {
+    body: d.rowToCreateNoName,
+    log: {error: sinon.spy()},
+    user: {organizationID: d.organizationID}
+  }
+  const nextMissingFields = sinon.spy()
+  await endpoint.create(d.table)(reqMissingFields, null, nextMissingFields)
+  t.true(nextMissingFields.calledWithMatch(sinon.match.instanceOf(Error)),
+         'returns error when request body is missing a required field')
+
+  const reqNoOrg = {
+    body: d.rowToCreateNoOrg,
+    log: {error: sinon.spy()},
+    user: {organizationID: d.organizationID}
+  }
+  const resNoOrg = {
+    send: sinon.spy()
+  }
+  const nextNoOrg = sinon.spy()
+  await endpoint.create(d.table)(reqNoOrg, resNoOrg, nextNoOrg)
+  t.true(res.send.calledOnce, 'route sends a response when body has no org ID')
+  t.true(res.send.calledWithMatch(sinon.match.object),
+         'route responds with an object when body has no org ID')
+  t.false(next.called, 'no errors when body has no org ID')
 })
 
 test('Update', async t => {
@@ -97,6 +143,17 @@ test('Update', async t => {
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
   t.false(next.called, 'no errors')
+
+  const reqMissing = {
+    log: {error: sinon.spy()},
+    params: {name: d.missingRowToUpdate.name},
+    body: d.missingRowToUpdate,
+    user: {organizationID: d.organizationID}
+  }
+  const nextMissing = sinon.spy()
+  await endpoint.update(d.table, d.primaryKey)(reqMissing, null, nextMissing)
+  t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
+         'returns error when updating nonexistent row')
 })
 
 test('Delete', async t => {
@@ -120,6 +177,16 @@ test('Delete', async t => {
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
+
+  const reqMissing = {
+    log: {error: sinon.spy()},
+    params: {name: d.nonNameToDelete},
+    user: {organizationID: d.organizationID}
+  }
+  const nextMissing = sinon.spy()
+  await endpoint.delete(d.table, d.primaryKey)(reqMissing, null, nextMissing)
+  t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
+         'returns error when deleting nonexistent row')
 })
 
 test('Default', async t => {
