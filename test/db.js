@@ -6,6 +6,7 @@ const knex = require('./fixtures/knex-instance')
 const db = require('../services/db')
 
 test.before('Set up test table', async t => {
+  fixt.testTableName = knex.randomizeTableName(fixt.testTableName)
   await knex.schema.dropTableIfExists(fixt.testTableName)
   await knex.schema.createTable(fixt.testTableName, (table) => {
     table.string('name').primary()
@@ -90,20 +91,21 @@ test('Throws error when updating row with the wrong columns', t => {
 })
 
 test('Builds a where clause without organization ID', t => {
-  const whereClause = db.buildWhere(fixt.testTableName, fixt.column, fixt.value)
+  const whereClause = db.buildWhere(fixt.whereClauseTable, fixt.column,
+                                    fixt.value)
   const expectedWhereClause = {}
   expectedWhereClause[fixt.column] = fixt.value
   t.deepEqual(whereClause, expectedWhereClause)
 })
 
 test('Builds a where clause with an organization ID', t => {
-  const whereClause = db.buildWhere(fixt.testTableName, fixt.column, fixt.value,
-                                    fixt.organizationID)
+  const whereClause = db.buildWhere(fixt.whereClauseTable, fixt.column,
+                                    fixt.value, fixt.organizationID)
   t.deepEqual(whereClause, fixt.expectedWhereClause)
 })
 
 test('Builds a where clause with only organization ID', t => {
-  const whereClause = db.buildWhere(fixt.testTableName, null, null,
+  const whereClause = db.buildWhere(fixt.whereClauseTable, null, null,
                                     fixt.organizationID)
   t.deepEqual(whereClause, fixt.expectedWhereClauseOrg)
 })

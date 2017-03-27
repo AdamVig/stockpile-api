@@ -17,3 +17,9 @@ module.exports = Knex({
   },
   useNullAsDefault: true
 })
+
+// Randomize a given table name to prevent conflicts
+module.exports.randomizeTableName = (name) => {
+  const random = Math.random().toString(36).substr(2, 5)
+  return `${name}-test-${random}`
+}
