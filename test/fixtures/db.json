@@ -23,6 +23,7 @@
   "column": "testColumn",
   "value": "testValue",
   "organizationID": 94,
+  "whereClauseTable": "test",
   "expectedWhereClause": {
     "test.organizationID": 94,
     "testColumn": "testValue"
