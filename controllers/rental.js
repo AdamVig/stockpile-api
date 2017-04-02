@@ -3,21 +3,21 @@ const endpoint = require('../services/endpoint')
 
 const rental = module.exports
 
-// Join rental with item to get the item's tag
-rental.withTag = (req, queryBuilder) => {
+// Join rental with item to get the item's barcode
+rental.withBarcode = (req, queryBuilder) => {
   return queryBuilder
     .select('rental.*')
     .leftJoin('item', 'rental.itemID', 'item.itemID')
-    .select('item.tag')
+    .select('item.barcode')
 }
 
 const messages = {conflict: 'Cannot rent item, item is already rented'}
 
-rental.getAll = endpoint.getAll('rental', {modify: rental.withTag})
-rental.get = endpoint.get('rental', 'tag', {modify: rental.withTag})
+rental.getAll = endpoint.getAll('rental', {modify: rental.withBarcode})
+rental.get = endpoint.get('rental', 'barcode', {modify: rental.withBarcode})
 rental.create = endpoint.create('rental', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
-rental.delete = endpoint.delete('rental', {modify: rental.withTag})
+rental.delete = endpoint.delete('rental', {modify: rental.withBarcode})
 
 rental.mount = app => {
   /**
@@ -31,7 +31,7 @@ rental.mount = app => {
    *   "rentalID": 0,
    *   "returnDate": null,
    *   "startDate": "2017-02-22T05:00:00.000Z",
-   *   "tag": "",
+   *   "barcode": "",
    *   "userID": null
    * }
    */
@@ -50,7 +50,7 @@ rental.mount = app => {
    *     "rentalID": 0,
    *     "returnDate": null,
    *     "startDate": "2017-02-22T05:00:00.000Z",
-   *     "tag": "",
+   *     "barcode": "",
    *     "userID": null
    *   ]
    * }
@@ -63,7 +63,7 @@ rental.mount = app => {
    *
    * @apiUse RentalResponse
    */
-  app.get({name: 'get rental', path: 'rental/:tag'},
+  app.get({name: 'get rental', path: 'rental/:barcode'},
           auth.verify, rental.get)
   /**
    * @api {put} /rental Create arental
@@ -81,7 +81,7 @@ rental.mount = app => {
    *
    * @apiUse RentalResponse
    */
-  app.put({name: 'update rental', path: 'rental/:tag'},
+  app.put({name: 'update rental', path: 'rental/:barcode'},
           auth.verify, rental.update)
   /**
    * @api {delete} /rental/:rentalID Delete a rental
@@ -91,6 +91,6 @@ rental.mount = app => {
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
-  app.del({name: 'delete rental', path: 'rental/:tag'},
+  app.del({name: 'delete rental', path: 'rental/:barcode'},
           auth.verify, rental.delete)
 }
