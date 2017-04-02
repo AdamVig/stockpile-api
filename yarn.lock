@@ -983,6 +983,10 @@ bl@~1.1.2:
   dependencies:
     readable-stream "~2.0.5"
 
+blessed@^0.1.81:
+  version "0.1.81"
+  resolved "https://registry.yarnpkg.com/blessed/-/blessed-0.1.81.tgz#f962d687ec2c369570ae71af843256e6d0ca1129"
+
 block-stream@*:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/block-stream/-/block-stream-0.0.9.tgz#13ebfe778a03205cfe03751481ebb4b3300c126a"
@@ -1436,6 +1440,12 @@ debug-log@^1.0.1:
 debug@*, debug@^2.1.1, debug@^2.1.3, debug@^2.2.0, debug@^2.3.2, debug@^2.6:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.0.tgz#bc596bcabe7617f11d9fa15361eded5608b8499b"
+  dependencies:
+    ms "0.7.2"
+
+debug@^2.6.3:
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.3.tgz#0f7eb8c30965ec08c72accfa0130c8b79984141d"
   dependencies:
     ms "0.7.2"
 
@@ -1897,9 +1907,9 @@ fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
 
-fclone@1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/fclone/-/fclone-1.0.10.tgz#f7ad6ffa01c82488b16b741cdc04fad03405c64b"
+fclone@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/fclone/-/fclone-1.0.11.tgz#10e85da38bfea7fc599341c296ee1d77266ee640"
 
 fclone@1.0.8:
   version "1.0.8"
@@ -2622,6 +2632,10 @@ is-windows@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-0.2.0.tgz#de1aa6d63ea29dd248737b69f1ff8b8002d2108c"
 
+is@^3.2.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/is/-/is-3.2.1.tgz#d0ac2ad55eb7b0bec926a5266f6c662aaa83dca5"
+
 isarray@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-0.0.1.tgz#8a18acfca9a8f4177e09abfc6038939b05d1eedf"
@@ -3026,6 +3040,10 @@ lodash.keys@^3.0.0:
     lodash._getnative "^3.0.0"
     lodash.isarguments "^3.0.0"
     lodash.isarray "^3.0.0"
+
+lodash.merge@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
 
 lodash.once@^4.0.0:
   version "4.1.1"
@@ -3696,24 +3714,25 @@ pm2-axon@3.0.2:
     debug "~2.2.0"
     escape-regexp "0.0.1"
 
-pm2-deploy@^0.3.3:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/pm2-deploy/-/pm2-deploy-0.3.4.tgz#eb7f2fcd5f7131800a355d3bdfc04bae427f1b34"
+pm2-deploy@^0.3.5:
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/pm2-deploy/-/pm2-deploy-0.3.5.tgz#d434bec7bcb1d3c8386a1234af5a3b6794016c1c"
   dependencies:
     async "^1.5"
     tv4 "^1.2"
 
-pm2-multimeter@0.1.2:
+pm2-multimeter@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/pm2-multimeter/-/pm2-multimeter-0.1.2.tgz#1a1e55153d41a05534cea23cfe860abaa0eb4ace"
   dependencies:
     charm "~0.1.1"
 
-pm2@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/pm2/-/pm2-2.3.0.tgz#9b83090d0f97fb658e25b91563c8b04acdf468e7"
+pm2@2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/pm2/-/pm2-2.4.2.tgz#7afa1176773c3bebac962ad52e8261a270175027"
   dependencies:
     async "1.5"
+    blessed "^0.1.81"
     chalk "^1.1"
     chokidar "^1.6.1"
     cli-table "0.3.1"
@@ -3721,31 +3740,32 @@ pm2@^2.3.0:
     cron "1.2.1"
     debug "^2.3.2"
     eventemitter2 "1.0.5"
-    fclone "1.0.10"
+    fclone "1.0.11"
     mkdirp "0.5.1"
     moment "^2.15"
     nssocket "0.6.0"
     pidusage "^1.1.0"
     pm2-axon "3.0.2"
     pm2-axon-rpc "0.4.5"
-    pm2-deploy "^0.3.3"
-    pm2-multimeter "0.1.2"
-    pmx "^1.0.1"
+    pm2-deploy "^0.3.5"
+    pm2-multimeter "^0.1.2"
+    pmx "^1.0.2"
     semver "^5.2"
-    shelljs "0.7.5"
+    shelljs "0.7.6"
     source-map-support "^0.4.6"
+    sprintf-js "~1.0.2"
     vizion "^0.2"
     yamljs "0.2.8"
   optionalDependencies:
     gkt "https://tgz.pm2.io/gkt-1.0.0.tgz"
 
-pmx@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/pmx/-/pmx-1.0.1.tgz#dd097401947f0f273865dbeabaafa63fb6f40779"
+pmx@^1.0.2:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/pmx/-/pmx-1.1.0.tgz#381d291eedd96b81a098a5c5f0df548047258ffd"
   dependencies:
     debug "^2.6"
     json-stringify-safe "^5.0"
-    vxx "^1.0.3"
+    vxx "^1.1.1"
 
 power-assert-context-formatter@^1.0.4:
   version "1.1.1"
@@ -4253,7 +4273,15 @@ set-immediate-shim@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz#4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
 
-shelljs@0.7.5, shelljs@^0.7.5:
+shelljs@0.7.6:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.6.tgz#379cccfb56b91c8601e4793356eb5382924de9ad"
+  dependencies:
+    glob "^7.0.0"
+    interpret "^1.0.0"
+    rechoir "^0.6.2"
+
+shelljs@^0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.5.tgz#2eef7a50a21e1ccf37da00df767ec69e30ad0675"
   dependencies:
@@ -4781,7 +4809,7 @@ uuid@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-uuid@^3.0.0:
+uuid@^3.0.0, uuid@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
@@ -4830,18 +4858,21 @@ vizion@^0.2:
   dependencies:
     async "1.5"
 
-vxx@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/vxx/-/vxx-1.0.3.tgz#b16df362e07352948bdb49c869ebe139d11cc264"
+vxx@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/vxx/-/vxx-1.1.1.tgz#fb4ea1233579bff54a1c37c7ae3f32a0363aeb34"
   dependencies:
     continuation-local-storage "^3.1.4"
-    debug "^2.2.0"
+    debug "^2.6.3"
+    extend "^3.0.0"
+    is "^3.2.0"
     lodash.findindex "^4.4.0"
     lodash.isequal "^4.0.0"
+    lodash.merge "^4.6.0"
     methods "^1.1.1"
     semver "^5.0.1"
     shimmer "^1.0.0"
-    uuid "^2.0.1"
+    uuid "^3.0.1"
 
 wbuf@^1.1.0, wbuf@^1.4.0:
   version "1.7.2"
