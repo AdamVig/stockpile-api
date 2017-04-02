@@ -36,9 +36,9 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .modify(filterQuery(req, filterParams))
 }
 
-endpoint.addAllMethods(item, 'item', 'tag')
+endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
-item.get = endpoint.get('item', 'tag', {modify: item.withFieldsAndFilters})
+item.get = endpoint.get('item', 'barcode', {modify: item.withFieldsAndFilters})
 
 item.mount = app => {
   /**
@@ -50,7 +50,7 @@ item.mount = app => {
    *   "organizationID": 0,
    *   "modelID": 0,
    *   "categoryID": 0,
-   *   "tag": "234234"
+   *   "barcode": "234234"
    * }
    */
 
@@ -80,20 +80,20 @@ item.mount = app => {
    *       "organizationID": 0,
    *       "modelID": 0,
    *       "categoryID": 0,
-   *       "tag": "234234"
+   *       "barcode": "234234"
    *     }
    *   ]
    * }
    */
   app.get({name: 'get all items', path: 'item'}, auth.verify, item.getAll)
   /**
-   * @api {get} /item/:tag Get an item
+   * @api {get} /item/:barcode Get an item
    * @apiName GetItem
    * @apiGroup Item
    *
    * @apiUse ItemResponse
    */
-  app.get({name: 'get item', path: 'item/:tag'}, auth.verify, item.get)
+  app.get({name: 'get item', path: 'item/:barcode'}, auth.verify, item.get)
   /**
    * @api {put} /item Create an item
    * @apiName CreateItem
@@ -101,31 +101,31 @@ item.mount = app => {
    *
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
-   * @apiParam {String} tag Unique identifier of item
+   * @apiParam {String} barcode Unique identifier of item
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id ID of created row
    */
   app.put({name: 'create item', path: 'item'}, auth.verify, item.create)
   /**
-   * @api {put} /item/:tag Update item
+   * @api {put} /item/:barcode Update item
    * @apiName UpdateItem
    * @apiGroup Item
    *
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
-   * @apiParam {String} [tag] Unique identifier of item
+   * @apiParam {String} [barcode] Unique identifier of item
    *
    * @apiUse ItemResponse
    */
-  app.put({name: 'update item', path: 'item/:tag'}, auth.verify, item.update)
+  app.put({name: 'update item', path: 'item/:barcode'}, auth.verify, item.update)
   /**
-   * @api {delete} /item/:tag Delete item
+   * @api {delete} /item/:barcode Delete item
    * @apiName DeleteItem
    * @apiGroup Item
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
-  app.del({name: 'delete item', path: 'item/:tag'}, auth.verify, item.delete)
+  app.del({name: 'delete item', path: 'item/:barcode'}, auth.verify, item.delete)
 }
