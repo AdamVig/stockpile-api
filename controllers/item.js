@@ -58,6 +58,7 @@ item.mount = app => {
    * @api {get} /item Get all items
    * @apiName GetItems
    * @apiGroup Item
+   * @apiPermission User
    *
    * @apiDescription This endpoint can be filtered using the query parameters
    * specified below. Any of the filters can be applied at the same time in
@@ -90,6 +91,7 @@ item.mount = app => {
    * @api {get} /item/:barcode Get an item
    * @apiName GetItem
    * @apiGroup Item
+   * @apiPermission User
    *
    * @apiUse ItemResponse
    */
@@ -98,6 +100,7 @@ item.mount = app => {
    * @api {put} /item Create an item
    * @apiName CreateItem
    * @apiGroup Item
+   * @apiPermission User
    *
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
@@ -111,6 +114,7 @@ item.mount = app => {
    * @api {put} /item/:barcode Update item
    * @apiName UpdateItem
    * @apiGroup Item
+   * @apiPermission User
    *
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
@@ -123,6 +127,7 @@ item.mount = app => {
    * @api {delete} /item/:barcode Delete item
    * @apiName DeleteItem
    * @apiGroup Item
+   * @apiPermission User
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted

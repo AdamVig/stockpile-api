@@ -21,6 +21,7 @@ brand.mount = app => {
    * @api {get} /brand Get all brands
    * @apiName GetBrands
    * @apiGroup Brand
+   * @apiPermission User
    *
    * @apiExample {json} Response format:
    * {
@@ -38,6 +39,7 @@ brand.mount = app => {
    * @api {get} /brand/:brandID Get brand
    * @apiName GetBrand
    * @apiGroup Brand
+   * @apiPermission User
    *
    * @apiUse BrandResponse
    */
@@ -46,6 +48,7 @@ brand.mount = app => {
    * @api {put} /brand Create a brand
    * @apiName CreateBrand
    * @apiGroup Brand
+   * @apiPermission User
    *
    * @apiParam {String{0...255}} name Name of brand
    *
@@ -57,6 +60,7 @@ brand.mount = app => {
    * @api {put} /brand/:brandID Update a brand
    * @apiName UpdateBrand
    * @apiGroup Brand
+   * @apiPermission User
    *
    * @apiParam {String{0...255}} [name] Name of brand
    *
@@ -68,6 +72,7 @@ brand.mount = app => {
    * @api {delete} /brand/:brandID Delete a brand
    * @apiName DeleteBrand
    * @apiGroup Brand
+   * @apiPermission User
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted

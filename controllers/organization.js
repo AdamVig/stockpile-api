@@ -22,6 +22,7 @@ organization.mount = app => {
    * @api {get} /organization/:organizationID Get an organization
    * @apiName GetOrganization
    * @apiGroup Organization
+   * @apiPermission User
    *
    * @apiUse OrganizationResponse
    */
@@ -31,6 +32,7 @@ organization.mount = app => {
    * @api {put} /organization Create an organization
    * @apiName CreateOrganization
    * @apiGroup Organization
+   * @apiPermission Administrator
    *
    * @apiParam {String} name Name of organization
    *
@@ -43,6 +45,7 @@ organization.mount = app => {
    * @api {put} /organization/:organizationID Update an organization
    * @apiName UpdateOrganization
    * @apiGroup Organization
+   * @apiPermission Administrator
    *
    * @apiParam {String} name Name of organization
    *
@@ -54,6 +57,7 @@ organization.mount = app => {
    * @api {delete} /organization/:organizationID Delete an organization
    * @apiName DeleteOrganization
    * @apiGroup Organization
+   * @apiPermission Administrator
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted

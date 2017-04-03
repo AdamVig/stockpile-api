@@ -40,6 +40,7 @@ model.mount = app => {
    * @api {get} /model/:modelID Get model
    * @apiName GetModel
    * @apiGroup Model
+   * @apiPermission User
    *
    * @apiUse ModelResponse
    */
@@ -48,6 +49,7 @@ model.mount = app => {
    * @api {put} /model Create a model
    * @apiName CreateModel
    * @apiGroup Model
+   * @apiPermission User
    *
    * @apiParam {String{0...255}} name Name of model
    * @apiParam {Number} brandID ID of a brand
@@ -60,6 +62,7 @@ model.mount = app => {
    * @api {put} /model/:modelID Update a model
    * @apiName UpdateModel
    * @apiGroup Model
+   * @apiPermission User
    *
    * @apiParam {String{0...255}} [name] Name of model
    * @apiParam {Number} [brandID] ID of a brand
@@ -72,6 +75,7 @@ model.mount = app => {
    * @api {delete} /model/:modelID Delete a model
    * @apiName DeleteModel
    * @apiGroup Model
+   * @apiPermission User
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted

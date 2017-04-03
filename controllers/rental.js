@@ -54,6 +54,7 @@ rental.mount = app => {
    * @api {get} /rental Get all rentals
    * @apiName GetRentals
    * @apiGroup Rental
+   * @apiPermission User
    *
    * @apiExample {json} Response format:
    * {
@@ -74,6 +75,7 @@ rental.mount = app => {
    * @api {get} /rental/:rentalID Get a rental
    * @apiName GetRental
    * @apiGroup Rental
+   * @apiPermission User
    *
    * @apiUse RentalResponse
    */
@@ -83,6 +85,7 @@ rental.mount = app => {
    * @api {put} /rental Create arental
    * @apiName CreateRental
    * @apiGroup Rental
+   * @apiPermission User
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id ID of created row
@@ -93,6 +96,7 @@ rental.mount = app => {
    * @api {put} /rental/:rentalID Update a rental
    * @apiName UpdateRental
    * @apiGroup Rental
+   * @apiPermission User
    *
    * @apiUse RentalResponse
    */
@@ -102,6 +106,7 @@ rental.mount = app => {
    * @api {delete} /rental/:rentalID Delete a rental
    * @apiName DeleteRental
    * @apiGroup Rental
+   * @apiPermission Administrator
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
