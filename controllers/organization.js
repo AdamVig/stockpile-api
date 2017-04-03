@@ -22,6 +22,7 @@ organization.mount = app => {
    * @api {get} /organization/:organizationID Get an organization
    * @apiName GetOrganization
    * @apiGroup Organization
+   * @apiPermission User
    *
    * @apiUse OrganizationResponse
    */
@@ -31,6 +32,7 @@ organization.mount = app => {
    * @api {put} /organization Create an organization
    * @apiName CreateOrganization
    * @apiGroup Organization
+   * @apiPermission Administrator
    *
    * @apiParam {String} name Name of organization
    *
@@ -38,26 +40,28 @@ organization.mount = app => {
    * @apiSuccess (200) {Number} id ID of created row
    */
   app.put({name: 'create organization', path: 'organization'},
-          auth.verify, organization.create)
+          auth.verify, auth.checkAdmin, organization.create)
   /**
    * @api {put} /organization/:organizationID Update an organization
    * @apiName UpdateOrganization
    * @apiGroup Organization
+   * @apiPermission Administrator
    *
    * @apiParam {String} name Name of organization
    *
    * @apiUse OrganizationResponse
    */
   app.put({name: 'update organization', path: 'organization/:organizationID'},
-          auth.verify, organization.update)
+          auth.verify, auth.checkAdmin, organization.update)
   /**
    * @api {delete} /organization/:organizationID Delete an organization
    * @apiName DeleteOrganization
    * @apiGroup Organization
+   * @apiPermission Administrator
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete organization', path: 'organization/:organizationID'},
-          auth.verify, organization.delete)
+          auth.verify, auth.checkAdmin, organization.delete)
 }

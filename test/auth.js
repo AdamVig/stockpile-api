@@ -137,8 +137,19 @@ test('Check user', t => {
   auth.checkUser(reqWithUser, res, next)
   t.true(res.send.calledWith(200), 'success response sent')
   auth.checkUser(req, res, next)
-  t.true(next.calledWith(restify.NotFoundError()),
+  t.true(next.calledWith(sinon.match.instanceOf(restify.NotFoundError)),
          'error passed to next handler')
+})
+
+test('Check admin', t => {
+  const next = sinon.spy()
+  auth.checkAdmin(fixt.checkAdminReq, null, next)
+  t.true(next.calledWithExactly(), 'next called with no args')
+
+  const nextUnauthorized = sinon.spy()
+  auth.checkAdmin(fixt.checkAdminReqUnauthorized, null, nextUnauthorized)
+  t.true(nextUnauthorized.calledWithMatch(sinon.match.instanceOf(Error)),
+        'next called with error')
 })
 
 test.after.always('Clean up database', async t => {

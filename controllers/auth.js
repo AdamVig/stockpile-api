@@ -140,6 +140,16 @@ auth.checkUser = (req, res, next) => {
   if (req.user) {
     res.send(200)
   } else {
-    return next(restify.NotFoundError())
+    return next(new restify.NotFoundError())
+  }
+}
+
+// Check if user is admin
+auth.checkAdmin = (req, res, next) => {
+  const adminRoleID = 1
+  if (req.user.roleID === adminRoleID) {
+    return next()
+  } else {
+    return next(new restify.UnauthorizedError('must be an administrator'))
   }
 }

@@ -14,6 +14,7 @@ user.mount = app => {
    * @api {get} /user Get all users
    * @apiName GetUsers
    * @apiGroup User
+   * @apiPermission User
    *
    * @apiDescription Not implemented.
    *
@@ -24,6 +25,7 @@ user.mount = app => {
    * @api {get} /user/:userID Get a user
    * @apiName GetUser
    * @apiGroup User
+   * @apiPermission User
    *
    * @apiDescription Not implemented.
    *
@@ -34,6 +36,7 @@ user.mount = app => {
    * @api {put} /user Create a user
    * @apiName CreateUser
    * @apiGroup User
+   * @apiPermission User
    *
    * @apiDescription Not implemented.
    *
@@ -44,6 +47,7 @@ user.mount = app => {
    * @api {put} /user/:userID Update a user
    * @apiName UpdateUser
    * @apiGroup User
+   * @apiPermission User
    *
    */
   app.put({name: 'update user', path: 'user/:userID'}, auth.verify, user.update)
@@ -51,6 +55,7 @@ user.mount = app => {
    * @api {delete} /user/:userID Delete a user
    * @apiName DeleteUser
    * @apiGroup User
+   * @apiPermission User
    *
    * @apiDescription Not implemented.
    *
