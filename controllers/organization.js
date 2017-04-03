@@ -3,16 +3,9 @@ const endpoint = require('../services/endpoint')
 
 const organization = module.exports
 
-organization.withoutCredentials = (req, queryBuilder) => {
-  return queryBuilder
-    .select('organizationID', 'name')
-}
-
-organization.get = endpoint.get('organization', 'organizationID',
-                                {modify: organization.withoutCredentials})
+organization.get = endpoint.get('organization', 'organizationID')
 organization.create = endpoint.create('organization')
-organization.update = endpoint.update('organization', 'organizationID',
-                                      {modify: organization.withoutCredentials})
+organization.update = endpoint.update('organization', 'organizationID')
 organization.delete = endpoint.delete('organization', 'organizationID')
 
 organization.mount = app => {

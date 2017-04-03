@@ -1,0 +1,15 @@
+{
+  "userID": 60,
+  "req": {
+    "body": {},
+    "headers": {
+      "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySUQiOjYwLCJvcmdhbml6YXRpb25JRCI6MzcsInJvbGVJRCI6Mn0.qtQDoYvqisQdhOi4FDvnyCIJkHSxF3DF_C9uLov2jXA"
+    }
+  },
+  "reqBad": {
+    "body": {},
+    "headersBad": {
+      "authorization": "Bearer "
+    }
+  }
+}

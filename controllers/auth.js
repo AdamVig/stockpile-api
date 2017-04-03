@@ -22,28 +22,29 @@ const auth = module.exports
 
 auth.mount = app => {
   /**
-   * @api {post} /auth Authenticate
+   * @api {post} /auth Authenticate a user
    * @apiName Authenticate
    * @apiGroup Authentication
    *
-   * @apiParam {String} email Organization's email
-   * @apiParam {String} password Organization's password
+   * @apiParam {String} email User's email
+   * @apiParam {String} password User's password
    *
-   * @apiSuccess (200) {Number} id ID of organization
+   * @apiSuccess (200) {Number} id ID of user
    * @apiSuccess (200) {String} token Authorization token for use in requests
    * @apiSuccess (200) {String} message Descriptive message
    */
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
   /**
-   * @api {post} /auth/register Register an organization
+   * @api {post} /auth/register Register a user
    * @apiName Register
    * @apiGroup Authentication
    *
-   * @apiParam {String} email Organization's email
-   * @apiParam {String} password Organization's password
-   * @apiParam {String} name Organization's name
+   * @apiParam {String} email User's email
+   * @apiParam {String} password User's password
+   * @apiParam {String} name User's name
+   * @apiParam {Number} roleID=2 Role, defaults to "Member"
    *
-   * @apiSuccess (201) {Number} id ID of organization
+   * @apiSuccess (201) {Number} id ID of user
    * @apiSuccess (201) {String} message Descriptive message
    */
   app.post({name: 'register', path: 'auth/register'}, auth.register)
@@ -63,21 +64,25 @@ auth.mount = app => {
 // Check user credentials and return token if valid
 auth.authenticate = (req, res, next) => {
   if (req.body.email && req.body.password) {
-    return db.get('organization', 'email', req.body.email)
-      .then(organization => {
-        const {organizationID, password} = organization
+    return db.get('user', 'email', req.body.email)
+      .then(user => {
+        const {password} = user
         return Promise.all([
-          organizationID,
+          user,
           bcrypt.compare(req.body.password, password)
         ])
       })
-      .then(([organizationID, valid]) => {
+      .then(([user, valid]) => {
         if (valid === true) {
-          const token = makeToken({sub: organizationID})
+          const token = makeToken({
+            userID: user.userID,
+            organizationID: user.organizationID,
+            roleID: user.roleID
+          })
           res.send({
-            id: organizationID,
+            id: user.userID,
             token,
-            message: 'organization credentials are valid'
+            message: 'credentials are valid'
           })
         } else {
           return next(new restify.UnauthorizedError(
@@ -93,23 +98,23 @@ auth.authenticate = (req, res, next) => {
 // Initialize Passport middleware
 module.exports.initialize = passport.initialize()
 
-// Register an organization
+// Register a user
 auth.register = (req, res, next) => {
-  if (req.body.name && req.body.email && req.body.password) {
+  const required = [
+    'firstName', 'lastName', 'email', 'password', 'organizationID'
+  ]
+  const bodyKeys = Object.keys(req.body)
+  // Check request body contains all required keys
+  if (required.every(key => bodyKeys.includes(key))) {
     return bcrypt.hash(req.body.password, saltRounds)
       .then(hash => {
-        const organizationData = {
-          name: req.body.name,
-          email: req.body.email,
-          password: hash
-        }
-        return db.create('organization', organizationData)
+        req.body.password = hash
+        return db.create('user', req.body)
       })
-      .then(id => {
-        const organizationID = id[0]
+      .then(([userID]) => {
         return res.send(201, {
-          id: organizationID,
-          message: 'created organization'
+          id: userID,
+          message: 'registered user'
         })
       })
       .catch(next)
@@ -120,7 +125,7 @@ auth.register = (req, res, next) => {
 
 // Authenticate a user given a JWT payload
 auth.authenticateToken = (payload, done) => {
-  return db.get('organization', 'organizationID', payload.sub)
+  return db.get('user', 'userID', payload.userID)
     .then(user => done(null, user))
     .catch(done)
 }

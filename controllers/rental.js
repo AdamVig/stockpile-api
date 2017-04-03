@@ -1,3 +1,5 @@
+const jwt = require('jwt-simple')
+
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
@@ -9,6 +11,18 @@ rental.withBarcode = (req, queryBuilder) => {
     .select('rental.*')
     .leftJoin('item', 'rental.itemID', 'item.itemID')
     .select('item.barcode')
+}
+
+// Get user ID from token and add to request body
+rental.addUserID = function addUserID (req, res, next) {
+  try {
+    const token = req.headers.authorization.replace('Bearer ', '')
+    const payload = jwt.decode(token, process.env.JWT_SECRET)
+    req.body.userID = payload.userID
+    return next()
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const messages = {conflict: 'Cannot rent item, item is already rented'}
@@ -32,7 +46,7 @@ rental.mount = app => {
    *   "returnDate": null,
    *   "startDate": "2017-02-22T05:00:00.000Z",
    *   "barcode": "",
-   *   "userID": null
+   *   "userID": 0
    * }
    */
 
@@ -51,7 +65,7 @@ rental.mount = app => {
    *     "returnDate": null,
    *     "startDate": "2017-02-22T05:00:00.000Z",
    *     "barcode": "",
-   *     "userID": null
+   *     "userID": 0
    *   ]
    * }
    */
@@ -73,7 +87,8 @@ rental.mount = app => {
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id ID of created row
    */
-  app.put({name: 'create rental', path: 'rental'}, auth.verify, rental.create)
+  app.put({name: 'create rental', path: 'rental'}, auth.verify,
+          rental.addUserID, rental.create)
   /**
    * @api {put} /rental/:rentalID Update a rental
    * @apiName UpdateRental
