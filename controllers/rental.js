@@ -19,9 +19,9 @@ rental.addUserID = function addUserID (req, res, next) {
     const token = req.headers.authorization.replace('Bearer ', '')
     const payload = jwt.decode(token, process.env.JWT_SECRET)
     req.body.userID = payload.userID
-    next()
+    return next()
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 
