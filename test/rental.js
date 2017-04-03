@@ -4,6 +4,15 @@ const test = require('ava')
 const fixt = require('./fixtures/rental')
 const rental = require('../controllers/rental')
 
+test('Add barcode', t => {
+  const queryBuilder = {
+    leftJoin: function () { return this },
+    select: function () { return this }
+  }
+  const result = rental.withBarcode(null, queryBuilder)
+  t.true(result === queryBuilder, 'returns query builder')
+})
+
 test('Add user ID', t => {
   const next = sinon.spy()
   rental.addUserID(fixt.req, null, next)
