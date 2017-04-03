@@ -143,3 +143,13 @@ auth.checkUser = (req, res, next) => {
     return next(restify.NotFoundError())
   }
 }
+
+// Check if user is admin
+auth.checkAdmin = (req, res, next) => {
+  const adminRoleID = 1
+  if (req.user.roleID === adminRoleID) {
+    return next()
+  } else {
+    return next(restify.UnauthorizedError())
+  }
+}
