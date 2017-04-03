@@ -137,7 +137,7 @@ test('Check user', t => {
   auth.checkUser(reqWithUser, res, next)
   t.true(res.send.calledWith(200), 'success response sent')
   auth.checkUser(req, res, next)
-  t.true(next.calledWith(restify.NotFoundError()),
+  t.true(next.calledWith(sinon.match.instanceOf(restify.NotFoundError)),
          'error passed to next handler')
 })
 

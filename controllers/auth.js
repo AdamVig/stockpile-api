@@ -140,7 +140,7 @@ auth.checkUser = (req, res, next) => {
   if (req.user) {
     res.send(200)
   } else {
-    return next(restify.NotFoundError())
+    return next(new restify.NotFoundError())
   }
 }
 
@@ -150,6 +150,6 @@ auth.checkAdmin = (req, res, next) => {
   if (req.user.roleID === adminRoleID) {
     return next()
   } else {
-    return next(restify.UnauthorizedError())
+    return next(new restify.UnauthorizedError('must be an administrator'))
   }
 }
