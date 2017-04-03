@@ -107,5 +107,5 @@ rental.mount = app => {
    * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete rental', path: 'rental/:barcode'},
-          auth.verify, rental.delete)
+          auth.verify, auth.checkAdmin, rental.delete)
 }

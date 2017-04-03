@@ -38,7 +38,7 @@ organization.mount = app => {
    * @apiSuccess (200) {Number} id ID of created row
    */
   app.put({name: 'create organization', path: 'organization'},
-          auth.verify, organization.create)
+          auth.verify, auth.checkAdmin, organization.create)
   /**
    * @api {put} /organization/:organizationID Update an organization
    * @apiName UpdateOrganization
@@ -49,7 +49,7 @@ organization.mount = app => {
    * @apiUse OrganizationResponse
    */
   app.put({name: 'update organization', path: 'organization/:organizationID'},
-          auth.verify, organization.update)
+          auth.verify, auth.checkAdmin, organization.update)
   /**
    * @api {delete} /organization/:organizationID Delete an organization
    * @apiName DeleteOrganization
@@ -59,5 +59,5 @@ organization.mount = app => {
    * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete organization', path: 'organization/:organizationID'},
-          auth.verify, organization.delete)
+          auth.verify, auth.checkAdmin, organization.delete)
 }
