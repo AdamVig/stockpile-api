@@ -137,7 +137,7 @@ passport.use(new passportJWT.Strategy(jwtStrategyOptions, auth.authenticateToken
 auth.verify = passport.authenticate('jwt', { session: false })
 
 // Check if user is attached to the request object
-auth.checkUserExists = (req, res, next) => {
+auth.checkUserExists = function checkUserExists (req, res, next) {
   if (req.user) {
     res.send(200)
   } else {
@@ -146,7 +146,7 @@ auth.checkUserExists = (req, res, next) => {
 }
 
 // Check if user is admin
-auth.checkAdmin = (req, res, next) => {
+auth.checkAdmin = function checkAdmin (req, res, next) {
   const adminRoleID = 1
   if (req.user.roleID === adminRoleID) {
     return next()
@@ -156,8 +156,8 @@ auth.checkAdmin = (req, res, next) => {
 }
 
 // Check if user ID in token matches user ID in URL parameters
-auth.checkUserMatches = (req, res, next) => {
   if (req.user.userID === req.params.userID) {
+auth.checkUserMatches = function checkUserMatches (req, res, next) {
     return next()
   } else {
     return next(new restify.UnauthorizedError(
