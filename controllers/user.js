@@ -3,7 +3,15 @@ const endpoint = require('../services/endpoint')
 
 const user = module.exports
 
-user.getAll = endpoint.getAll('userInfo', 'userID')
+// Select all fields from the user table except password
+user.removePasswordAddRole = (req, queryBuilder) => {
+  return queryBuilder
+    .join('role', 'user.roleID', 'role.roleID')
+    .select('userID', 'email', 'firstName', 'lastName', 'organizationID',
+            'role.name as role')
+}
+
+user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})
 user.get = endpoint.get('userInfo', 'userID')
 user.update = endpoint.update('userInfo', 'userID')
 user.delete = endpoint.delete('userInfo', 'userID')
