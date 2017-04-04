@@ -6,8 +6,6 @@ const restify = require('restify')
 
 const db = require('../services/db')
 
-const saltRounds = 10
-
 const jwtStrategyOptions = {
   jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
   secretOrKey: process.env.JWT_SECRET
@@ -19,6 +17,8 @@ const makeToken = module.exports.makeToken = (payload) => {
 }
 
 const auth = module.exports
+
+auth.saltRounds = 10
 
 auth.mount = app => {
   /**
@@ -107,7 +107,7 @@ auth.register = (req, res, next) => {
   const bodyKeys = Object.keys(req.body)
   // Check request body contains all required keys
   if (required.every(key => bodyKeys.includes(key))) {
-    return bcrypt.hash(req.body.password, saltRounds)
+    return bcrypt.hash(req.body.password, auth.saltRounds)
       .then(hash => {
         req.body.password = hash
         return db.create('user', req.body)
