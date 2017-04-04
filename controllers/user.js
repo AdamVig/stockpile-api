@@ -44,7 +44,8 @@ user.mount = app => {
    *       "firstName": "",
    *       "lastName": "",
    *       "email": "",
-   *       "organizationID": 0
+   *       "organizationID": 0,
+   *       "role": "Member"
    *     }
    *   ]
    * }
