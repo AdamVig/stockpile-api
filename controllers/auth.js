@@ -156,8 +156,8 @@ auth.checkAdmin = function checkAdmin (req, res, next) {
 }
 
 // Check if user ID in token matches user ID in URL parameters
-  if (req.user.userID === req.params.userID) {
 auth.checkUserMatches = function checkUserMatches (req, res, next) {
+  if (req.user.userID === Number.parseInt(req.params.userID, 10)) {
     return next()
   } else {
     return next(new restify.UnauthorizedError(
