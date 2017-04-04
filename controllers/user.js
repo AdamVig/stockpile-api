@@ -83,5 +83,5 @@ user.mount = app => {
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
-  app.del({name: 'delete user', path: 'user/userID'}, auth.verify, user.delete)
+  app.del({name: 'delete user', path: 'user/:userID'}, auth.verify, user.delete)
 }
