@@ -60,7 +60,8 @@ user.mount = app => {
    *
    * @apiUse UserResponse
    */
-  app.get({name: 'get user', path: 'user/:userID'}, auth.verify, user.get)
+  app.get({name: 'get user', path: 'user/:userID'},
+          auth.verify, auth.checkUserMatches, user.get)
   /**
    * @api {put} /user/:userID Update a user
    * @apiName UpdateUser
@@ -73,7 +74,8 @@ user.mount = app => {
    *
    * @apiUse UserResponse
    */
-  app.put({name: 'update user', path: 'user/:userID'}, auth.verify, user.update)
+  app.put({name: 'update user', path: 'user/:userID'},
+          auth.verify, auth.checkUserMatches, user.update)
   /**
    * @api {delete} /user/:userID Delete a user
    * @apiName DeleteUser
@@ -83,5 +85,6 @@ user.mount = app => {
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
-  app.del({name: 'delete user', path: 'user/userID'}, auth.verify, user.delete)
+  app.del({name: 'delete user', path: 'user/:userID'},
+          auth.verify, auth.checkUserMatches, user.delete)
 }
