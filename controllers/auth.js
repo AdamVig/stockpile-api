@@ -58,7 +58,8 @@ auth.mount = app => {
    *
    * @apiSuccess (200) empty No response body
    */
-  app.head({name: 'verify', path: 'auth/verify'}, auth.verify, auth.checkUser)
+  app.head({name: 'verify', path: 'auth/verify'},
+           auth.verify, auth.checkUserExists)
 }
 
 // Check user credentials and return token if valid
@@ -136,7 +137,7 @@ passport.use(new passportJWT.Strategy(jwtStrategyOptions, auth.authenticateToken
 auth.verify = passport.authenticate('jwt', { session: false })
 
 // Check if user is attached to the request object
-auth.checkUser = (req, res, next) => {
+auth.checkUserExists = (req, res, next) => {
   if (req.user) {
     res.send(200)
   } else {
@@ -151,5 +152,15 @@ auth.checkAdmin = (req, res, next) => {
     return next()
   } else {
     return next(new restify.UnauthorizedError('must be an administrator'))
+  }
+}
+
+// Check if user ID in token matches user ID in URL parameters
+auth.checkUserMatches = (req, res, next) => {
+  if (req.user.userID === req.params.userID) {
+    return next()
+  } else {
+    return next(new restify.UnauthorizedError(
+      'must be an administrator to access other users\' data'))
   }
 }

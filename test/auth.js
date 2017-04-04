@@ -122,7 +122,7 @@ test('Authenticate token', async t => {
          'does not authenticate missing user')
 })
 
-test('Check user', t => {
+test('Check user exists', t => {
   const req = {
     body: fixt.authUser
   }
@@ -134,9 +134,9 @@ test('Check user', t => {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  auth.checkUser(reqWithUser, res, next)
+  auth.checkUserExists(reqWithUser, res, next)
   t.true(res.send.calledWith(200), 'success response sent')
-  auth.checkUser(req, res, next)
+  auth.checkUserExists(req, res, next)
   t.true(next.calledWith(sinon.match.instanceOf(restify.NotFoundError)),
          'error passed to next handler')
 })
@@ -148,6 +148,17 @@ test('Check admin', t => {
 
   const nextUnauthorized = sinon.spy()
   auth.checkAdmin(fixt.checkAdminReqUnauthorized, null, nextUnauthorized)
+  t.true(nextUnauthorized.calledWithMatch(sinon.match.instanceOf(Error)),
+        'next called with error')
+})
+
+test('Check user matches', t => {
+  const next = sinon.spy()
+  auth.checkUserMatches(fixt.checkUserReq, null, next)
+  t.true(next.calledWithExactly(), 'next called with no args')
+
+  const nextUnauthorized = sinon.spy()
+  auth.checkUserMatches(fixt.checkUserReqUnauthorized, null, nextUnauthorized)
   t.true(nextUnauthorized.calledWithMatch(sinon.match.instanceOf(Error)),
         'next called with error')
 })
