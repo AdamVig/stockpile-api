@@ -3,52 +3,66 @@ const endpoint = require('../services/endpoint')
 
 const user = module.exports
 
-user.getAll = endpoint.default()
-user.get = endpoint.default()
-user.create = endpoint.default()
-user.update = endpoint.default()
-user.delete = endpoint.default()
+user.getAll = endpoint.getAll('userInfo', 'userID')
+user.get = endpoint.get('userInfo', 'userID')
+user.update = endpoint.update('userInfo', 'userID')
+user.delete = endpoint.delete('userInfo', 'userID')
 
 user.mount = app => {
+  /**
+   * @apiDefine UserResponse
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "userID": 0,
+   *   "firstName": "",
+   *   "lastName": "",
+   *   "email": "",
+   *   "organizationID": 0
+   * }
+   */
+
   /**
    * @api {get} /user Get all users
    * @apiName GetUsers
    * @apiGroup User
-   * @apiPermission User
+   * @apiPermission Administrator
    *
-   * @apiDescription Not implemented.
-   *
-   * @apiSuccess (200) empty No response body
+   * @apiExample {json} Response Format
+   * {
+   *   results: [
+   *     {
+   *       "userID": 0,
+   *       "firstName": "",
+   *       "lastName": "",
+   *       "email": "",
+   *       "organizationID": 0
+   *     }
+   *   ]
+   * }
    */
-  app.get({name: 'get all users', path: 'user'}, auth.verify, user.getAll)
+  app.get({name: 'get all users', path: 'user'},
+          auth.verify, auth.checkAdmin, user.getAll)
   /**
    * @api {get} /user/:userID Get a user
    * @apiName GetUser
    * @apiGroup User
    * @apiPermission User
    *
-   * @apiDescription Not implemented.
-   *
-   * @apiSuccess (200) empty No response body
+   * @apiUse UserResponse
    */
   app.get({name: 'get user', path: 'user/:userID'}, auth.verify, user.get)
-  /**
-   * @api {put} /user Create a user
-   * @apiName CreateUser
-   * @apiGroup User
-   * @apiPermission User
-   *
-   * @apiDescription Not implemented.
-   *
-   * @apiSuccess (200) empty No response body
-   */
-  app.put({name: 'create user', path: 'user'}, auth.verify, user.create)
   /**
    * @api {put} /user/:userID Update a user
    * @apiName UpdateUser
    * @apiGroup User
    * @apiPermission User
    *
+   * @apiParam {String{0...255}} [firstName] First name
+   * @apiParam {String{0...255}} [lastName] Last name
+   * @apiParam {String{0...255}} [email] Email address
+   *
+   * @apiUse UserResponse
    */
   app.put({name: 'update user', path: 'user/:userID'}, auth.verify, user.update)
   /**
@@ -57,9 +71,8 @@ user.mount = app => {
    * @apiGroup User
    * @apiPermission User
    *
-   * @apiDescription Not implemented.
-   *
-   * @apiSuccess (200) empty No response body
+   * @apiSuccess (200) {String} message Descriptive message
+   * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete user', path: 'user/userID'}, auth.verify, user.delete)
 }
