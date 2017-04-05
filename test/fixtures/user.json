@@ -1,0 +1,36 @@
+{
+  "organization": {
+    "name": "User Test Organization"
+  },
+  "user": {
+    "firstName": "One",
+    "lastName": "Test",
+    "email": "test.user.one@example.com",
+    "password": "$2a$10$/gP.TO3xwe1f9Zh4PF1bv.7CL5mzwbrJOrlRqNCBEXQAdk6e1/vZ2",
+    "organizationID": 0
+  },
+  "req": {
+    "body": {
+      "currentPassword": "test123",
+      "newPassword": "password123"
+    },
+    "params": {
+      "userID": 0
+    },
+    "user": {
+      "organizationID": 0
+    }
+  },
+  "reqWrong": {
+    "body": {
+      "currentPassword": "wrongpassword",
+      "newPassword": "password123"
+    },
+    "params": {
+      "userID": 0
+    },
+    "user": {
+      "organizationID": 0
+    }
+  }
+}

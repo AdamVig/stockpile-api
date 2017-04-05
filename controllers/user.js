@@ -1,4 +1,8 @@
+const bcrypt = require('bcrypt')
+const restify = require('restify')
+
 const auth = require('./auth')
+const db = require('../services/db')
 const endpoint = require('../services/endpoint')
 
 const user = module.exports
@@ -15,6 +19,31 @@ user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})
 user.get = endpoint.get('userInfo', 'userID')
 user.update = endpoint.update('userInfo', 'userID')
 user.delete = endpoint.delete('userInfo', 'userID')
+
+// Change a user's password
+user.changeUserPassword = function changeUserPassword (req, res, next) {
+  return db.get('user', 'userID', req.params.userID, req.user.organizationID)
+    .then(({password}) => {
+      return bcrypt.compare(req.body.currentPassword, password)
+    })
+    .then(matches => {
+      if (matches) {
+        return bcrypt.hash(req.body.newPassword, auth.saltRounds)
+      } else {
+        throw new restify.BadRequestError('passwords do not match')
+      }
+    })
+    .then(hashedPassword => {
+      return db.update('user', 'userID', req.params.userID,
+                       {password: hashedPassword}, req.user.organizationID)
+    })
+    .then((result) => {
+      return res.send({
+        message: 'password changed'
+      })
+    })
+    .catch(next)
+}
 
 user.mount = app => {
   /**
@@ -87,4 +116,17 @@ user.mount = app => {
    */
   app.del({name: 'delete user', path: 'user/:userID'},
           auth.verify, auth.checkUserMatches, user.delete)
+  /**
+   * @api {put} /user/:userID/password Change a user's password
+   * @apiName ChangeUserPassword
+   * @apiGroup User
+   * @apiPermission User
+   *
+   * @apiParam {String} currentPassword Current password
+   * @apiParam {String} newPassword New password
+   *
+   * @apiSuccess (200) {String} message Descriptive message
+   */
+  app.put({name: 'change user password', path: 'user/:userID/password'},
+          auth.verify, auth.checkUserMatches, user.changeUserPassword)
 }
