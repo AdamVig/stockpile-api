@@ -191,12 +191,12 @@ module.exports.addAllMethods = (controller, table, key, messages = {}) => {
 /**
  * Bind modify function if defined
  * @param {function} [modify] Query modifier
- * @param {object} req Restify request
+ * @param {any} params Parameters to bind
  * @return {function|undefined} Query modifier or 'undefined'
  */
-module.exports.bindModify = (modify, req) => {
+module.exports.bindModify = (modify, ...params) => {
   if (modify) {
-    return modify.bind(null, req)
+    return modify.bind(null, ...params)
   } else {
     return modify
   }
