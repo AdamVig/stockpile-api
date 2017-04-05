@@ -6,9 +6,9 @@ const item = require('../controllers/item')
 
 test('With fields and filters', t => {
   const queryBuilder = {
-    leftJoin: function () { return this },
-    modify: sinon.spy(),
-    select: function () { return this }
+    leftJoin: sinon.stub().returnsThis(),
+    modify: sinon.stub().returnsThis(),
+    select: sinon.stub().returnsThis()
   }
   item.withFieldsAndFilters(fixt.req, queryBuilder)
   t.true(queryBuilder.modify.called, 'filters are added to request')
