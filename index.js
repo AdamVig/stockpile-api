@@ -1,5 +1,6 @@
 const restify = require('restify')
 const restifyJSONHAL = require('restify-json-hal')
+const restifyLinks = require('restify-links')
 
 const auth = require('./controllers/auth')
 const config = require('./package')
@@ -25,6 +26,7 @@ app.pre(log.onRequest)
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
+app.use(restifyLinks())
 app.use(filterRequestBody())
 
 // Handle OPTIONS requests and method not allowed errors

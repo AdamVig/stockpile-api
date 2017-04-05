@@ -4174,6 +4174,10 @@ restify-json-hal@^0.1.2:
   dependencies:
     parse-comments "^0.4.3"
 
+restify-links@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/restify-links/-/restify-links-1.1.0.tgz#685c5e0d8517a48bc3bdf1b326ef1868fff0ca72"
+
 restify@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/restify/-/restify-4.3.0.tgz#03b67960d1d42a6dafcde3bd82fb882173a27678"
@@ -4273,17 +4277,9 @@ set-immediate-shim@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz#4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
 
-shelljs@0.7.6:
+shelljs@0.7.6, shelljs@^0.7.5:
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.6.tgz#379cccfb56b91c8601e4793356eb5382924de9ad"
-  dependencies:
-    glob "^7.0.0"
-    interpret "^1.0.0"
-    rechoir "^0.6.2"
-
-shelljs@^0.7.5:
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.5.tgz#2eef7a50a21e1ccf37da00df767ec69e30ad0675"
   dependencies:
     glob "^7.0.0"
     interpret "^1.0.0"
