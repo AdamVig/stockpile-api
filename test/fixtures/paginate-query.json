@@ -1,0 +1,18 @@
+{
+  "req": {
+    "params": {
+      "limit": 50,
+      "offset": 10
+    }
+  },
+  "reqOnlyLimit": {
+    "params": {
+      "limit": 50
+    }
+  },
+  "reqOnlyOffset": {
+    "params": {
+      "offset": 10
+    }
+  }
+}
