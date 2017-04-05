@@ -3,8 +3,9 @@
  * request parameters
  * @param {object} queryBuilder Knex query builder
  * @param {object} req HTTP request
+ * @param {object} res HTTP response
  */
-module.exports = (queryBuilder, req) => {
+module.exports = (queryBuilder, req, res) => {
   if (req && req.params.limit) {
     queryBuilder
       .limit(Number.parseInt(req.params.limit, 10))

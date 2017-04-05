@@ -21,7 +21,7 @@ const db = require('../services/db')
 module.exports.getAll = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID,
-                     module.exports.bindModify(modify, req))
+                     module.exports.bindModify(modify, req, res))
       .then(results => res.send({results}))
       .catch(err => module.exports.handleError(err, messages, next, req))
   }
@@ -38,7 +38,8 @@ module.exports.getAll = (tableName, {modify, messages} = {}) => {
 module.exports.get = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.get(tableName, columnName, req.params[columnName],
-                  req.user.organizationID, module.exports.bindModify(modify, req))
+                  req.user.organizationID,
+                  module.exports.bindModify(modify, req, res))
       .then(row => res.send(row))
       .catch(err => module.exports.handleError(err, messages, next, req))
   }
@@ -58,7 +59,8 @@ module.exports.create = (tableName, {modify, messages} = {}) => {
       req.body.organizationID = req.user.organizationID
     }
 
-    return db.create(tableName, req.body, module.exports.bindModify(modify, req))
+    return db.create(tableName, req.body,
+                     module.exports.bindModify(modify, req, res))
       .then(([id]) => res.send({
         id,
         message: module.exports.chooseMessage('create', messages)
@@ -79,7 +81,7 @@ module.exports.update = (tableName, columnName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.update(tableName, columnName, req.params[columnName], req.body,
                      req.user.organizationID,
-                     module.exports.bindModify(modify, req))
+                     module.exports.bindModify(modify, req, res))
       .then(updatedRow => { return res.send(updatedRow) })
       .catch(err => module.exports.handleError(err, messages, next, req))
   }

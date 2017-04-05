@@ -7,6 +7,6 @@ test('Without password', t => {
     join: function () { return this },
     select: function () { return this }
   }
-  const result = user.removePasswordAddRole(null, queryBuilder)
+  const result = user.removePasswordAddRole(null, null, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
 })
