@@ -54,7 +54,7 @@ module.exports.get = (tableName, columnName, {modify, messages} = {}) => {
 module.exports.create = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     // Add organization ID if it is missing
-    if (!req.body.organizationID) {
+    if (!req.body.organizationID && req.user) {
       req.body.organizationID = req.user.organizationID
     }
 
