@@ -32,7 +32,7 @@ organization.mount = app => {
    * @api {put} /organization Create an organization
    * @apiName CreateOrganization
    * @apiGroup Organization
-   * @apiPermission Administrator
+   * @apiPermission Public
    *
    * @apiParam {String} name Name of organization
    *
@@ -40,7 +40,7 @@ organization.mount = app => {
    * @apiSuccess (200) {Number} id ID of created row
    */
   app.put({name: 'create organization', path: 'organization'},
-          auth.verify, auth.checkAdmin, organization.create)
+          organization.create)
   /**
    * @api {put} /organization/:organizationID Update an organization
    * @apiName UpdateOrganization
