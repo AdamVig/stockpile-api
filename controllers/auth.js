@@ -151,7 +151,7 @@ auth.checkAdmin = function checkAdmin (req, res, next) {
   if (req.user.roleID === adminRoleID) {
     return next()
   } else {
-    return next(new restify.UnauthorizedError('must be an administrator'))
+    return next(new restify.ForbiddenError('must be an administrator'))
   }
 }
 
@@ -160,7 +160,7 @@ auth.checkUserMatches = function checkUserMatches (req, res, next) {
   if (req.user.userID === Number.parseInt(req.params.userID, 10)) {
     return next()
   } else {
-    return next(new restify.UnauthorizedError(
+    return next(new restify.ForbiddenError(
       'must be an administrator to access other users\' data'))
   }
 }
