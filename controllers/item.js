@@ -1,7 +1,7 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 const filterQuery = require('../services/filter-query')
-const paginateQuery = require('../services/paginate-query')
+const paginate = require('../services/paginate')
 
 const item = module.exports
 
@@ -37,7 +37,7 @@ item.withFieldsAndFilters = (req, res, queryBuilder) => {
     .modify(filterQuery(req, filterParams))
 
   // Add pagination
-    .modify(paginateQuery, req)
+    .modify(paginate.paginateQuery, req, res, 'item')
 }
 
 endpoint.addAllMethods(item, 'item', 'barcode')
