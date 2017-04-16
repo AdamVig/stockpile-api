@@ -30,5 +30,21 @@
   },
   "expectedWhereClauseOrg": {
     "test.organizationID": 94
-  }
+  },
+  "countRowsTable": "count-rows",
+  "countRowsTestRows": [
+    {
+      "name": "Count Rows Test 1"
+    },
+    {
+      "name": "Count Rows Test 2"
+    },
+    {
+      "name": "Count Rows Test 3"
+    },
+    {
+      "name": "Count Rows Test 4"
+    }
+  ],
+  "expectedRowsCount": 4
 }

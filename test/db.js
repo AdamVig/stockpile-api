@@ -110,6 +110,17 @@ test('Builds a where clause with only organization ID', t => {
   t.deepEqual(whereClause, fixt.expectedWhereClauseOrg)
 })
 
+test('Count rows', async t => {
+  const table = knex.randomizeTableName(fixt.countRowsTable)
+  await knex.schema.createTable(table, table => {
+    table.string('name')
+  })
+  await knex(table).insert(fixt.countRowsTestRows)
+  const {count} = await db.countRows(table)
+  t.is(count, fixt.expectedRowsCount, 'counts rows correctly')
+  await knex.schema.dropTable(table)
+})
+
 test.after.always('Remove test table', async t => {
   await knex.schema.dropTable(fixt.testTableName)
 })
