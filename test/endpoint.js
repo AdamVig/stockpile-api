@@ -13,12 +13,12 @@ test.before('Set up test table', async t => {
     table.integer('value')
     table.integer('organizationID')
   })
+
+  // Insert multiple rows
+  await knex(fixt.table).insert(fixt.multipleRows)
 })
 
 test('Get all', async t => {
-  // Insert multiple rows
-  await knex(fixt.table).insert(fixt.multipleRows)
-
   const req = {
     user: {organizationID: fixt.organizationID}
   }
@@ -46,6 +46,31 @@ test('Get all', async t => {
                                             nextMissingTable)
   t.true(nextMissingTable.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when getting missing row')
+})
+
+test('Get all with pagination', async t => {
+  const req = {
+    params: fixt.paginationParams,
+    path: sinon.stub().returns(fixt.paginationPath),
+    user: {organizationID: fixt.organizationID}
+  }
+  const res = {
+    links: sinon.spy(),
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+
+  await endpoint.getAll(fixt.table)(req, res, next)
+
+  t.true(res.links.calledOnce, 'sets link header')
+  t.true(res.send.calledOnce, 'sends one response')
+  t.true(res.send.calledWithMatch(sinon.match.object),
+         'responds with an object')
+  // Two items inserted, so should be two or more in the table
+  t.true(res.send.calledWithMatch(sinon.match(response =>
+                                              response.results.length >= 2)),
+         'responds with the right number of items')
+  t.false(next.called, 'no errors')
 })
 
 test('Get', async t => {

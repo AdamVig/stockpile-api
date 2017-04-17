@@ -106,5 +106,10 @@
   ],
   "req": {
     "test": "value"
-  }
+  },
+  "paginationParams": {
+    "limit": 5,
+    "offset": 2
+  },
+  "paginationPath": "/test"
 }
