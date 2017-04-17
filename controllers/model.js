@@ -1,9 +1,18 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
+const paginate = require('../services/paginate')
 
 const model = module.exports
 
 endpoint.addAllMethods(model, 'model', 'modelID')
+
+// Add pagination to query
+model.withPagination = (req, queryBuilder) => {
+  return queryBuilder
+    .modify(paginate.paginateQuery, req, 'model')
+}
+
+model.getAll = endpoint.getAll('model', {modify: model.withPagination})
 
 model.mount = app => {
   /**

@@ -1,5 +1,6 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
+const paginate = require('../services/paginate')
 
 const user = module.exports
 
@@ -9,6 +10,7 @@ user.removePasswordAddRole = (req, queryBuilder) => {
     .join('role', 'user.roleID', 'role.roleID')
     .select('userID', 'email', 'firstName', 'lastName', 'organizationID',
             'role.name as role')
+    .modify(paginate.paginateQuery, req, 'user')
 }
 
 user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})

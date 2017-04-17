@@ -37,7 +37,7 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .modify(filterQuery(req, filterParams))
 
   // Add pagination
-    .modify(paginate.paginateQuery, req, res, 'item')
+    .modify(paginate.paginateQuery, req, 'item')
 }
 
 endpoint.addAllMethods(item, 'item', 'barcode')
