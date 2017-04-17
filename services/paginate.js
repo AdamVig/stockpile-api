@@ -62,14 +62,10 @@ module.exports.addLinks = (req, res, tableName) => {
  * @param {object} req HTTP request
  */
 module.exports.paginateQuery = (queryBuilder, req) => {
-  if (req && req.params.limit) {
-    queryBuilder
-      .limit(Number.parseInt(req.params.limit, 10))
+  if (req.params.limit) {
+    queryBuilder.limit(Number.parseInt(req.params.limit, 10))
   }
-
-  // Using offset without limit automatically sets an abitrarily high limit
-  if (req && req.params.offset) {
-    queryBuilder
-      .offset(Number.parseInt(req.params.offset, 10))
+  if (req.params.offset) {
+    queryBuilder.offset(Number.parseInt(req.params.offset, 10))
   }
 }
