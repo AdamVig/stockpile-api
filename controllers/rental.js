@@ -6,7 +6,7 @@ const endpoint = require('../services/endpoint')
 const rental = module.exports
 
 // Join rental with item to get the item's barcode
-rental.withBarcode = (req, res, queryBuilder) => {
+rental.withBarcode = (req, queryBuilder) => {
   return queryBuilder
     .select('rental.*')
     .leftJoin('item', 'rental.itemID', 'item.itemID')

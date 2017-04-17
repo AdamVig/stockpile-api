@@ -5,7 +5,7 @@ const paginate = require('../services/paginate')
 
 const item = module.exports
 
-item.withFieldsAndFilters = (req, res, queryBuilder) => {
+item.withFieldsAndFilters = (req, queryBuilder) => {
   // Mapping between query param fields and database query column names
   const filterParams = new Map()
   filterParams.set('brandID', 'brand.brandID')

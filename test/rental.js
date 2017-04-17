@@ -9,7 +9,7 @@ test('Add barcode', t => {
     leftJoin: function () { return this },
     select: function () { return this }
   }
-  const result = rental.withBarcode(null, null, queryBuilder)
+  const result = rental.withBarcode(null, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
 })
 

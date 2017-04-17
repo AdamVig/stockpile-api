@@ -10,6 +10,6 @@ test('With fields and filters', t => {
     modify: sinon.stub().returnsThis(),
     select: sinon.stub().returnsThis()
   }
-  item.withFieldsAndFilters(fixt.req, null, queryBuilder)
+  item.withFieldsAndFilters(fixt.req, queryBuilder)
   t.true(queryBuilder.modify.called, 'filters are added to request')
 })
