@@ -14,5 +14,68 @@
     "params": {
       "offset": 10
     }
+  },
+  "table": "paginate",
+  "path": "/page",
+  "user": {
+    "organizationID": 0
+  },
+  "rows": [
+    {
+      "name": "Add Links Row 1",
+      "organizationID": 0
+    },
+    {
+      "name": "Add Links Row 2",
+      "organizationID": 0
+    },
+    {
+      "name": "Add Links Row 3",
+      "organizationID": 0
+    }
+  ],
+  "addLinksParams": {
+    "limit": 2,
+    "offset": 1
+  },
+  "paramsNoPrevNext": {
+    "limit": 2,
+    "offset": 2,
+    "count": 3
+  },
+  "paramsPrev": {
+    "limit": 2,
+    "offset": 5,
+    "count": 6
+  },
+  "paramsNext": {
+    "limit": 4,
+    "offset": 2,
+    "count": 8
+  },
+  "paramsOddTotal": {
+    "limit": 5,
+    "offset": 0,
+    "count": 11
+  },
+  "linksNoPrevNextExpected": {
+    "first": "/page?limit=2&offset=0",
+    "last": "/page?limit=2&offset=2"
+  },
+  "linksPrevExpected": {
+    "first": "/page?limit=2&offset=0",
+    "previous": "/page?limit=2&offset=3",
+    "last": "/page?limit=2&offset=4"
+  },
+  "linksNextExpected": {
+    "first": "/page?limit=4&offset=0",
+    "next": "/page?limit=4&offset=6",
+    "last": "/page?limit=4&offset=4"
+  },
+  "lastLinkOddTotalExpected": "/page?limit=5&offset=10",
+  "noOffsetTotalLimit": "10",
+  "linksNoOffsetTotalExpected": {
+    "first": "/page?limit=10&offset=0",
+    "last": "/page?limit=10&offset=0"
   }
 }
