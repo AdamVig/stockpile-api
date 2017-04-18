@@ -89,9 +89,9 @@
     "defaultTest": "default",
     "customTest": "conflict"
   },
-  "expectedDefaultMessage": "something went wrong",
+  "expectedDefaultMessage": "Something went wrong",
   "expectedCustomMessage": "item already exists",
-  "defaultBadRequestMessage": "wrong fields in request body",
+  "defaultBadRequestMessage": "Wrong fields",
   "customMessages": {
     "create": "item created",
     "delete": "item deleted",

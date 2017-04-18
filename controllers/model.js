@@ -2,6 +2,10 @@ const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
+const messages = {
+  missing: 'Model does not exist'
+}
+
 const model = module.exports
 
 model.withKits = (req, queryBuilder) => {
@@ -22,6 +26,7 @@ model.withPagination = (req, queryBuilder) => {
 }
 
 model.getAll = endpoint.getAll('model', {modify: model.withPagination})
+model.get = endpoint.get('model', 'modelID', {messages})
 
 model.mount = app => {
   /**

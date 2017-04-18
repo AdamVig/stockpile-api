@@ -135,12 +135,12 @@ module.exports.default = () => {
  */
 module.exports.chooseMessage = (type, messages = {}) => {
   const defaultMessages = {
-    create: 'created',
-    delete: 'deleted',
-    conflict: 'already exists',
-    missing: 'does not exist',
-    badRequest: 'wrong fields in request body',
-    default: 'something went wrong'
+    create: 'Created',
+    delete: 'Deleted',
+    conflict: 'Already exists',
+    missing: 'Does not exist',
+    badRequest: 'Wrong fields',
+    default: 'Something went wrong'
   }
   return messages[type] || defaultMessages[type] || defaultMessages.default
 }

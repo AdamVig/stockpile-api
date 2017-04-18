@@ -3,6 +3,10 @@ const endpoint = require('../services/endpoint')
 const filterQuery = require('../services/filter-query')
 const paginate = require('../services/paginate')
 
+const messages = {
+  missing: 'Item does not exist'
+}
+
 const item = module.exports
 
 item.withFieldsAndFilters = (req, queryBuilder) => {
@@ -42,7 +46,8 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
 
 endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
-item.get = endpoint.get('item', 'barcode', {modify: item.withFieldsAndFilters})
+item.get = endpoint.get('item', 'barcode',
+                        {modify: item.withFieldsAndFilters, messages})
 
 item.mount = app => {
   /**

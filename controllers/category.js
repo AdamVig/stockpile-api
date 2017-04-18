@@ -2,6 +2,10 @@ const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
+const messages = {
+  missing: 'Category does not exist'
+}
+
 const category = module.exports
 
 endpoint.addAllMethods(category, 'category', 'categoryID')
@@ -13,6 +17,7 @@ category.withPagination = (req, queryBuilder) => {
 }
 
 category.getAll = endpoint.getAll('category', {modify: category.withPagination})
+category.get = endpoint.get('category', 'categoryID', {messages})
 
 category.mount = app => {
   /**

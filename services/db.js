@@ -11,14 +11,14 @@ require('dotenv-safe').load({
 
 function MissingDataError () {
   this.name = 'MissingDataError'
-  this.message = 'data is missing'
+  this.message = 'Data is missing'
   this.code = 'ER_BAD_REQUEST_ERROR'
 }
 MissingDataError.prototype = Object.create(Error.prototype)
 
 function NotFoundError () {
   this.name = 'NotFoundError'
-  this.message = 'row does not exist'
+  this.message = 'Row does not exist'
   this.code = 'ER_NOT_FOUND'
 }
 NotFoundError.prototype = Object.create(Error.prototype)

@@ -83,16 +83,19 @@ auth.authenticate = (req, res, next) => {
           res.send({
             id: user.userID,
             token,
-            message: 'credentials are valid'
+            message: 'Authentication successful'
           })
         } else {
           return next(new restify.UnauthorizedError(
-            'email and password combination is invalid'))
+            'Email and password combination is incorrect'))
         }
       })
-      .catch(next)
+      .catch(() => {
+        return next(new restify.UnauthorizedError(
+          'Email and password combination is incorrect'))
+      })
   } else {
-    return next(new restify.BadRequestError('missing required fields'))
+    return next(new restify.BadRequestError('Missing email or password'))
   }
 }
 
@@ -115,7 +118,7 @@ auth.register = (req, res, next) => {
       .then(([userID]) => {
         return res.send(201, {
           id: userID,
-          message: 'registered user'
+          message: 'User successfully registered'
         })
       })
       .catch(next)
@@ -151,7 +154,7 @@ auth.checkAdmin = function checkAdmin (req, res, next) {
   if (req.user.roleID === adminRoleID) {
     return next()
   } else {
-    return next(new restify.ForbiddenError('must be an administrator'))
+    return next(new restify.ForbiddenError('Must be an administrator'))
   }
 }
 
@@ -161,6 +164,6 @@ auth.checkUserMatches = function checkUserMatches (req, res, next) {
     return next()
   } else {
     return next(new restify.ForbiddenError(
-      'must be an administrator to access other users\' data'))
+      'Must be an administrator to access other users\' data'))
   }
 }
