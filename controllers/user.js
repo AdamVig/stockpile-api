@@ -20,6 +20,13 @@ user.delete = endpoint.delete('userInfo', 'userID')
 
 user.mount = app => {
   /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
+  /**
    * @apiDefine UserResponse
    *
    * @apiExample {json} Response Format
@@ -37,6 +44,8 @@ user.mount = app => {
    * @apiName GetUsers
    * @apiGroup User
    * @apiPermission Administrator
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response Format
    * {

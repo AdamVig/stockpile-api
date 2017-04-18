@@ -16,6 +16,13 @@ category.getAll = endpoint.getAll('category', {modify: category.withPagination})
 
 category.mount = app => {
   /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
+  /**
    * @apiDefine CategoryResponse
    *
    * @apiExample {json} Response format:
@@ -30,6 +37,8 @@ category.mount = app => {
    * @api {get} /category Get all categories
    * @apiName GetCategories
    * @apiGroup Category
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response format:
    * {

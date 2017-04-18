@@ -16,6 +16,13 @@ model.getAll = endpoint.getAll('model', {modify: model.withPagination})
 
 model.mount = app => {
   /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
+  /**
    * @apiDefine ModelResponse
    *
    * @apiExample {json} Response format:
@@ -31,6 +38,8 @@ model.mount = app => {
    * @api {get} /model Get all models
    * @apiName GetModels
    * @apiGroup Model
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response format:
    * {

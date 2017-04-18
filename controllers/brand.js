@@ -16,6 +16,13 @@ brand.getAll = endpoint.getAll('brand', {modify: brand.withPagination})
 
 brand.mount = app => {
   /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
+  /**
    * @apiDefine BrandResponse
    *
    * @apiExample {json} Response format:
@@ -31,6 +38,8 @@ brand.mount = app => {
    * @apiName GetBrands
    * @apiGroup Brand
    * @apiPermission User
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response format:
    * {

@@ -42,6 +42,13 @@ rental.delete = endpoint.delete('rental', {modify: rental.withBarcode})
 
 rental.mount = app => {
   /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
+  /**
    * @apiDefine RentalResponse
    *
    * @apiExample {json} Response format:
@@ -62,6 +69,8 @@ rental.mount = app => {
    * @apiName GetRentals
    * @apiGroup Rental
    * @apiPermission User
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response format:
    * {
