@@ -1,0 +1,16 @@
+{
+  "req": {
+    "params": {
+      "kitID": 0
+    }
+  },
+  "kitModelsTable": "kitModels",
+  "createKitModelReq": {
+    "body": {
+      "modelID": 1
+    },
+    "params": {
+      "kitID": 1
+    }
+  }
+}

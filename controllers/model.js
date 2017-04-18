@@ -4,7 +4,16 @@ const paginate = require('../services/paginate')
 
 const model = module.exports
 
+model.withKits = (req, queryBuilder) => {
+  return queryBuilder
+    .select('kit.*')
+    .where('model.modelID', req.params.modelID)
+    .join('kitModels', 'model.modelID', 'kitModels.modelID')
+    .join('kit', 'kitModels.kitID', 'kit.kitID')
+}
+
 endpoint.addAllMethods(model, 'model', 'modelID')
+model.getKits = endpoint.getAll('model', {modify: model.withKits})
 
 // Add pagination to query
 model.withPagination = (req, queryBuilder) => {
@@ -100,4 +109,23 @@ model.mount = app => {
    */
   app.del({name: 'delete model', path: 'model/:modelID'},
           auth.verify, model.delete)
+  /**
+   * @api {get} /model/:modelID/kits Get model kits
+   * @apiName GetModelKits
+   * @apiGroup Model
+   * @apiPermission User
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   results: [
+   *     {
+   *       "kitID": 0,
+   *       "organizationID": 0,
+   *       "name": ""
+   *     }
+   *   ]
+   * }
+   */
+  app.get({name: 'get model kits', path: 'model/:modelID/kits'}, auth.verify,
+          model.getKits)
 }
