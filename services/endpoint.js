@@ -9,10 +9,10 @@
 const restify = require('restify')
 
 const db = require('../services/db')
+const paginate = require('./paginate')
 
 /**
- * Get all rows from a table and return them in an object, assigned to a
- * property with the same name as the table
+ * Get all rows from a table, paginating or modifying query if appropriate
  * @param {string} tableName Name of a database table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
@@ -22,7 +22,15 @@ module.exports.getAll = (tableName, {modify, messages} = {}) => {
   return (req, res, next) => {
     return db.getAll(tableName, req.user.organizationID,
                      module.exports.bindModify(modify, req))
-      .then(results => res.send({results}))
+      .then(results => {
+        // If pagination parameters in request, add pagination links
+        if (req.params && (req.params.limit || req.params.offset)) {
+          return paginate.addLinks(req, res, tableName)
+            .then(() => res.send({results}))
+        } else {
+          return res.send({results})
+        }
+      })
       .catch(err => module.exports.handleError(err, messages, next, req))
   }
 }
@@ -191,12 +199,12 @@ module.exports.addAllMethods = (controller, table, key, messages = {}) => {
 /**
  * Bind modify function if defined
  * @param {function} [modify] Query modifier
- * @param {object} req Restify request
+ * @param {any} params Parameters to bind
  * @return {function|undefined} Query modifier or 'undefined'
  */
-module.exports.bindModify = (modify, req) => {
+module.exports.bindModify = (modify, ...params) => {
   if (modify) {
-    return modify.bind(null, req)
+    return modify.bind(null, ...params)
   } else {
     return modify
   }

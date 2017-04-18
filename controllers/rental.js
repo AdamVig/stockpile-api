@@ -2,6 +2,7 @@ const jwt = require('jwt-simple')
 
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
+const paginate = require('../services/paginate')
 
 const rental = module.exports
 
@@ -11,6 +12,11 @@ rental.withBarcode = (req, queryBuilder) => {
     .select('rental.*')
     .leftJoin('item', 'rental.itemID', 'item.itemID')
     .select('item.barcode')
+}
+
+rental.withBarcodeAndPagination = (req, queryBuilder) => {
+  return rental.withBarcode(req, queryBuilder)
+    .modify(paginate.paginateQuery, req, 'rental')
 }
 
 // Get user ID from token and add to request body
@@ -27,13 +33,21 @@ rental.addUserID = function addUserID (req, res, next) {
 
 const messages = {conflict: 'Cannot rent item, item is already rented'}
 
-rental.getAll = endpoint.getAll('rental', {modify: rental.withBarcode})
+rental.getAll = endpoint.getAll('rental',
+                                {modify: rental.withBarcodeAndPagination})
 rental.get = endpoint.get('rental', 'barcode', {modify: rental.withBarcode})
 rental.create = endpoint.create('rental', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
 rental.delete = endpoint.delete('rental', {modify: rental.withBarcode})
 
 rental.mount = app => {
+  /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
   /**
    * @apiDefine RentalResponse
    *
@@ -55,6 +69,8 @@ rental.mount = app => {
    * @apiName GetRentals
    * @apiGroup Rental
    * @apiPermission User
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response format:
    * {

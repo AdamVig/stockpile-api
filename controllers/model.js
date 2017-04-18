@@ -1,11 +1,27 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
+const paginate = require('../services/paginate')
 
 const model = module.exports
 
 endpoint.addAllMethods(model, 'model', 'modelID')
 
+// Add pagination to query
+model.withPagination = (req, queryBuilder) => {
+  return queryBuilder
+    .modify(paginate.paginateQuery, req, 'model')
+}
+
+model.getAll = endpoint.getAll('model', {modify: model.withPagination})
+
 model.mount = app => {
+  /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
   /**
    * @apiDefine ModelResponse
    *
@@ -22,6 +38,8 @@ model.mount = app => {
    * @api {get} /model Get all models
    * @apiName GetModels
    * @apiGroup Model
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response format:
    * {

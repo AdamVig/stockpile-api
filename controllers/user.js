@@ -4,6 +4,7 @@ const restify = require('restify')
 const auth = require('./auth')
 const db = require('../services/db')
 const endpoint = require('../services/endpoint')
+const paginate = require('../services/paginate')
 
 const user = module.exports
 
@@ -13,6 +14,7 @@ user.removePasswordAddRole = (req, queryBuilder) => {
     .join('role', 'user.roleID', 'role.roleID')
     .select('userID', 'email', 'firstName', 'lastName', 'organizationID',
             'role.name as role')
+    .modify(paginate.paginateQuery, req, 'user')
 }
 
 user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})
@@ -47,6 +49,13 @@ user.changeUserPassword = function changeUserPassword (req, res, next) {
 
 user.mount = app => {
   /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
+  /**
    * @apiDefine UserResponse
    *
    * @apiExample {json} Response Format
@@ -64,6 +73,8 @@ user.mount = app => {
    * @apiName GetUsers
    * @apiGroup User
    * @apiPermission Administrator
+   *
+   * @apiUse Pagination
    *
    * @apiExample {json} Response Format
    * {

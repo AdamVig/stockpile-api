@@ -23,6 +23,7 @@ test.before('Insert data', async t => {
 test('Without password', t => {
   const queryBuilder = {
     join: function () { return this },
+    modify: function () { return this },
     select: function () { return this }
   }
   const result = user.removePasswordAddRole(null, queryBuilder)

@@ -161,3 +161,18 @@ module.exports.update = (table, column, value, data, organizationID, modify = ()
         .first()
     })
 }
+
+/**
+ * Count all rows in a table
+ * @param {string} table Name of a database table
+ * @param {any} [organizationID] ID of organization
+ * @param {function} [modify=noop] Modify the query
+ * @return {Promise.<array>} Resolved by all rows from table
+ */
+module.exports.countRows = (table, organizationID, modify = () => {}) => {
+  return knex(table)
+    .where(module.exports.buildWhere(table, null, null, organizationID))
+    .count('* as count')
+    .first()
+    .modify(modify)
+}

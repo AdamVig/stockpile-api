@@ -1,6 +1,7 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 const filterQuery = require('../services/filter-query')
+const paginate = require('../services/paginate')
 
 const item = module.exports
 
@@ -34,6 +35,9 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
 
   // Add filters to query
     .modify(filterQuery(req, filterParams))
+
+  // Add pagination
+    .modify(paginate.paginateQuery, req, 'item')
 }
 
 endpoint.addAllMethods(item, 'item', 'barcode')
@@ -41,6 +45,13 @@ item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode', {modify: item.withFieldsAndFilters})
 
 item.mount = app => {
+  /**
+   * @apiDefine Pagination
+   *
+   * @apiParam (Pagination) {Number{0..}} [limit] Max rows in response
+   * @apiParam (Pagination) {Number{0..}} [offset] Rows to offset response by
+   */
+
   /**
    * @apiDefine ItemResponse
    *
@@ -64,14 +75,19 @@ item.mount = app => {
    * specified below. Any of the filters can be applied at the same time in
    * any order.
    *
-   * @apiParam {Number} [brandID] Return items with only this brandID
-   * @apiParam {Number} [modelID] Return items with only this modelID
-   * @apiParam {Number} [categoryID] Return items with only this categoryID
-   *
+   * @apiParam (Filter) {Number} [brandID] Return items with only this brandID
+   * @apiParam (Filter) {Number} [modelID] Return items with only this modelID
+   * @apiParam (Filter) {Number} [categoryID] Return items with only this
+   *   categoryID
    * @apiParamExample Filter brand and model
    * /item?brandID=0&modelID=0
    * @apiParamExample Filter category
    * /item?categoryID=0
+   *
+   *
+   * @apiUse Pagination
+   * @apiParamExample Paginate response
+   * /item?limit=10&offset=10
    *
    * @apiExample {json} Response format:
    * {
