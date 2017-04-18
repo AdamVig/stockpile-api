@@ -51,7 +51,10 @@ test('Paginate query with no parameters', t => {
     limit: sinon.spy(),
     offset: sinon.spy()
   }
-  paginate.paginateQuery(queryBuilder, null)
+  const req = {
+    params: {}
+  }
+  paginate.paginateQuery(queryBuilder, req)
   t.false(queryBuilder.limit.called, 'limit is not called')
   t.false(queryBuilder.offset.called, 'offset is not called')
 })
