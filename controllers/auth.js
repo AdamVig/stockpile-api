@@ -118,7 +118,7 @@ auth.register = (req, res, next) => {
       .then(([userID]) => {
         return res.send(201, {
           id: userID,
-          message: 'Registered user successfully'
+          message: 'User successfully registered'
         })
       })
       .catch(next)
