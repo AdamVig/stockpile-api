@@ -1,3 +1,9 @@
+/**
+ * Paginate responses
+ *
+ * @module services/paginate
+ */
+
 const db = require('./db')
 
 /**
