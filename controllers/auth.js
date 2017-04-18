@@ -90,7 +90,10 @@ auth.authenticate = (req, res, next) => {
             'email and password combination is invalid'))
         }
       })
-      .catch(next)
+      .catch(() => {
+        return next(new restify.UnauthorizedError(
+          'Email and password combination is incorrect'))
+      })
   } else {
     return next(new restify.BadRequestError('missing required fields'))
   }

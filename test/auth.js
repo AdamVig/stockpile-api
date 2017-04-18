@@ -87,6 +87,15 @@ test('Authenticates a user', async t => {
   t.true(nextNoPassword.calledWithMatch(
     sinon.match.instanceOf(restify.BadRequestError)),
          'throws error when request is missing fields')
+
+  const reqBadEmail = {
+    body: fixt.authUserBadEmail
+  }
+  const nextBadEmail = sinon.spy()
+  await auth.authenticate(reqBadEmail, null, nextBadEmail)
+  t.true(nextBadEmail.calledWithMatch(
+    sinon.match.instanceOf(restify.UnauthorizedError)),
+         'throws error when user does not exist')
 })
 
 test('Returns error when email and password do not match', async t => {
