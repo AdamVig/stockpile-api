@@ -31,11 +31,15 @@ rental.addUserID = function addUserID (req, res, next) {
   }
 }
 
-const messages = {conflict: 'Cannot rent item, item is already rented'}
+const messages = {
+  conflict: 'Cannot rent item, item is already rented',
+  missing: 'Rental does not exist'
+}
 
 rental.getAll = endpoint.getAll('rental',
                                 {modify: rental.withBarcodeAndPagination})
-rental.get = endpoint.get('rental', 'barcode', {modify: rental.withBarcode})
+rental.get = endpoint.get('rental', 'barcode',
+                          {modify: rental.withBarcode, messages})
 rental.create = endpoint.create('rental', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
 rental.delete = endpoint.delete('rental', {modify: rental.withBarcode})

@@ -1,9 +1,13 @@
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
 
+const messages = {
+  missing: 'Organization does not exist'
+}
+
 const organization = module.exports
 
-organization.get = endpoint.get('organization', 'organizationID')
+organization.get = endpoint.get('organization', 'organizationID', {messages})
 organization.create = endpoint.create('organization')
 organization.update = endpoint.update('organization', 'organizationID')
 organization.delete = endpoint.delete('organization', 'organizationID')

@@ -6,6 +6,10 @@ const db = require('../services/db')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
+const messages = {
+  missing: 'User does not exist'
+}
+
 const user = module.exports
 
 // Select all fields from the user table except password
@@ -18,7 +22,7 @@ user.removePasswordAddRole = (req, queryBuilder) => {
 }
 
 user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})
-user.get = endpoint.get('userInfo', 'userID')
+user.get = endpoint.get('userInfo', 'userID', {messages})
 user.update = endpoint.update('userInfo', 'userID')
 user.delete = endpoint.delete('userInfo', 'userID')
 
