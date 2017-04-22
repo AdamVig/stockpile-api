@@ -120,7 +120,7 @@ rental.mount = app => {
    *
    * @apiUse RentalResponse
    */
-  app.put({name: 'update rental', path: 'rental/:barcode'},
+  app.put({name: 'update rental', path: 'rental/:rentalID'},
           auth.verify, rental.update)
   /**
    * @api {delete} /rental/:rentalID Delete a rental
@@ -131,6 +131,6 @@ rental.mount = app => {
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
-  app.del({name: 'delete rental', path: 'rental/:barcode'},
+  app.del({name: 'delete rental', path: 'rental/:rentalID'},
           auth.verify, auth.checkAdmin, rental.delete)
 }
