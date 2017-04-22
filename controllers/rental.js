@@ -107,6 +107,14 @@ rental.mount = app => {
    * @apiGroup Rental
    * @apiPermission User
    *
+   * @apiParam {Number} userID ID of renting user
+   * @apiParam {Number} itemID ID of rented item
+   * @apiParam {String} startDate Date rental taken out (YYYY-MM-DD)
+   * @apiParam {String} endDate Date rental is due (YYYY-MM-DD)
+   * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {Number} [organizationID] ID of organization (automatically taken
+   *   from token, but can be overridden)
+   *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id ID of created row
    */
@@ -117,6 +125,14 @@ rental.mount = app => {
    * @apiName UpdateRental
    * @apiGroup Rental
    * @apiPermission User
+   *
+   * @apiParam {Number} [userID] ID of renting user
+   * @apiParam {Number} [itemID] ID of rented item
+   * @apiParam {String} [startDate] Date rental taken out (YYYY-MM-DD)
+   * @apiParam {String} [endDate] Date rental is due (YYYY-MM-DD)
+   * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {Number} [organizationID] ID of organization (automatically taken
+   *   from token, but can be overridden)
    *
    * @apiUse RentalResponse
    */
