@@ -92,7 +92,7 @@ rental.mount = app => {
    */
   app.get({name: 'get all rentals', path: 'rental'}, auth.verify, rental.getAll)
   /**
-   * @api {get} /rental/:rentalID Get a rental
+   * @api {get} /rental/:barcode Get a rental
    * @apiName GetRental
    * @apiGroup Rental
    * @apiPermission User
@@ -102,10 +102,18 @@ rental.mount = app => {
   app.get({name: 'get rental', path: 'rental/:barcode'},
           auth.verify, rental.get)
   /**
-   * @api {put} /rental Create arental
+   * @api {put} /rental Create a rental
    * @apiName CreateRental
    * @apiGroup Rental
    * @apiPermission User
+   *
+   * @apiParam {Number} userID ID of renting user
+   * @apiParam {Number} itemID ID of rented item
+   * @apiParam {String} startDate Date rental taken out (YYYY-MM-DD)
+   * @apiParam {String} endDate Date rental is due (YYYY-MM-DD)
+   * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {Number} [organizationID] ID of organization (automatically taken
+   *   from token, but can be overridden)
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id ID of created row
@@ -118,9 +126,17 @@ rental.mount = app => {
    * @apiGroup Rental
    * @apiPermission User
    *
+   * @apiParam {Number} [userID] ID of renting user
+   * @apiParam {Number} [itemID] ID of rented item
+   * @apiParam {String} [startDate] Date rental taken out (YYYY-MM-DD)
+   * @apiParam {String} [endDate] Date rental is due (YYYY-MM-DD)
+   * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {Number} [organizationID] ID of organization (automatically taken
+   *   from token, but can be overridden)
+   *
    * @apiUse RentalResponse
    */
-  app.put({name: 'update rental', path: 'rental/:barcode'},
+  app.put({name: 'update rental', path: 'rental/:rentalID'},
           auth.verify, rental.update)
   /**
    * @api {delete} /rental/:rentalID Delete a rental
@@ -131,6 +147,6 @@ rental.mount = app => {
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
-  app.del({name: 'delete rental', path: 'rental/:barcode'},
+  app.del({name: 'delete rental', path: 'rental/:rentalID'},
           auth.verify, auth.checkAdmin, rental.delete)
 }
