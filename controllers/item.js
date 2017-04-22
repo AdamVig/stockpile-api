@@ -66,7 +66,8 @@ item.mount = app => {
    *   "organizationID": 0,
    *   "modelID": 0,
    *   "categoryID": 0,
-   *   "barcode": "234234"
+   *   "barcode": "234234",
+   *   "notes": ""
    * }
    */
 
@@ -102,7 +103,8 @@ item.mount = app => {
    *       "organizationID": 0,
    *       "modelID": 0,
    *       "categoryID": 0,
-   *       "barcode": "234234"
+   *       "barcode": "234234",
+   *       "notes": ""
    *     }
    *   ]
    * }
@@ -126,6 +128,7 @@ item.mount = app => {
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
    * @apiParam {String} barcode Unique identifier of item
+   * @apiParam {String{0..1000}} [notes] Notes about item
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id ID of created row
@@ -140,6 +143,7 @@ item.mount = app => {
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
    * @apiParam {String} [barcode] Unique identifier of item
+   * @apiParam {String{0..1000}} [notes] Notes about item
    *
    * @apiUse ItemResponse
    */
