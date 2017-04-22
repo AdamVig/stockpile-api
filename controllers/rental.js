@@ -92,7 +92,7 @@ rental.mount = app => {
    */
   app.get({name: 'get all rentals', path: 'rental'}, auth.verify, rental.getAll)
   /**
-   * @api {get} /rental/:rentalID Get a rental
+   * @api {get} /rental/:barcode Get a rental
    * @apiName GetRental
    * @apiGroup Rental
    * @apiPermission User
