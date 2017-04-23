@@ -64,7 +64,9 @@ rental.mount = app => {
    *   "returnDate": null,
    *   "startDate": "2017-02-22T05:00:00.000Z",
    *   "barcode": "",
-   *   "userID": 0
+   *   "userID": 0,
+   *   "notes": "",
+   *   "externalRenterID": 0
    * }
    */
 
@@ -86,7 +88,9 @@ rental.mount = app => {
    *     "returnDate": null,
    *     "startDate": "2017-02-22T05:00:00.000Z",
    *     "barcode": "",
-   *     "userID": 0
+   *     "userID": 0,
+   *     "notes": "",
+   *     "externalRenterID": 0
    *   ]
    * }
    */
@@ -112,8 +116,10 @@ rental.mount = app => {
    * @apiParam {String} startDate Date rental taken out (YYYY-MM-DD)
    * @apiParam {String} endDate Date rental is due (YYYY-MM-DD)
    * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {Number} [externalRenterID] ID of external renter
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
+   * @apiParam {String{0..1000}} [notes] Notes about rental
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id ID of created row
@@ -131,6 +137,8 @@ rental.mount = app => {
    * @apiParam {String} [startDate] Date rental taken out (YYYY-MM-DD)
    * @apiParam {String} [endDate] Date rental is due (YYYY-MM-DD)
    * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {String{0..1000}} [notes] Notes about rental
+   * @apiParam {Number} [externalRenterID] ID of external renter
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *
