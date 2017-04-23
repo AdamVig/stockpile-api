@@ -1,23 +1,71 @@
-## Authenticating
-When the organization does not exist yet:  
-`POST /register` with body containing:
+## Authentication
+### Before creating a user, an organization must exist:
+`PUT /organization` with body containing:  
 ```JSON
-{"name": "Name of Organization", "email": "org@example.com", "password": "org123"}
+{
+  "name": "Name of Organization"
+}
+```
+Then save the `id` field of the response. This will be used as the `organizationID` field for the new user.  
+
+### To create a user:
+`POST /auth/register` with body containing:  
+```JSON
+{
+  "firstName": "User First Name",
+  "lastName": "User Last Name",
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+The body of the above request can include a `roleID` field set to `1` to make the new user's role "Administrator" (`2`, the default, is "Member" and has fewer permissions). Example of the body of a registration request for an administrator:  
+```JSON
+{
+  "firstName": "User First Name",
+  "lastName": "User Last Name",
+  "email": "user@example.com",
+  "password": "password123",
+  "roleID": 1
+}
 ```
 
-When the organization already exists:  
-`POST /auth` with body containing:
+The response will look like this:  
 ```JSON
-{"email": "org@example.com", "password": "org123"}
+{
+  "id": 1,
+  "message": "User successfully registered"
+}
 ```
 
-In either situation, you will receive a response like this:  
+### To authenticate a user:
+`POST /auth` with body containing:  
 ```JSON
-{"id": 1, "token": "987234.sdf0982347234.hjgsdf89234", "message": "organization credentials are valid"}
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
 ```
 
-Make all further requests with the following header:  
+The response will look like this:  
+```JSON
+{
+  "id": 1,
+  "token": "987234.sdf0982347234.hjgsdf89234",
+  "message": "Authentication successful"
+}
+```
+
+Use the bearer token from the response in the `Authorization` header of all requests:  
 `Authorization: Bearer 987234.sdf0982347234.hjgsdf89234`
+
+Decode the token with a JWT library to extract the following properties:  
+```JSON
+{
+  "userID": 1,
+  "organizationID": 1,
+  "roleID": 1
+}
+```
 
 ## HAL
 [Hypertext Application Language (HAL)](http://stateless.co/hal_specification.html) is a "simple format that gives a consistent and easy way to hyperlink between resources in your API." It is similar to HATEOAS in that it makes the API explorable by providing links to related entities in each response.  
