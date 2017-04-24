@@ -39,10 +39,11 @@ auth.mount = app => {
    * @apiName Register
    * @apiGroup Authentication
    *
-   * @apiParam {String} email User's email
-   * @apiParam {String} password User's password
-   * @apiParam {String} name User's name
-   * @apiParam {Number} roleID=2 Role, defaults to "Member"
+   * @apiParam {String} email Email address
+   * @apiParam {String} password Password
+   * @apiParam {String} firstName First name
+   * @apiParam {String} lastName Last name
+   * @apiParam {Number} [roleID=2] Role, defaults to "Member"
    * @apiParam {String} [archived] Date user was archived (YYYY-MM-DD)
    *
    * @apiSuccess (201) {Number} id ID of user
@@ -54,8 +55,8 @@ auth.mount = app => {
    * @apiName Verify
    * @apiGroup Authentication
    *
-   * @apiParam {String} email User's email
-   * @apiParam {String} password User's password
+   * @apiParam {String} email Email address
+   * @apiParam {String} password Password
    *
    * @apiSuccess (200) empty No response body
    */
