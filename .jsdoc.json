@@ -3,8 +3,11 @@
     "destination": "docs/jsdoc"
   },
   "plugins": ["plugins/markdown"],
+  "readme": "docs/jsdoc-home.md",
   "source": {
-    "include": ["services"],
-    "includePattern": ".js$"
+    "include": [
+      "services",
+      "docs/jsdoc-home.md"
+    ]
   }
 }
