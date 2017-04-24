@@ -5,6 +5,8 @@
 # stockpile-api
 The API for Stockpile, an app that manages stuff for organizations.  
 
+[Read the docs.](https://stockpile.adamvig.com/docs)
+
 See [stockpile-app](https://github.com/emmanuelroussel/stockpile-app) for the web and mobile application that consumes this API.  
 
 ## Scripts
