@@ -21,6 +21,21 @@ You must define environment variables in a `.env` file in the root directory of 
 Environment variables are loaded into the app and can be accessed in any file with `process.env.VAR_NAME`.  
 Override variables at run-time by defining them with the command, like `VAR_NAME=value yarn start`.  
 
+### Example Environment Variables
+```
+NODE_ENV=prod
+PORT=9999
+DB_URL=example.com
+DB_USER=db-user
+DB_PASSWORD=9234kjhsdfnmb234
+DB_NAME=my_db
+JWT_SECRET=392skdjlhfbjkmnb3425lkdfg
+API_URL=https://example.com/api/
+```
+
+Note that the format of `DB_URL` is flexible because it is passed to the Knex constructor.  
+Note that `API_URL` must begin with `http://` or `https://` and end with `/`.  
+
 ## Tests
 Tests are located in `./test` and are run asynchronously in parallel with `yarn test`.  
 
