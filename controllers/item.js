@@ -58,6 +58,7 @@ item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
 item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
+item.getStatus = endpoint.get('itemStatus', 'itemID')
 
 item.mount = app => {
   /**
@@ -194,4 +195,19 @@ item.mount = app => {
    */
   app.get({name: 'get item rentals', path: 'item/:barcode/rentals'},
           auth.verify, item.getRentals)
+  /**
+   * @api {get} /item/:barcode/status Get status of an item
+   * @apiName GetItemStatus
+   * @apiGroup Item
+   * @apiPermission User
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "itemID": 0,
+   *   "available": 0,
+   *   "rentalID": 0
+   * }
+   */
+  app.get({name: 'get item status', path: 'item/:barcode/status'},
+          auth.verify, item.getStatus)
 }
