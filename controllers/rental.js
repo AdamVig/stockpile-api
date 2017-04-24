@@ -96,14 +96,18 @@ rental.mount = app => {
    */
   app.get({name: 'get all rentals', path: 'rental'}, auth.verify, rental.getAll)
   /**
-   * @api {get} /rental/:barcode Get a rental
+   * @api {get} /rental/:rentalID Get a rental
    * @apiName GetRental
    * @apiGroup Rental
    * @apiPermission User
    *
+   * @apiDescription To find the `rentalID` of an item's current active rental
+   *   by the item's barcode, use `GET /item/:barcode/status`. To find all
+   *   current and past rentals of an item, use `GET /item/:barcode/rentals`.
+   *
    * @apiUse RentalResponse
    */
-  app.get({name: 'get rental', path: 'rental/:barcode'},
+  app.get({name: 'get rental', path: 'rental/:rentalID'},
           auth.verify, rental.get)
   /**
    * @api {put} /rental Create a rental

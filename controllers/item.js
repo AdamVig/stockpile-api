@@ -44,10 +44,21 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'item')
 }
 
+item.withRentals = (req, queryBuilder) => {
+  return queryBuilder
+    .join('rental', 'item.itemID', 'rental.itemID')
+    .select('rental.*')
+
+  // Add pagination
+    .modify(paginate.paginateQuery, req, 'item')
+}
+
 endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
+item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
+item.getStatus = endpoint.get('itemStatus', 'itemID')
 
 item.mount = app => {
   /**
@@ -158,4 +169,45 @@ item.mount = app => {
    * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete item', path: 'item/:barcode'}, auth.verify, item.delete)
+  /**
+   * @api {get} /item/:barcode/rentals Get rentals of an item
+   * @apiName GetItemRentals
+   * @apiGroup Item
+   * @apiPermission User
+   *
+   * @apiUse Pagination
+   *
+   * @apiExample {json} Response format:
+   * {
+   *   "results": [
+   *     "endDate": "2017-02-23T05:00:00.000Z",
+   *     "itemID": 0,
+   *     "organizationID": 0,
+   *     "rentalID": 0,
+   *     "returnDate": null,
+   *     "startDate": "2017-02-22T05:00:00.000Z",
+   *     "barcode": "",
+   *     "userID": 0,
+   *     "notes": "",
+   *     "externalRenterID": 0
+   *   ]
+   * }
+   */
+  app.get({name: 'get item rentals', path: 'item/:barcode/rentals'},
+          auth.verify, item.getRentals)
+  /**
+   * @api {get} /item/:barcode/status Get status of an item
+   * @apiName GetItemStatus
+   * @apiGroup Item
+   * @apiPermission User
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "itemID": 0,
+   *   "available": 0,
+   *   "rentalID": 0
+   * }
+   */
+  app.get({name: 'get item status', path: 'item/:barcode/status'},
+          auth.verify, item.getStatus)
 }

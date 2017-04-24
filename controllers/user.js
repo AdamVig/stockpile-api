@@ -68,7 +68,8 @@ user.mount = app => {
    *   "firstName": "",
    *   "lastName": "",
    *   "email": "",
-   *   "organizationID": 0
+   *   "organizationID": 0,
+   *   "archived": null
    * }
    */
 
@@ -89,7 +90,8 @@ user.mount = app => {
    *       "lastName": "",
    *       "email": "",
    *       "organizationID": 0,
-   *       "role": "Member"
+   *       "role": "Member",
+   *       "archived": null
    *     }
    *   ]
    * }
@@ -115,6 +117,7 @@ user.mount = app => {
    * @apiParam {String{0...255}} [firstName] First name
    * @apiParam {String{0...255}} [lastName] Last name
    * @apiParam {String{0...255}} [email] Email address
+   * @apiParam {String} [archived] Date user was archived (YYYY-MM-DD)
    *
    * @apiUse UserResponse
    */
@@ -124,13 +127,18 @@ user.mount = app => {
    * @api {delete} /user/:userID Delete a user
    * @apiName DeleteUser
    * @apiGroup User
-   * @apiPermission User
+   * @apiPermission Admin
+   *
+   * @apiDescription Only administrators can actually delete users. In general,
+   *   users should not be deleted, but archived. To archive a user, set the
+   *   `Archived` property to a date. This will automatically set the `email`
+   *   and `password` fields of the user to `NULL`.
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (204) empty No body when item was already deleted
    */
   app.del({name: 'delete user', path: 'user/:userID'},
-          auth.verify, auth.checkUserMatches, user.delete)
+          auth.verify, auth.checkAdmin, user.delete)
   /**
    * @api {put} /user/:userID/password Change a user's password
    * @apiName ChangeUserPassword
