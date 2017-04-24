@@ -68,7 +68,8 @@ user.mount = app => {
    *   "firstName": "",
    *   "lastName": "",
    *   "email": "",
-   *   "organizationID": 0
+   *   "organizationID": 0,
+   *   "archived": null
    * }
    */
 
@@ -89,7 +90,8 @@ user.mount = app => {
    *       "lastName": "",
    *       "email": "",
    *       "organizationID": 0,
-   *       "role": "Member"
+   *       "role": "Member",
+   *       "archived": null
    *     }
    *   ]
    * }
@@ -115,6 +117,7 @@ user.mount = app => {
    * @apiParam {String{0...255}} [firstName] First name
    * @apiParam {String{0...255}} [lastName] Last name
    * @apiParam {String{0...255}} [email] Email address
+   * @apiParam {String} [archived] Date user was archived (YYYY-MM-DD)
    *
    * @apiUse UserResponse
    */

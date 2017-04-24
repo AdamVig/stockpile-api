@@ -43,6 +43,7 @@ auth.mount = app => {
    * @apiParam {String} password User's password
    * @apiParam {String} name User's name
    * @apiParam {Number} roleID=2 Role, defaults to "Member"
+   * @apiParam {String} [archived] Date user was archived (YYYY-MM-DD)
    *
    * @apiSuccess (201) {Number} id ID of user
    * @apiSuccess (201) {String} message Descriptive message
