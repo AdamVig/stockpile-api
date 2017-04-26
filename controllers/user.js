@@ -36,7 +36,7 @@ user.changeUserPassword = function changeUserPassword (req, res, next) {
       if (matches) {
         return bcrypt.hash(req.body.newPassword, auth.saltRounds)
       } else {
-        throw new restify.BadRequestError('passwords do not match')
+        throw new restify.BadRequestError('Wrong password')
       }
     })
     .then(hashedPassword => {
@@ -45,7 +45,7 @@ user.changeUserPassword = function changeUserPassword (req, res, next) {
     })
     .then((result) => {
       return res.send({
-        message: 'password changed'
+        message: 'Password successfully changed'
       })
     })
     .catch(next)
