@@ -83,6 +83,10 @@ model.mount = app => {
    * @apiGroup Model
    * @apiPermission User
    *
+   * @apiDescription A model represents a real-world model like Macbook Pro or
+   *   T5i. Each model has a brand associated with it, like Apple or
+   *   Canon T5i. A brand can have multiple models.
+   *
    * @apiParam {String{0...255}} name Name of model
    * @apiParam {Number} brandID ID of a brand
    *

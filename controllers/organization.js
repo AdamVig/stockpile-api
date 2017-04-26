@@ -38,6 +38,11 @@ organization.mount = app => {
    * @apiGroup Organization
    * @apiPermission Public
    *
+   * @apiDescription An organization is the overall entity that most other
+   *   entities reside under. This endpoint is public because an organization
+   *   must be created before a user can be created, so the client wouldn't have
+   *   a token to send for this endpoint.
+   *
    * @apiParam {String} name Name of organization
    *
    * @apiSuccess (200) {String} message Descriptive message

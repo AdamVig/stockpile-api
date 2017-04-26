@@ -72,6 +72,10 @@ category.mount = app => {
    * @apiName CreateCategory
    * @apiGroup Category
    *
+   * @apiDescription Each item must belong to a category. Categories can be used
+   *   to group items that are similar. Custom fields can be assigned to
+   *   specific categories.
+   *
    * @apiParam {String{0...255}} name Name of category
    *
    * @apiSuccess (200) {String} message Descriptive message

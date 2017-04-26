@@ -26,6 +26,9 @@ auth.mount = app => {
    * @apiName Authenticate
    * @apiGroup Authentication
    *
+   * @apiDescription Log a user in and receive a token to use in further
+   *   requests.
+   *
    * @apiParam {String} email User's email
    * @apiParam {String} password User's password
    *
@@ -38,6 +41,9 @@ auth.mount = app => {
    * @api {post} /auth/register Register a user
    * @apiName Register
    * @apiGroup Authentication
+   *
+   * @apiDescription See the guide on authentication at the top of these docs
+   *   for an explanation of the registration and authentication process.
    *
    * @apiParam {String} email Email address
    * @apiParam {String} password Password
@@ -55,10 +61,15 @@ auth.mount = app => {
    * @apiName Verify
    * @apiGroup Authentication
    *
+   * @apiDescription This endpoint is for checking whether a token is valid.
+   *   Since it uses the `HEAD` method, it cannot take a body or parameters and
+   *   will not return anything other than the responses listed below.
+   *
    * @apiParam {String} email Email address
    * @apiParam {String} password Password
    *
    * @apiSuccess (200) empty No response body
+   * @apiError 401 Token is not valid
    */
   app.head({name: 'verify', path: 'auth/verify'},
            auth.verify, auth.checkUserExists)
