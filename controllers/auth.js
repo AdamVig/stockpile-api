@@ -165,7 +165,6 @@ auth.checkUserMatches = function checkUserMatches (req, res, next) {
   if (req.user.userID === Number.parseInt(req.params.userID, 10)) {
     return next()
   } else {
-    return next(new restify.ForbiddenError(
-      'Must be an administrator to access other users\' data'))
+    return auth.checkAdmin(req, res, next)
   }
 }
