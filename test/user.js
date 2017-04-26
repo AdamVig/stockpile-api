@@ -63,6 +63,14 @@ test('Change password', async t => {
          'password is not updated')
 })
 
+test('Rentals for user', t => {
+  const queryBuilder = {
+    where: sinon.stub().returnsThis()
+  }
+  const result = user.rentalsForUser(fixt.reqForRentals, queryBuilder)
+  t.true(result === queryBuilder, 'returns query builder')
+})
+
 test.after.always('Clean up database', async t => {
   await knex('user').where('userID', fixt.user.userID).del()
   await knex('organization')

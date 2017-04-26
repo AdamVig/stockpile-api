@@ -51,6 +51,14 @@ user.changeUserPassword = function changeUserPassword (req, res, next) {
     .catch(next)
 }
 
+// Get rentals for only the current user
+user.rentalsForUser = (req, queryBuilder) => {
+  return queryBuilder
+    .where('userID', req.user.userID)
+}
+
+user.getRentals = endpoint.getAll('rental', {modify: user.rentalsForUser})
+
 user.mount = app => {
   /**
    * @apiDefine Pagination
@@ -152,4 +160,27 @@ user.mount = app => {
    */
   app.put({name: 'change user password', path: 'user/:userID/password'},
           auth.verify, auth.checkUserMatches, user.changeUserPassword)
+  /**
+   * @api {get} /user/:userID/rentals Get all rentals made by a user
+   * @apiName GetUserRentals
+   * @apiGroup User
+   * @apiPermission User
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "results": [
+   *     "endDate": "2017-02-23T05:00:00.000Z",
+   *     "itemID": 0,
+   *     "organizationID": 0,
+   *     "rentalID": 0,
+   *     "returnDate": null,
+   *     "startDate": "2017-02-22T05:00:00.000Z",
+   *     "userID": 0,
+   *     "notes": "",
+   *     "externalRenterID": 0
+   *   ]
+   * }
+   */
+  app.get({name: 'get user rentals', path: 'user/:userID/rentals'}, auth.verify,
+          user.getRentals)
 }

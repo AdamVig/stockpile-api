@@ -32,5 +32,10 @@
     "user": {
       "organizationID": 0
     }
+  },
+  "reqForRentals": {
+    "user": {
+      "userID": 0
+    }
   }
 }
