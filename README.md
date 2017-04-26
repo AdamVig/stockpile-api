@@ -17,6 +17,36 @@ Yarn presents the same API as npm for running scripts. The scripts below are def
  * `yarn run dev` run the app in development
  * `yarn run lint` lint code using [ESLint](http://eslint.org/) + [StandardJS](http://standardjs.com/)
  * `yarn run docs` generate documentation using [Docco](https://jashkenas.github.io/docco/)
+ 
+## File Structure
+- `.codeclimate.yml` CodeClimate code-quality tool configuration
+- `.editorconfig` editor configuration to ensure consistent indentation and line-endings
+- `.env.example` template file for environment variables, should be copied and renamed to `.env`
+- `.jsdoc.json` JSDoc documentation configuration
+- `.travis.yml` Travis CI configuration
+- `contributing.json` GitMagic Git message quality-control configuration
+- `deploy_key.enc` encrypted SSH key for deploying to production via Travis CI
+- `index.js` main application bootstrap file
+- `yarn.lock` Yarn package manager lockfile
+
+### `/controllers`
+This folder contains a file for each top-level route and `routes.js`, which mounts all of the routes by passing an instance of the Restify application to them.  
+
+The filenames of the controllers are the same as the top-level path they represent. For example, `external-renter.js` represents the group of routes starting with `/external-renter`.  
+
+### `/docs`
+Contains files used in the documentation providers. Documentation is generated into this folder, but is ignored by Git.  
+
+### `/scripts`
+Contains the Travis deployment script. Other non-application scripts like database migrations or cron jobs belong in this directory as well.  
+
+### `/services`
+Contains abstractions of commonly-used functionality and middleware used in the Restify application.  
+
+### `/test`
+Contains tests for each file that requires testing. Test files should have the same name as the file they contain tests for.  
+#### `/test/fixtures`
+Contains fixtures for tests. Fixtures for simple data can be JSON files. There should be a maximum of one fixture file per test and it should have the same name as the test file.  
 
 ## Environment Variables
 You must define environment variables in a `.env` file in the root directory of the project. Use `.env.example` as a template. The app will fail to start if any of the variables in `.env.example` are undefined.  
