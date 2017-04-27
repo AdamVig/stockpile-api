@@ -136,6 +136,10 @@ item.mount = app => {
    * @apiGroup Item
    * @apiPermission User
    *
+   * @apiDescription An item represents a physical object owned by the
+   *   organization. Items must have physical barcodes in order for the
+   *   application to be able to identify them.
+   *
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
    * @apiParam {String} barcode Unique identifier of item

@@ -93,6 +93,14 @@ kit.mount = app => {
    * @apiGroup Kit
    * @apiPermission User
    *
+   * @apiDescription Kits are collections of models that a user would like to
+   *   rent together. Kits consist of models, not items, to retain flexibility
+   *   in the physical inventory (for example, if kits consisted of items and
+   *   one item in a kit was rented, the whole kit would be impossible to rent).
+   *   When renting an item, the user could be prompted with a list of kits that
+   *   the item belongs to by using the item's modelID and
+   *   `GET /model/:modelID/kits`.
+   *
    * @apiParam {String{0..255}} name Name of kit
    *
    * @apiSuccess (200) {String} message Descriptive message

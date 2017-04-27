@@ -73,6 +73,9 @@ brand.mount = app => {
    * @apiGroup Brand
    * @apiPermission User
    *
+   * @apiDescription A brand represents a real-world brand like Apple or Canon.
+   *   Each model must be associated with a brand.
+   *
    * @apiParam {String{0...255}} name Name of brand
    *
    * @apiSuccess (200) {String} message Descriptive message

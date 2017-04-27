@@ -60,6 +60,12 @@ externalRenter.mount = app => {
    * @apiName CreateExternalRenter
    * @apiGroup ExternalRenter
    *
+   * @apiDescription An external renter is a person or organization from outside
+   *   the organization using Stockpile that rents items. These renters are
+   *   saved to the database with contact information in case the Stockpile
+   *   organization needs to contact them after their items have been returned.
+   *   External renters can be associated with rentals.
+   *
    * @apiParam {String{0..255}} name Name of company or individual
    * @apiParam {String{0..255}} [email] Email address
    * @apiParam {String{10}} [phone] Phone number

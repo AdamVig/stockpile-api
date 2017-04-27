@@ -115,6 +115,11 @@ rental.mount = app => {
    * @apiGroup Rental
    * @apiPermission User
    *
+   * @apiDescription Rentals track the availability of items. To mark a rental
+   *   as returned, *do not delete the rental*, but instead set `returnDate` to
+   *   the date the item was returned. Rentals are associated with users and
+   *   optionally with external renters.
+   *
    * @apiParam {Number} userID ID of renting user
    * @apiParam {Number} itemID ID of rented item
    * @apiParam {String} startDate Date rental taken out (YYYY-MM-DD)
