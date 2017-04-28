@@ -121,7 +121,7 @@ kit.mount = app => {
    */
   app.del({name: 'delete kit', path: 'kit/:kitID'}, auth.verify, kit.delete)
   /**
-   * @api {get} /kit/:kitID/model/:modelID Get all kit models
+   * @api {get} /kit/:kitID/model Get all kit models
    * @apiName GetAllKitModels
    * @apiGroup Kit
    * @apiPermission User
