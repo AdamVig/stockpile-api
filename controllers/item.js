@@ -205,6 +205,11 @@ item.mount = app => {
    * @apiGroup Item
    * @apiPermission User
    *
+   * @apiDescription An item's status is either available or unavailable. In the
+   *   response from this endpoint, the `available` property will equal either
+   *   `1` or `0`, respectively. An item is considered available if there are no
+   *   rentals for it or if all of the rentals for it have `returnDate` set.
+   *
    * @apiExample {json} Response Format
    * {
    *   "itemID": 0,
