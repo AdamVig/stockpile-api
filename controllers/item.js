@@ -58,7 +58,7 @@ item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
 item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
-item.getStatus = endpoint.get('itemStatus', 'itemID')
+item.getStatus = endpoint.get('itemStatus', 'barcode')
 
 item.mount = app => {
   /**
@@ -205,10 +205,16 @@ item.mount = app => {
    * @apiGroup Item
    * @apiPermission User
    *
+   * @apiDescription An item's status is either available or unavailable. In the
+   *   response from this endpoint, the `available` property will equal either
+   *   `1` or `0`, respectively. An item is considered available if there are no
+   *   rentals for it or if all of the rentals for it have `returnDate` set.
+   *
    * @apiExample {json} Response Format
    * {
-   *   "itemID": 0,
    *   "available": 0,
+   *   "barcode": "",
+   *   "organizationID": 0,
    *   "rentalID": 0
    * }
    */
