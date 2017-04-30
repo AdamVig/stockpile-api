@@ -58,7 +58,7 @@ item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
 item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
-item.getStatus = endpoint.get('itemStatus', 'itemID')
+item.getStatus = endpoint.get('itemStatus', 'barcode')
 
 item.mount = app => {
   /**
