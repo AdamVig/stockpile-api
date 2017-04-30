@@ -3,5 +3,10 @@
     "params": {
       "test": "test.column"
     }
+  },
+  "reqForItem": {
+    "params": {
+      "barcode": ""
+    }
   }
 }
