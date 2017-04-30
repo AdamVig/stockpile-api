@@ -212,8 +212,9 @@ item.mount = app => {
    *
    * @apiExample {json} Response Format
    * {
-   *   "itemID": 0,
    *   "available": 0,
+   *   "barcode": "",
+   *   "organizationID": 0,
    *   "rentalID": 0
    * }
    */
