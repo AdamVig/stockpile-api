@@ -55,7 +55,7 @@ item.withRentals = (req, queryBuilder) => {
 
 endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
-item.get = endpoint.get('item', 'item.barcode',
+item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
 item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
 item.getStatus = endpoint.get('itemStatus', 'barcode')
