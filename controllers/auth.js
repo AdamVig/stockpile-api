@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
-const jwt = require('jwt-simple')
+const crypto = require('crypto')
+const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const passportJWT = require('passport-jwt')
 const restify = require('restify')
@@ -12,8 +13,11 @@ const jwtStrategyOptions = {
 }
 
 // Create a token
-const makeToken = module.exports.makeToken = (payload) => {
-  return jwt.encode(payload, process.env.JWT_SECRET)
+const makeToken = module.exports.makeToken = (userID, organizationID, roleID) => {
+  // Expire in fifteen minutes to propagate account deletion/role change quickly
+  const jwtExpirationTime = '15m'
+  const payload = {userID, organizationID, roleID}
+  return jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: jwtExpirationTime})
 }
 
 const auth = module.exports
@@ -33,10 +37,28 @@ auth.mount = app => {
    * @apiParam {String} password User's password
    *
    * @apiSuccess (200) {Number} id ID of user
-   * @apiSuccess (200) {String} token Authorization token for use in requests
+   * @apiSuccess (200) {String} token Authorization token for use in requests,
+   *   expires in fifteen minutes
+   * @apiSuccess (200) {String} refreshToken Refresh token used for getting a
+   *   new access token
    * @apiSuccess (200) {String} message Descriptive message
    */
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
+  /**
+   * @api {post} /auth/refresh Refresh access token
+   * @apiName Refresh
+   * @apiGroup Authentication
+   *
+   * @apiDescription When an access token expires, it is necessary to get a
+   *   new access token in order to continue making requests.
+   *
+   * @apiParam {String} refreshToken Refresh token
+   * @apiParam {Number} userID ID of user (can be decoded from token)
+   *
+   * @apiSuccess (200) {String} token Authorization token for use in requests
+   * @apiSuccess (200) {String} message Descriptive message
+   */
+  app.post({name: 'refresh', path: 'auth/refresh'}, auth.refresh)
   /**
    * @api {post} /auth/register Register a user
    * @apiName Register
@@ -89,16 +111,20 @@ auth.authenticate = (req, res, next) => {
       })
       .then(([user, valid]) => {
         if (valid === true) {
-          const token = makeToken({
-            userID: user.userID,
-            organizationID: user.organizationID,
-            roleID: user.roleID
-          })
-          res.send({
-            id: user.userID,
-            token,
-            message: 'Authentication successful'
-          })
+          const token = makeToken(user.userID, user.organizationID, user.roleID)
+          const refreshToken = user.userID +
+                crypto.randomBytes(40).toString('hex')
+
+          // Save refresh token for later validation
+          return db.create('refreshToken', {userID: user.userID, refreshToken})
+            .then(() => {
+              return res.send({
+                id: user.userID,
+                refreshToken,
+                token,
+                message: 'Authentication successful'
+              })
+            })
         } else {
           return next(new restify.UnauthorizedError(
             'Email and password combination is incorrect'))
@@ -115,6 +141,31 @@ auth.authenticate = (req, res, next) => {
 
 // Initialize Passport middleware
 module.exports.initialize = passport.initialize()
+
+// Provide a new access token given a valid refresh token
+auth.refresh = (req, res, next) => {
+  if (req.body.refreshToken && req.body.userID) {
+    return db('refreshToken')
+      .where('userID', req.body.userID)
+      .first()
+      .pluck('refreshToken')  // Get just the refresh token column
+      .then(([storedToken]) => {
+        if (req.body.refreshToken === storedToken) {
+          return db('user').where('userID', req.body.userID).first()
+            .then(user => {
+              const token = makeToken(user.userID, user.organizationID,
+                                      user.roleID)
+              return res.send({token, message: 'Token refreshed successfully'})
+            })
+        } else {
+          return next(new restify.UnauthorizedError('Refresh token is invalid'))
+        }
+      })
+  } else {
+    return next(new restify.BadRequestError(
+      'Request must contain refresh token and user ID'))
+  }
+}
 
 // Register a user
 auth.register = (req, res, next) => {
