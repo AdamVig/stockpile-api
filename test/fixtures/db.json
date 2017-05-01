@@ -26,10 +26,13 @@
   "whereClauseTable": "test",
   "expectedWhereClause": {
     "test.organizationID": 94,
-    "testColumn": "testValue"
+    "test.testColumn": "testValue"
   },
   "expectedWhereClauseOrg": {
     "test.organizationID": 94
+  },
+  "expectedWhereClauseNoOrg": {
+    "test.testColumn": "testValue"
   },
   "countRowsTable": "count-rows",
   "countRowsTestRows": [

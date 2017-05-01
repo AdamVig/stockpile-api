@@ -52,7 +52,7 @@ module.exports.buildWhere = (table, column, value, organizationID) => {
 
   // Add column and value to where clause if defined
   if (column && value) {
-    whereClause[column] = value
+    whereClause[`${table}.${column}`] = value
   }
 
   // Add organization ID to where clause if defined
