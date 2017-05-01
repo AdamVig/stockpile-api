@@ -223,12 +223,14 @@ item.mount = app => {
    *   `1` or `0`, respectively. An item is considered available if there are no
    *   rentals for it or if all of the rentals for it have `returnDate` set.
    *
+   *   **Note:** `organizationID` is deprecated and will be removed in a future
+   *   release.
+   *
    * @apiExample {json} Response Format
    * {
    *   "available": 0,
    *   "barcode": "",
-   *   "organizationID": 0,
-   *   "rentalID": 0
+   *   "organizationID": 0
    * }
    */
   app.get({name: 'get item status', path: 'item/:barcode/status'},
