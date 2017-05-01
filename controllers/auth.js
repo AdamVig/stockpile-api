@@ -39,6 +39,22 @@ auth.mount = app => {
    */
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
   /**
+   * @api {post} /auth/refresh Issue a new access token given a valid refresh
+   *   token
+   * @apiName Refresh
+   * @apiGroup Authentication
+   *
+   * @apiDescription When an access token expires, it is necessary to get a
+   *   new access token in order to continue making requests.
+   *
+   * @apiParam {String} refreshToken Refresh token
+   * @apiParam {Number} userID ID of user
+   *
+   * @apiSuccess (200) {String} token Authorization token for use in requests
+   * @apiSuccess (200) {String} message Descriptive message
+   */
+  app.post({name: 'refresh', path: 'auth/refresh'}, auth.refresh)
+  /**
    * @api {post} /auth/register Register a user
    * @apiName Register
    * @apiGroup Authentication
@@ -112,6 +128,31 @@ auth.authenticate = (req, res, next) => {
 
 // Initialize Passport middleware
 module.exports.initialize = passport.initialize()
+
+// Provide a new access token given a valid refresh token
+auth.refresh = (req, res, next) => {
+  if (req.body.refreshToken && req.body.userID) {
+    return db('refreshToken')
+      .where('userID', req.body.userID)
+      .first()
+      .pluck('refreshToken')  // Get just the refresh token column
+      .then(([storedToken]) => {
+        if (req.body.refreshToken === storedToken) {
+          return db('user').where('userID', req.body.userID).first()
+            .then(user => {
+              const token = makeToken(user.userID, user.organizationID,
+                                      user.roleID)
+              return res.send({token, message: 'Token refreshed successfully'})
+            })
+        } else {
+          return next(new restify.UnauthorizedError('Refresh token is invalid'))
+        }
+      })
+  } else {
+    return next(new restify.BadRequestError(
+      'Request must contain refresh token and user ID'))
+  }
+}
 
 // Register a user
 auth.register = (req, res, next) => {

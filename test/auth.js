@@ -17,6 +17,8 @@ test.before('Create organization', async t => {
   fixt.authUserWrong.organizationID = organizationID
   fixt.authUserWrongHash.organizationID = organizationID
   fixt.tokenUser.organizationID = organizationID
+  fixt.refreshTokenUser.organizationID = organizationID
+  fixt.refreshTokenInvalidUser.organizationID = organizationID
 })
 
 test('Make token', t => {
@@ -121,6 +123,64 @@ test('Returns error when email and password do not match', async t => {
   t.true(next.called, 'returns an error')
 })
 
+test('Refresh token', async t => {
+  // Insert user
+  const [userID] = await knex(fixt.table).insert(fixt.refreshTokenUser)
+  fixt.refreshTokenRow.userID = userID
+  fixt.refreshTokenReq.body.userID = userID
+
+  // Insert refresh token
+  await knex('refreshToken').insert(fixt.refreshTokenRow)
+
+  const res = {
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+
+  await auth.refresh(fixt.refreshTokenReq, res, next)
+
+  t.true(res.send.calledOnce, 'response sent')
+  t.false(next.called, 'no errors thrown')
+
+  // Clean up database
+  await knex('refreshToken').where(fixt.refreshTokenRow).del()
+  await knex(fixt.table).where('userID', userID).del()
+})
+
+test('Refresh token with invalid refresh token', async t => {
+  // Insert user
+  const [userID] = await knex(fixt.table).insert(fixt.refreshTokenInvalidUser)
+  fixt.refreshTokenInvalidRow.userID = userID
+  fixt.refreshTokenInvalidReq.body.userID = userID
+
+  // Insert refresh token
+  await knex('refreshToken').insert(fixt.refreshTokenInvalidRow)
+
+  const res = {
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+
+  await auth.refresh(fixt.refreshTokenInvalidReq, res, next)
+
+  t.true(
+    next.calledWithMatch(sinon.match.instanceOf(restify.UnauthorizedError)),
+    'throws error')
+  t.false(res.send.called, 'response not sent')
+
+  // Clean up database
+  await knex('refreshToken').where(fixt.refreshTokenInvalidRow).del()
+  await knex(fixt.table).where('userID', userID).del()
+})
+
+test('Refresh token with wrong fields', t => {
+  const next = sinon.spy()
+  auth.refresh(fixt.refreshTokenReqWrongFields, null, next)
+
+  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)),
+         'throws error when wrong fields provided')
+})
+
 test('Authenticate token', async t => {
   // Insert user into db and add ID to test data
   const [userID] = await knex(fixt.table).insert(fixt.tokenUser)
@@ -190,6 +250,10 @@ test.after.always('Clean up database', async t => {
   await knex(fixt.table)
     .where('email', fixt.authUserWrong.email)
     .del()
+  await knex(fixt.table)
+    .where('email', fixt.tokenUser.email)
+    .del()
+
   await knex(fixt.table)
     .where('email', fixt.tokenUser.email)
     .del()
