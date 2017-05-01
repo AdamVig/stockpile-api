@@ -12,7 +12,8 @@ const jwtStrategyOptions = {
 }
 
 // Create a token
-const makeToken = module.exports.makeToken = (payload) => {
+const makeToken = module.exports.makeToken = (userID, organizationID, roleID) => {
+  const payload = {userID, organizationID, roleID}
   return jwt.encode(payload, process.env.JWT_SECRET)
 }
 
@@ -89,11 +90,7 @@ auth.authenticate = (req, res, next) => {
       })
       .then(([user, valid]) => {
         if (valid === true) {
-          const token = makeToken({
-            userID: user.userID,
-            organizationID: user.organizationID,
-            roleID: user.roleID
-          })
+          const token = makeToken(user.userID, user.organizationID, user.roleID)
           res.send({
             id: user.userID,
             token,

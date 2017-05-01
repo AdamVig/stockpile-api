@@ -19,6 +19,13 @@ test.before('Create organization', async t => {
   fixt.tokenUser.organizationID = organizationID
 })
 
+test('Make token', t => {
+  const token = auth.makeToken(fixt.makeToken.userID,
+                               fixt.makeToken.organizationID,
+                               fixt.makeToken.roleID)
+  t.truthy(token, 'returns token')
+})
+
 test('Registers a user', async t => {
   const req = {
     body: fixt.user
