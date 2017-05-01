@@ -7,7 +7,10 @@ const paginate = require('../services/paginate')
 const rental = module.exports
 
 rental.withBarcodeAndPagination = (req, queryBuilder) => {
-  return rental.withBarcode(req, queryBuilder)
+  return queryBuilder
+    .select('rental.*')
+    .leftJoin('item', 'rental.itemID', 'item.itemID')
+    .select('item.barcode')
     .modify(paginate.paginateQuery, req, 'rental')
 }
 
