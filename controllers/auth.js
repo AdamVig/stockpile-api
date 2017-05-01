@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 const jwt = require('jwt-simple')
 const passport = require('passport')
 const passportJWT = require('passport-jwt')
@@ -35,6 +36,8 @@ auth.mount = app => {
    *
    * @apiSuccess (200) {Number} id ID of user
    * @apiSuccess (200) {String} token Authorization token for use in requests
+   * @apiSuccess (200) {String} refreshToken Refresh token used for getting a
+   *   new access token
    * @apiSuccess (200) {String} message Descriptive message
    */
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
@@ -107,11 +110,19 @@ auth.authenticate = (req, res, next) => {
       .then(([user, valid]) => {
         if (valid === true) {
           const token = makeToken(user.userID, user.organizationID, user.roleID)
-          res.send({
-            id: user.userID,
-            token,
-            message: 'Authentication successful'
-          })
+          const refreshToken = user.userID +
+                crypto.randomBytes(40).toString('hex')
+
+          // Save refresh token for later validation
+          return db.create('refreshToken', {userID: user.userID, refreshToken})
+            .then(() => {
+              return res.send({
+                id: user.userID,
+                refreshToken,
+                token,
+                message: 'Authentication successful'
+              })
+            })
         } else {
           return next(new restify.UnauthorizedError(
             'Email and password combination is incorrect'))
