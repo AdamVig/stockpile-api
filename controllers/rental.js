@@ -1,4 +1,4 @@
-const jwt = require('jwt-simple')
+const jwt = require('jsonwebtoken')
 
 const auth = require('./auth')
 const endpoint = require('../services/endpoint')
@@ -23,7 +23,7 @@ rental.withBarcodeAndPagination = (req, queryBuilder) => {
 rental.addUserID = function addUserID (req, res, next) {
   try {
     const token = req.headers.authorization.replace('Bearer ', '')
-    const payload = jwt.decode(token, process.env.JWT_SECRET)
+    const payload = jwt.decode(token)
     req.body.userID = payload.userID
     return next()
   } catch (err) {

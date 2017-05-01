@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
-const jwt = require('jwt-simple')
+const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const passportJWT = require('passport-jwt')
 const restify = require('restify')
@@ -15,7 +15,7 @@ const jwtStrategyOptions = {
 // Create a token
 const makeToken = module.exports.makeToken = (userID, organizationID, roleID) => {
   const payload = {userID, organizationID, roleID}
-  return jwt.encode(payload, process.env.JWT_SECRET)
+  return jwt.sign(payload, process.env.JWT_SECRET)
 }
 
 const auth = module.exports
