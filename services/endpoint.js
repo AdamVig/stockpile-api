@@ -131,6 +131,12 @@ module.exports.default = () => {
  * Choose a message from either custom or default messages
  * @param {string} type Type of message to choose
  * @param {object} [messages] Custom messages
+ * @param {string} [messages.create] Message when row is created
+ * @param {string} [messages.delete] Message when row is deleted
+ * @param {string} [messages.conflict] Message when row is missing
+ * @param {string} [messages.missing] Message when request is bad
+ * @param {string} [messages.badRequest] Message when row is created
+ * @param {string} [messages.default] Default message
  * @return {string} Chosen message
  */
 module.exports.chooseMessage = (type, messages = {}) => {
@@ -149,6 +155,12 @@ module.exports.chooseMessage = (type, messages = {}) => {
  * Choose Restify error based on database error
  * @param {error} err Error from database
  * @param {object} [messages] Messages for endpoint events
+ * @param {string} [messages.create] Message when row is created
+ * @param {string} [messages.delete] Message when row is deleted
+ * @param {string} [messages.conflict] Message when row is missing
+ * @param {string} [messages.missing] Message when request is bad
+ * @param {string} [messages.badRequest] Message when row is created
+ * @param {string} [messages.default] Default message
  * @return {error} Restify error
  */
 module.exports.chooseError = (err, messages) => {
@@ -172,6 +184,12 @@ module.exports.chooseError = (err, messages) => {
  * Handle an error in an endpoint handler chain
  * @param {error} err Error from database
  * @param {object} [messages] Messages for endpoint events
+ * @param {string} [messages.create] Message when row is created
+ * @param {string} [messages.delete] Message when row is deleted
+ * @param {string} [messages.conflict] Message when row is missing
+ * @param {string} [messages.missing] Message when request is bad
+ * @param {string} [messages.badRequest] Message when row is created
+ * @param {string} [messages.default] Default message
  * @param {function} next Next handler in chain; will be given error
  * @param {object} req Restify request
  */
@@ -186,6 +204,12 @@ module.exports.handleError = (err, messages, next, req) => {
  * @param {string} table Name of a database table, assumed to also be
  *   name of entity
  * @param {object} [messages] Messages for endpoint events
+ * @param {string} [messages.create] Message when row is created
+ * @param {string} [messages.delete] Message when row is deleted
+ * @param {string} [messages.conflict] Message when row is missing
+ * @param {string} [messages.missing] Message when request is bad
+ * @param {string} [messages.badRequest] Message when row is created
+ * @param {string} [messages.default] Default message
  * @param {string} key Name of a column in a table
  */
 module.exports.addAllMethods = (controller, table, key, messages = {}) => {
