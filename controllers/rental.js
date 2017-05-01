@@ -6,14 +6,6 @@ const paginate = require('../services/paginate')
 
 const rental = module.exports
 
-// Join rental with item to get the item's barcode
-rental.withBarcode = (req, queryBuilder) => {
-  return queryBuilder
-    .select('rental.*')
-    .leftJoin('item', 'rental.itemID', 'item.itemID')
-    .select('item.barcode')
-}
-
 rental.withBarcodeAndPagination = (req, queryBuilder) => {
   return rental.withBarcode(req, queryBuilder)
     .modify(paginate.paginateQuery, req, 'rental')
@@ -38,8 +30,7 @@ const messages = {
 
 rental.getAll = endpoint.getAll('rental',
                                 {modify: rental.withBarcodeAndPagination})
-rental.get = endpoint.get('rental', 'barcode',
-                          {modify: rental.withBarcode, messages})
+rental.get = endpoint.get('rental', 'rentalID', {messages})
 rental.create = endpoint.create('rental', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
 rental.delete = endpoint.delete('rental', {modify: rental.withBarcode})

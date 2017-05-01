@@ -93,9 +93,7 @@ test('Throws error when updating row with the wrong columns', t => {
 test('Builds a where clause without organization ID', t => {
   const whereClause = db.buildWhere(fixt.whereClauseTable, fixt.column,
                                     fixt.value)
-  const expectedWhereClause = {}
-  expectedWhereClause[fixt.column] = fixt.value
-  t.deepEqual(whereClause, expectedWhereClause)
+  t.deepEqual(whereClause, fixt.expectedWhereClauseNoOrg)
 })
 
 test('Builds a where clause with an organization ID', t => {
