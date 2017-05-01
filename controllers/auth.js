@@ -37,15 +37,15 @@ auth.mount = app => {
    * @apiParam {String} password User's password
    *
    * @apiSuccess (200) {Number} id ID of user
-   * @apiSuccess (200) {String} token Authorization token for use in requests
+   * @apiSuccess (200) {String} token Authorization token for use in requests,
+   *   expires in fifteen minutes
    * @apiSuccess (200) {String} refreshToken Refresh token used for getting a
    *   new access token
    * @apiSuccess (200) {String} message Descriptive message
    */
   app.post({name: 'authenticate', path: 'auth'}, auth.authenticate)
   /**
-   * @api {post} /auth/refresh Issue a new access token given a valid refresh
-   *   token
+   * @api {post} /auth/refresh Refresh access token
    * @apiName Refresh
    * @apiGroup Authentication
    *
@@ -53,7 +53,7 @@ auth.mount = app => {
    *   new access token in order to continue making requests.
    *
    * @apiParam {String} refreshToken Refresh token
-   * @apiParam {Number} userID ID of user
+   * @apiParam {Number} userID ID of user (can be decoded from token)
    *
    * @apiSuccess (200) {String} token Authorization token for use in requests
    * @apiSuccess (200) {String} message Descriptive message
