@@ -23,3 +23,11 @@ test('With rentals', t => {
   const result = item.withRentals(null, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
 })
+
+test('For item', t => {
+  const queryBuilder = {
+    where: sinon.stub().returnsThis()
+  }
+  const result = item.forItem(fixt.reqForItem, queryBuilder)
+  t.true(result === queryBuilder, 'returns query builder')
+})

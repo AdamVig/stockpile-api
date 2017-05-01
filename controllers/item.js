@@ -60,6 +60,19 @@ item.get = endpoint.get('item', 'item.barcode',
 item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
 item.getStatus = endpoint.get('itemStatus', 'barcode')
 
+// Custom fields
+item.forItem = (req, queryBuilder) => {
+  return queryBuilder
+    .where('barcode', req.params.barcode)
+}
+item.getCustomFieldValues = endpoint.getAll('itemCustomFieldValue',
+                                            {modify: item.forItem})
+item.getCustomFieldValue = endpoint.get('itemCustomFieldValue', 'customFieldID',
+                                        {modify: item.forItem})
+item.updateCustomFieldValue = endpoint.update('itemCustomFieldValue',
+                                              'customFieldID',
+                                              {modify: item.forItem})
+
 item.mount = app => {
   /**
    * @apiDefine Pagination
@@ -220,4 +233,65 @@ item.mount = app => {
    */
   app.get({name: 'get item status', path: 'item/:barcode/status'},
           auth.verify, item.getStatus)
+  /**
+   * @api {get} /item/:barcode/custom-field Get item custom field values
+   * @apiName GetItemCustomFieldValues
+   * @apiGroup ItemCustomField
+   * @apiPermission User
+   *
+   * @apiDescription Custom field values are automatically initialized to empty
+   *   strings when a new custom field is created, so empty strings will be
+   *   returned until a value is set.
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "results": [
+   *     {
+   *       "barcode": 0,
+   *       "customFieldID": 0,
+   *       "organizationID": 0,
+   *       "value": ""
+   *     }
+   *   ]
+   * }
+   */
+  app.get({
+    name: 'get item custom field values',
+    path: 'item/:barcode/custom-field'
+  }, auth.verify, item.getCustomFieldValues)
+  /**
+   * @api {get} /item/:barcode/custom-field/:customFieldID
+   *   Get item custom field value
+   * @apiName GetItemCustomFieldValue
+   * @apiGroup ItemCustomField
+   * @apiPermission User
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "barcode": 0,
+   *   "customFieldID": 0,
+   *   "organizationID": 0,
+   *   "value": ""
+   * }
+   */
+  app.get({
+    name: 'get item custom field value',
+    path: 'item/:barcode/custom-field/:customFieldID'
+  }, auth.verify, item.getCustomFieldValue)
+  /**
+   * @api {put} /item/:barcode/custom-field/:customFieldID
+   *   Update item custom field value
+   * @apiName UpdateItemCustomFieldValue
+   * @apiGroup ItemCustomField
+   * @apiPermission User
+   *
+   * @apiDescription Custom fields can be created with *create custom field*. To
+   *   "delete" a custom field value, set the value to an empty string.
+   *
+   * @apiParam {String{0..1000}} value A value for the custom field
+   */
+  app.put({
+    name: 'update item custom field value',
+    path: 'item/:barcode/custom-field/:customFieldID'
+  }, auth.verify, item.updateCustomFieldValue)
 }
