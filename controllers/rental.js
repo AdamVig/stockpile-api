@@ -118,11 +118,12 @@ rental.mount = app => {
    *   the date the item was returned. Rentals are associated with users and
    *   optionally with external renters.
    *
-   * @apiParam {Number} userID ID of renting user
    * @apiParam {Number} itemID ID of rented item
    * @apiParam {String} startDate Date rental taken out (YYYY-MM-DD)
    * @apiParam {String} endDate Date rental is due (YYYY-MM-DD)
    * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {Number} [userID] ID of renting user (automatically taken from
+   *   token, but can be overridden)
    * @apiParam {Number} [externalRenterID] ID of external renter
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
