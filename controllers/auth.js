@@ -30,8 +30,13 @@ auth.mount = app => {
    * @apiName Authenticate
    * @apiGroup Authentication
    *
-   * @apiDescription Log a user in and receive a token to use in further
-   *   requests.
+   * @apiDescription Log a user in and receive an access token to use in further
+   *   requests (`token` in the response). Provides a `refreshToken` to use to
+   *   get a new access token when the current token expires (with endpoint
+   *   *Refresh*). The access token will expire after fifteen minutes, but the
+   *   refresh token never expires. However, a new refresh token will be
+   *   provided each time the user uses this endpoint and the old refresh
+   *   token will stop working.
    *
    * @apiParam {String} email User's email
    * @apiParam {String} password User's password
