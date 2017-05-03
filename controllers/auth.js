@@ -116,7 +116,16 @@ auth.authenticate = (req, res, next) => {
                 crypto.randomBytes(40).toString('hex')
 
           // Save refresh token for later validation
-          return db.create('refreshToken', {userID: user.userID, refreshToken})
+          return db('refreshToken').where('userID', user.userID).first()
+            .then(refreshTokenRow => {
+              if (!refreshTokenRow) {
+                return db.create('refreshToken',
+                                 {userID: user.userID, refreshToken})
+              } else {
+                return db.update('refreshToken', 'userID', user.userID,
+                                 {refreshToken})
+              }
+            })
             .then(() => {
               return res.send({
                 id: user.userID,
