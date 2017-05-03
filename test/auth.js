@@ -88,6 +88,16 @@ test('Authenticates a user', async t => {
   t.true(res.send.calledWithMatch(sinon.match.object), 'responds with an object')
   t.false(next.called, 'no errors')
 
+  const resRefreshTokenUpdate = {
+    send: sinon.spy()
+  }
+
+  await auth.authenticate(req, resRefreshTokenUpdate, next)
+
+  t.true(resRefreshTokenUpdate.send.calledWithMatch(sinon.match.object),
+         'responds with an object when refresh token already exists')
+  t.false(next.called, 'no errors when refresh token already exists')
+
   const reqNoPassword = {
     body: fixt.authUserNoPassword
   }

@@ -30,8 +30,13 @@ auth.mount = app => {
    * @apiName Authenticate
    * @apiGroup Authentication
    *
-   * @apiDescription Log a user in and receive a token to use in further
-   *   requests.
+   * @apiDescription Log a user in and receive an access token to use in further
+   *   requests (`token` in the response). Provides a `refreshToken` to use to
+   *   get a new access token when the current token expires (with endpoint
+   *   *Refresh*). The access token will expire after fifteen minutes, but the
+   *   refresh token never expires. However, a new refresh token will be
+   *   provided each time the user uses this endpoint and the old refresh
+   *   token will stop working.
    *
    * @apiParam {String} email User's email
    * @apiParam {String} password User's password
@@ -116,7 +121,16 @@ auth.authenticate = (req, res, next) => {
                 crypto.randomBytes(40).toString('hex')
 
           // Save refresh token for later validation
-          return db.create('refreshToken', {userID: user.userID, refreshToken})
+          return db('refreshToken').where('userID', user.userID).first()
+            .then(refreshTokenRow => {
+              if (!refreshTokenRow) {
+                return db.create('refreshToken',
+                                 {userID: user.userID, refreshToken})
+              } else {
+                return db.update('refreshToken', 'userID', user.userID,
+                                 {refreshToken})
+              }
+            })
             .then(() => {
               return res.send({
                 id: user.userID,
