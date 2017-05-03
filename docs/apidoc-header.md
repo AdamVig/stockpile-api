@@ -51,11 +51,12 @@ The response will look like this:
 {
   "id": 1,
   "token": "987234.sdf0982347234.hjgsdf89234",
+  "refreshToken": "987234kjhmnbmbn34987234jkhsdf2374234fedd",
   "message": "Authentication successful"
 }
 ```
 
-Use the bearer token from the response in the `Authorization` header of all requests:  
+Use the access token from the response in the `Authorization` header of all requests:  
 `Authorization: Bearer 987234.sdf0982347234.hjgsdf89234`
 
 Decode the token with a JWT library to extract the following properties:  
@@ -66,6 +67,25 @@ Decode the token with a JWT library to extract the following properties:
   "roleID": 1
 }
 ```
+
+### To refresh a token:
+Use the refresh token from the authentication response to get new access tokens when they expire every fifteen minutes.  
+1. Authenticate the user as shown above. Save the access and refresh tokens from the response.
+2. Use the access token in the `Authorization` header of all requests. When a request returns a `401 Unauthorized`, the token is expired.
+3. `POST /auth/refresh` with body containing (`userID` can be decoded from the access token as shown above):
+  ```JSON
+  {
+    "userID": 1,
+    "refreshToken": "987234kjhmnbmbn34987234jkhsdf2374234fedd"
+  }
+  ```
+4. Save the access token from the response and use it for further requests:
+  ```JSON
+  {
+    "token": "987234.sdf0982347234.hjgsdf89234",
+    "message": "Token successfully refreshed"
+  }
+  ```
 
 ## HAL
 [Hypertext Application Language (HAL)](http://stateless.co/hal_specification.html) is a "simple format that gives a consistent and easy way to hyperlink between resources in your API." It is similar to HATEOAS in that it makes the API explorable by providing links to related entities in each response.  
