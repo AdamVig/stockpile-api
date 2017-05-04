@@ -14,10 +14,8 @@ const jwtStrategyOptions = {
 
 // Create a token
 const makeToken = module.exports.makeToken = (userID, organizationID, roleID) => {
-  // Expire in fifteen minutes to propagate account deletion/role change quickly
-  const jwtExpirationTime = '15m'
   const payload = {userID, organizationID, roleID}
-  return jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: jwtExpirationTime})
+  return jwt.sign(payload, process.env.JWT_SECRET)
 }
 
 const auth = module.exports
