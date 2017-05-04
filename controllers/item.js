@@ -53,11 +53,23 @@ item.withRentals = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'item')
 }
 
+// Get active rental associated with item
+item.withActiveRental = (req, queryBuilder) => {
+  return queryBuilder
+    .where('item.barcode', req.params.barcode)
+    .join('rental', 'item.itemID', 'rental.itemID')
+    .select('rental.*')
+    .where('rental.returnDate', null)
+    .orderBy('rental.startDate', 'ascending')
+}
+
 endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
 item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
+item.getActiveRental = endpoint.get('item', 'itemID',
+                                    {modify: item.withActiveRental})
 item.getStatus = endpoint.get('itemStatus', 'barcode')
 
 // Custom fields
@@ -212,6 +224,30 @@ item.mount = app => {
    */
   app.get({name: 'get item rentals', path: 'item/:barcode/rentals'},
           auth.verify, item.getRentals)
+    /**
+   * @api {get} /item/:barcode/rental/active Get active rental of an item
+   * @apiName GetItemActiveRental
+   * @apiGroup Item
+   * @apiPermission User
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "endDate": "2017-02-23T05:00:00.000Z",
+   *   "itemID": 0,
+   *   "organizationID": 0,
+   *   "rentalID": 0,
+   *   "returnDate": null,
+   *   "startDate": "2017-02-22T05:00:00.000Z",
+   *   "barcode": "",
+   *   "userID": 0,
+   *   "notes": "",
+   *   "externalRenterID": 0
+   * }
+   *
+   * @apiError 404 No active rental
+   */
+  app.get({name: 'get item active rental', path: 'item/:barcode/rental/active'},
+          auth.verify, item.getActiveRental)
   /**
    * @api {get} /item/:barcode/status Get status of an item
    * @apiName GetItemStatus
