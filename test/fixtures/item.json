@@ -8,5 +8,10 @@
     "params": {
       "barcode": ""
     }
+  },
+  "activeRentalReq": {
+    "params": {
+      "barcode": ""
+    }
   }
 }
