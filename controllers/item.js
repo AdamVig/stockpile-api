@@ -70,7 +70,7 @@ item.get = endpoint.get('item', 'barcode',
 item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
 item.getActiveRental = endpoint.get('item', 'itemID',
                                     {modify: item.withActiveRental})
-item.getStatus = endpoint.get('itemStatus', 'barcode')
+item.getStatus = endpoint.get('itemStatus', 'barcode', {hasOrganizationID: false})
 
 // Custom fields
 item.forItem = (req, queryBuilder) => {
