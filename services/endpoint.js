@@ -16,24 +16,27 @@ const paginate = require('./paginate')
  * @param {string} tableName Name of a database table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
+ * @param {boolean} [hasOrganizationID=true] If the table has an
+ *   `organizationID` column or not (used in building where clauses)
  * @return {function} Endpoint handler
  */
-module.exports.getAll = (tableName, {modify, messages} = {}) => {
-  return (req, res, next) => {
-    return db.getAll(tableName, req.user.organizationID,
-                     module.exports.bindModify(modify, req))
-      .then(results => {
-        // If pagination parameters in request, add pagination links
-        if (req.params && (req.params.limit || req.params.offset)) {
-          return paginate.addLinks(req, res, tableName)
-            .then(() => res.send({results}))
-        } else {
-          return res.send({results})
-        }
-      })
-      .catch(err => module.exports.handleError(err, messages, next, req))
+module.exports.getAll =
+  (tableName, {modify, messages, hasOrganizationID = true} = {}) => {
+    return (req, res, next) => {
+      return db.getAll(tableName, hasOrganizationID && req.user.organizationID,
+                       module.exports.bindModify(modify, req))
+        .then(results => {
+          // If pagination parameters in request, add pagination links
+          if (req.params && (req.params.limit || req.params.offset)) {
+            return paginate.addLinks(req, res, tableName)
+              .then(() => res.send({results}))
+          } else {
+            return res.send({results})
+          }
+        })
+        .catch(err => module.exports.handleError(err, messages, next, req))
+    }
   }
-}
 
 /**
  * Get a row from a table, identified by a column and value from the request
@@ -41,39 +44,46 @@ module.exports.getAll = (tableName, {modify, messages} = {}) => {
  * @param {string} columnName Name of a column in the table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
+ * @param {boolean} [hasOrganizationID=true] If the table has an
+ *   `organizationID` column or not (used in building where clauses)
  * @return {function} Endpoint handler
  */
-module.exports.get = (tableName, columnName, {modify, messages} = {}) => {
-  return (req, res, next) => {
-    return db.get(tableName, columnName, req.params[columnName],
-                  req.user.organizationID, module.exports.bindModify(modify, req))
-      .then(row => res.send(row))
-      .catch(err => module.exports.handleError(err, messages, next, req))
+module.exports.get =
+  (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
+    return (req, res, next) => {
+      return db.get(tableName, columnName, req.params[columnName],
+                    hasOrganizationID && req.user.organizationID,
+                    module.exports.bindModify(modify, req))
+        .then(row => res.send(row))
+        .catch(err => module.exports.handleError(err, messages, next, req))
+    }
   }
-}
 
 /**
  * Create a row in a table, returning a descriptive message
  * @param {string} tableName Name of a database table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
+ * @param {boolean} [hasOrganizationID=true] If the table has an
+ *   `organizationID` column or not (used in building where clauses)
  * @return {function} Endpoint handler
  */
-module.exports.create = (tableName, {modify, messages} = {}) => {
-  return (req, res, next) => {
-    // Add organization ID if it is missing
-    if (!req.body.organizationID && req.user) {
-      req.body.organizationID = req.user.organizationID
-    }
+module.exports.create =
+  (tableName, {modify, messages, hasOrganizationID = true} = {}) => {
+    return (req, res, next) => {
+      // Add organization ID if it is missing
+      if (!req.body.organizationID && req.user) {
+        req.body.organizationID = req.user.organizationID
+      }
 
-    return db.create(tableName, req.body, module.exports.bindModify(modify, req))
-      .then(([id]) => res.send({
-        id,
-        message: module.exports.chooseMessage('create', messages)
-      }))
-      .catch(err => module.exports.handleError(err, messages, next, req))
+      return db.create(tableName, req.body, module.exports.bindModify(modify, req))
+        .then(([id]) => res.send({
+          id,
+          message: module.exports.chooseMessage('create', messages)
+        }))
+        .catch(err => module.exports.handleError(err, messages, next, req))
+    }
   }
-}
 
 /**
  * Update a row in a table, returning the updated row
@@ -81,17 +91,20 @@ module.exports.create = (tableName, {modify, messages} = {}) => {
  * @param {string} columnName Name of a column in the table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
+ * @param {boolean} [hasOrganizationID=true] If the table has an
+ *   `organizationID` column or not (used in building where clauses)
  * @return {function} Endpoint handler
  */
-module.exports.update = (tableName, columnName, {modify, messages} = {}) => {
-  return (req, res, next) => {
-    return db.update(tableName, columnName, req.params[columnName], req.body,
-                     req.user.organizationID,
-                     module.exports.bindModify(modify, req))
-      .then(updatedRow => { return res.send(updatedRow) })
-      .catch(err => module.exports.handleError(err, messages, next, req))
+module.exports.update =
+  (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
+    return (req, res, next) => {
+      return db.update(tableName, columnName, req.params[columnName], req.body,
+                       hasOrganizationID && req.user.organizationID,
+                       module.exports.bindModify(modify, req))
+        .then(updatedRow => { return res.send(updatedRow) })
+        .catch(err => module.exports.handleError(err, messages, next, req))
+    }
   }
-}
 
 /**
  * Delete a row in a table, returning a descriptive message
@@ -99,23 +112,28 @@ module.exports.update = (tableName, columnName, {modify, messages} = {}) => {
  * @param {string} columnName Name of a column in the table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
+ * @param {boolean} [hasOrganizationID=true] If the table has an
+ *   `organizationID` column or not (used in building where clauses)
  * @return {function} Endpoint handler
  */
-module.exports.delete = (tableName, columnName, {modify, messages} = {}) => {
-  return (req, res, next) => {
-    return db.delete(tableName, columnName, req.params[columnName],
-                     req.user.organizationID,
-                     module.exports.bindModify(modify, req))
-      .then((rowsAffected) => {
-        if (rowsAffected > 0) {
-          res.send({message: module.exports.chooseMessage('delete', messages)})
-        } else {
-          res.send(204)
-        }
-      })
-      .catch(err => module.exports.handleError(err, messages, next, req))
+module.exports.delete =
+  (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
+    return (req, res, next) => {
+      return db.delete(tableName, columnName, req.params[columnName],
+                       hasOrganizationID && req.user.organizationID,
+                       module.exports.bindModify(modify, req))
+        .then((rowsAffected) => {
+          if (rowsAffected > 0) {
+            res.send({
+              message: module.exports.chooseMessage('delete', messages)
+            })
+          } else {
+            res.send(204)
+          }
+        })
+        .catch(err => module.exports.handleError(err, messages, next, req))
+    }
   }
-}
 
 /**
  * Default endpoint handler for new endpoints
