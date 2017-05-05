@@ -37,7 +37,10 @@ kit.withKitID = (req, queryBuilder) => {
 
 endpoint.addAllMethods(kit, 'kit', 'kitID')
 
-kit.getAllKitModels = endpoint.getAll('kitModels', {modify: kit.withModelDetails})
+kit.getAllKitModels = endpoint.getAll('kitModels', {
+  modify: kit.withModelDetails,
+  hasOrganizationID: false
+})
 kit.createKitModel = (req, res, next) => {
   if (req.body.modelID) {
     req.body.kitID = req.params.kitID
