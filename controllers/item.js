@@ -77,10 +77,14 @@ item.forItem = (req, queryBuilder) => {
   return queryBuilder
     .where('barcode', req.params.barcode)
 }
-item.getCustomFieldValues = endpoint.getAll('itemCustomFieldValue',
-                                            {modify: item.forItem})
-item.getCustomFieldValue = endpoint.get('itemCustomFieldValue', 'customFieldID',
-                                        {modify: item.forItem})
+item.getCustomFieldValues = endpoint.getAll('itemCustomFieldValue', {
+  modify: item.forItem,
+  hasOrganizationID: false
+})
+item.getCustomFieldValue = endpoint.get('itemCustomFieldValue', 'customFieldID', {
+  modify: item.forItem,
+  hasOrganizationID: false
+})
 item.updateCustomFieldValue = endpoint.update('itemCustomFieldValue',
                                               'customFieldID',
                                               {modify: item.forItem})
