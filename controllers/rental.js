@@ -94,8 +94,9 @@ rental.mount = app => {
    * @apiPermission User
    *
    * @apiDescription To find the `rentalID` of an item's current active rental
-   *   by the item's barcode, use `GET /item/:barcode/status`. To find all
-   *   current and past rentals of an item, use `GET /item/:barcode/rentals`.
+   *   by the item's barcode, use `GET /item/:barcode/rental/active`. To find
+   *   all current and past rentals of an item, use
+   *   `GET /item/:barcode/rentals`.
    *
    * @apiUse RentalResponse
    */
