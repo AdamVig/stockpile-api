@@ -95,7 +95,6 @@ item.mount = app => {
    *
    * @apiExample {json} Response format:
    * {
-   *   "itemID": 0,
    *   "organizationID": 0,
    *   "modelID": 0,
    *   "categoryID": 0,
@@ -132,7 +131,6 @@ item.mount = app => {
    * {
    *   results: [
    *     {
-   *       "itemID": 0,
    *       "organizationID": 0,
    *       "modelID": 0,
    *       "categoryID": 0,
@@ -207,7 +205,6 @@ item.mount = app => {
    * {
    *   "results": [
    *     "endDate": "2017-02-23T05:00:00.000Z",
-   *     "itemID": 0,
    *     "organizationID": 0,
    *     "rentalID": 0,
    *     "returnDate": null,
@@ -230,7 +227,6 @@ item.mount = app => {
    * @apiExample {json} Response Format
    * {
    *   "endDate": "2017-02-23T05:00:00.000Z",
-   *   "itemID": 0,
    *   "organizationID": 0,
    *   "rentalID": 0,
    *   "returnDate": null,
