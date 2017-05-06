@@ -44,13 +44,9 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'item')
 }
 
-item.withRentals = (req, queryBuilder) => {
+item.paginateRentals = (req, queryBuilder) => {
   return queryBuilder
-    .join('rental', 'item.itemID', 'rental.itemID')
-    .select('rental.*')
-
-  // Add pagination
-    .modify(paginate.paginateQuery, req, 'item')
+    .modify(paginate.paginateQuery, req, 'rental')
 }
 
 // Get active rental associated with item
@@ -67,7 +63,7 @@ endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
-item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
+item.getRentals = endpoint.getAll('rental', {modify: item.paginateRentals})
 item.getActiveRental = endpoint.get('item', 'itemID',
                                     {modify: item.withActiveRental})
 item.getStatus = endpoint.get('itemStatus', 'barcode', {hasOrganizationID: false})
