@@ -14,21 +14,17 @@ test('With fields and filters', t => {
   t.true(queryBuilder.modify.called, 'filters are added to request')
 })
 
-test('With rentals', t => {
+test('Paginate rentals', t => {
   const queryBuilder = {
-    join: sinon.stub().returnsThis(),
-    modify: sinon.stub().returnsThis(),
-    select: sinon.stub().returnsThis()
+    modify: sinon.stub().returnsThis()
   }
-  const result = item.withRentals(null, queryBuilder)
+  const result = item.paginateRentals(null, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
 })
 
 test('With active rental', t => {
   const queryBuilder = {
-    join: sinon.stub().returnsThis(),
     orderBy: sinon.stub().returnsThis(),
-    select: sinon.stub().returnsThis(),
     where: sinon.stub().returnsThis()
   }
   const result = item.withActiveRental(fixt.activeRentalReq, queryBuilder)

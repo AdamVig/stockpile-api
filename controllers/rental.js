@@ -6,11 +6,8 @@ const paginate = require('../services/paginate')
 
 const rental = module.exports
 
-rental.withBarcodeAndPagination = (req, queryBuilder) => {
+rental.paginate = (req, queryBuilder) => {
   return queryBuilder
-    .select('rental.*')
-    .leftJoin('item', 'rental.itemID', 'item.itemID')
-    .select('item.barcode')
     .modify(paginate.paginateQuery, req, 'rental')
 }
 
@@ -35,12 +32,11 @@ const messages = {
   missing: 'Rental does not exist'
 }
 
-rental.getAll = endpoint.getAll('rental',
-                                {modify: rental.withBarcodeAndPagination})
+rental.getAll = endpoint.getAll('rental', {modify: rental.paginate})
 rental.get = endpoint.get('rental', 'rentalID', {messages})
 rental.create = endpoint.create('rental', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
-rental.delete = endpoint.delete('rental', {modify: rental.withBarcode})
+rental.delete = endpoint.delete('rental')
 
 rental.mount = app => {
   /**
@@ -56,7 +52,6 @@ rental.mount = app => {
    * @apiExample {json} Response format:
    * {
    *   "endDate": "2017-02-23T05:00:00.000Z",
-   *   "itemID": 0,
    *   "organizationID": 0,
    *   "rentalID": 0,
    *   "returnDate": null,
@@ -80,7 +75,6 @@ rental.mount = app => {
    * {
    *   "results": [
    *     "endDate": "2017-02-23T05:00:00.000Z",
-   *     "itemID": 0,
    *     "organizationID": 0,
    *     "rentalID": 0,
    *     "returnDate": null,
@@ -100,8 +94,9 @@ rental.mount = app => {
    * @apiPermission User
    *
    * @apiDescription To find the `rentalID` of an item's current active rental
-   *   by the item's barcode, use `GET /item/:barcode/status`. To find all
-   *   current and past rentals of an item, use `GET /item/:barcode/rentals`.
+   *   by the item's barcode, use `GET /item/:barcode/rental/active`. To find
+   *   all current and past rentals of an item, use
+   *   `GET /item/:barcode/rentals`.
    *
    * @apiUse RentalResponse
    */
@@ -118,7 +113,7 @@ rental.mount = app => {
    *   the date the item was returned. Rentals are associated with users and
    *   optionally with external renters.
    *
-   * @apiParam {Number} itemID ID of rented item
+   * @apiParam {String} barcode Barcode of rented item
    * @apiParam {String} startDate Date rental taken out (YYYY-MM-DD)
    * @apiParam {String} endDate Date rental is due (YYYY-MM-DD)
    * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
@@ -141,7 +136,7 @@ rental.mount = app => {
    * @apiPermission User
    *
    * @apiParam {Number} [userID] ID of renting user
-   * @apiParam {Number} [itemID] ID of rented item
+   * @apiParam {Barcode} [barcode] Barcode of rented item
    * @apiParam {String} [startDate] Date rental taken out (YYYY-MM-DD)
    * @apiParam {String} [endDate] Date rental is due (YYYY-MM-DD)
    * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)

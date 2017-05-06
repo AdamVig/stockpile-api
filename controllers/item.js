@@ -44,21 +44,14 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'item')
 }
 
-item.withRentals = (req, queryBuilder) => {
+item.paginateRentals = (req, queryBuilder) => {
   return queryBuilder
-    .join('rental', 'item.itemID', 'rental.itemID')
-    .select('rental.*')
-
-  // Add pagination
-    .modify(paginate.paginateQuery, req, 'item')
+    .modify(paginate.paginateQuery, req, 'rental')
 }
 
 // Get active rental associated with item
 item.withActiveRental = (req, queryBuilder) => {
   return queryBuilder
-    .where('item.barcode', req.params.barcode)
-    .join('rental', 'item.itemID', 'rental.itemID')
-    .select('rental.*')
     .where('rental.returnDate', null)
     .orderBy('rental.startDate', 'ascending')
 }
@@ -67,8 +60,8 @@ endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
-item.getRentals = endpoint.getAll('item', {modify: item.withRentals})
-item.getActiveRental = endpoint.get('item', 'itemID',
+item.getRentals = endpoint.getAll('rental', {modify: item.paginateRentals})
+item.getActiveRental = endpoint.get('rental', 'barcode',
                                     {modify: item.withActiveRental})
 item.getStatus = endpoint.get('itemStatus', 'barcode', {hasOrganizationID: false})
 
@@ -102,7 +95,6 @@ item.mount = app => {
    *
    * @apiExample {json} Response format:
    * {
-   *   "itemID": 0,
    *   "organizationID": 0,
    *   "modelID": 0,
    *   "categoryID": 0,
@@ -139,7 +131,6 @@ item.mount = app => {
    * {
    *   results: [
    *     {
-   *       "itemID": 0,
    *       "organizationID": 0,
    *       "modelID": 0,
    *       "categoryID": 0,
@@ -214,7 +205,6 @@ item.mount = app => {
    * {
    *   "results": [
    *     "endDate": "2017-02-23T05:00:00.000Z",
-   *     "itemID": 0,
    *     "organizationID": 0,
    *     "rentalID": 0,
    *     "returnDate": null,
@@ -237,7 +227,6 @@ item.mount = app => {
    * @apiExample {json} Response Format
    * {
    *   "endDate": "2017-02-23T05:00:00.000Z",
-   *   "itemID": 0,
    *   "organizationID": 0,
    *   "rentalID": 0,
    *   "returnDate": null,
