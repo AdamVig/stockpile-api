@@ -6,11 +6,8 @@ const paginate = require('../services/paginate')
 
 const rental = module.exports
 
-rental.withBarcodeAndPagination = (req, queryBuilder) => {
+rental.paginate = (req, queryBuilder) => {
   return queryBuilder
-    .select('rental.*')
-    .leftJoin('item', 'rental.itemID', 'item.itemID')
-    .select('item.barcode')
     .modify(paginate.paginateQuery, req, 'rental')
 }
 
@@ -35,12 +32,11 @@ const messages = {
   missing: 'Rental does not exist'
 }
 
-rental.getAll = endpoint.getAll('rental',
-                                {modify: rental.withBarcodeAndPagination})
+rental.getAll = endpoint.getAll('rental', {modify: rental.paginate})
 rental.get = endpoint.get('rental', 'rentalID', {messages})
 rental.create = endpoint.create('rental', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
-rental.delete = endpoint.delete('rental', {modify: rental.withBarcode})
+rental.delete = endpoint.delete('rental')
 
 rental.mount = app => {
   /**
