@@ -52,9 +52,6 @@ item.paginateRentals = (req, queryBuilder) => {
 // Get active rental associated with item
 item.withActiveRental = (req, queryBuilder) => {
   return queryBuilder
-    .where('item.barcode', req.params.barcode)
-    .join('rental', 'item.itemID', 'rental.itemID')
-    .select('rental.*')
     .where('rental.returnDate', null)
     .orderBy('rental.startDate', 'ascending')
 }
@@ -64,7 +61,7 @@ item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
 item.getRentals = endpoint.getAll('rental', {modify: item.paginateRentals})
-item.getActiveRental = endpoint.get('item', 'itemID',
+item.getActiveRental = endpoint.get('rental', 'barcode',
                                     {modify: item.withActiveRental})
 item.getStatus = endpoint.get('itemStatus', 'barcode', {hasOrganizationID: false})
 
