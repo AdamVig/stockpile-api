@@ -44,7 +44,8 @@ kit.getAllKitModels = endpoint.getAll('kitModels', {
 kit.createKitModel = (req, res, next) => {
   if (req.body.modelID) {
     req.body.kitID = req.params.kitID
-    return endpoint.create('kitModels')(req, res, next)
+    return endpoint.create('kitModels',
+                           {hasOrganizationID: false})(req, res, next)
   } else {
     return next(new restify.BadRequestError('missing modelID in body'))
   }
