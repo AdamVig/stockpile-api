@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/AdamVig/stockpile-api.svg?branch=master)](https://travis-ci.org/AdamVig/stockpile-api)
+[![Build Status](https://travis-ci.org/stockpile-co/api.svg?branch=master)](https://travis-ci.org/stockpile-co/api)
 [![Coverage Status](https://coveralls.io/repos/github/AdamVig/stockpile-api/badge.svg)](https://coveralls.io/github/AdamVig/stockpile-api)
 [![Code Climate](https://codeclimate.com/github/AdamVig/stockpile-api/badges/gpa.svg)](https://codeclimate.com/github/AdamVig/stockpile-api)
 
@@ -17,7 +17,7 @@ Yarn presents the same API as npm for running scripts. The scripts below are def
  * `yarn run dev` run the app in development
  * `yarn run lint` lint code using [ESLint](http://eslint.org/) + [StandardJS](http://standardjs.com/)
  * `yarn run docs` generate documentation using [Docco](https://jashkenas.github.io/docco/)
- 
+
 ## File Structure
 - `.codeclimate.yml` CodeClimate code-quality tool configuration
 - `.editorconfig` editor configuration to ensure consistent indentation and line-endings
