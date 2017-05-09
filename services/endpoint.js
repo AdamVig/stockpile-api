@@ -192,6 +192,8 @@ module.exports.chooseError = (err, messages) => {
     case 'ER_NOT_FOUND':
       return new restify.NotFoundError(
         module.exports.chooseMessage('missing', messages))
+    case 'ER_SIGNAL_EXCEPTION':
+      return new restify.BadRequestError(err.sqlMessage)
     default:
       return new restify.InternalServerError(
         module.exports.chooseMessage('default', messages))
