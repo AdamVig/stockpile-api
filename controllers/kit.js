@@ -146,7 +146,8 @@ kit.mount = app => {
    *      "modelID": 0,
    *      "model": "",
    *      "brandID": 0,
-   *      "brand": ""
+   *      "brand": "",
+   *      "quantity": 0
    *    }
    *  ]
    * }
@@ -160,6 +161,7 @@ kit.mount = app => {
    * @apiPermission User
    *
    * @apiParam {Number} modelID ID of model
+   * @apiParam {Number} [quantity=1] How many of the model belong in the kit
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id Always zero (composite key in the table)
