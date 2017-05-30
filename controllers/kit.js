@@ -7,9 +7,9 @@ const kit = module.exports
 
 kit.withModels = (req, queryBuilder) => {
   return queryBuilder
-    .join('kitModels', 'kit.kitID', 'kitModels.kitID')
+    .join('kitModel', 'kit.kitID', 'kitModel.kitID')
 
-    .join('model', 'model.modelID', 'kitModels.modelID')
+    .join('model', 'model.modelID', 'kitModel.modelID')
     .select('model.modelID', 'model.name as model')
 
     .join('brand', 'brand.brandID', 'model.brandID')
@@ -22,7 +22,7 @@ kit.withModelDetails = (req, queryBuilder) => {
     .select('kitID')
 
   // Add models
-    .join('model', 'kitModels.modelID', 'model.modelID')
+    .join('model', 'kitModel.modelID', 'model.modelID')
     .select('model.modelID', 'model.name as model')
 
   // Add brands
@@ -37,7 +37,7 @@ kit.withKitID = (req, queryBuilder) => {
 
 endpoint.addAllMethods(kit, 'kit', 'kitID')
 
-kit.getAllKitModels = endpoint.getAll('kitModels', {
+kit.getAllKitModels = endpoint.getAll('kitModel', {
   modify: kit.withModelDetails,
   hasOrganizationID: false
 })
@@ -45,7 +45,7 @@ kit.getAllKitModels = endpoint.getAll('kitModels', {
 kit.createKitModel = (req, res, next) => {
   if (req.body.modelID) {
     req.body.kitID = req.params.kitID
-    return endpoint.create('kitModels',
+    return endpoint.create('kitModel',
                            {hasOrganizationID: false})(req, res, next)
   } else {
     return next(new restify.BadRequestError('missing modelID in body'))
@@ -53,10 +53,10 @@ kit.createKitModel = (req, res, next) => {
 }
 
 kit.updateKitModel = endpoint.update(
-  'kitModels', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
+  'kitModel', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
 
 kit.deleteKitModel = endpoint.delete(
-  'kitModels', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
+  'kitModel', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
 
 kit.mount = app => {
   /**

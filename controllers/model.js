@@ -12,8 +12,8 @@ model.withKits = (req, queryBuilder) => {
   return queryBuilder
     .select('kit.*')
     .where('model.modelID', req.params.modelID)
-    .join('kitModels', 'model.modelID', 'kitModels.modelID')
-    .join('kit', 'kitModels.kitID', 'kit.kitID')
+    .join('kitModel', 'model.modelID', 'kitModel.modelID')
+    .join('kit', 'kitModel.kitID', 'kit.kitID')
 }
 
 endpoint.addAllMethods(model, 'model', 'modelID')
