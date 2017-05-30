@@ -53,6 +53,9 @@ kit.createKitModel = (req, res, next) => {
 kit.deleteKitModel = endpoint.delete('kitModels', 'modelID',
                                      {modify: kit.withKitID})
 
+kit.updateKitModel = endpoint.update(
+  'kitModels', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
+
 kit.mount = app => {
   /**
    * @apiDefine KitResponse
@@ -168,6 +171,23 @@ kit.mount = app => {
    */
   app.put({name: 'create kit model', path: 'kit/:kitID/model'},
           auth.verify, kit.createKitModel)
+  /**
+   * @api {put} /kit/:kitID/model/:modelID Update kit model
+   * @apiName UpdateKitModel
+   * @apiGroup Kit
+   * @apiPermission User
+   *
+   * @apiParam {Number} quantity How many of the model belong in the kit
+   *
+   * @apiUse {json} Response Format
+   * {
+   *   "kitID": 0,
+   *   "modelID": 0,
+   *   "quantity": 0
+   * }
+   */
+  app.put({name: 'update kit model', path: 'kit/:kitID/model/:modelID'},
+          auth.verify, kit.updateKitModel)
   /**
    * @api {delete} /kit/:kitID/model/:modelID Delete a kit model
    * @apiName DeleteKitModel
