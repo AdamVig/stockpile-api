@@ -41,6 +41,7 @@ kit.getAllKitModels = endpoint.getAll('kitModels', {
   modify: kit.withModelDetails,
   hasOrganizationID: false
 })
+
 kit.createKitModel = (req, res, next) => {
   if (req.body.modelID) {
     req.body.kitID = req.params.kitID
@@ -50,10 +51,11 @@ kit.createKitModel = (req, res, next) => {
     return next(new restify.BadRequestError('missing modelID in body'))
   }
 }
-kit.deleteKitModel = endpoint.delete('kitModels', 'modelID',
-                                     {modify: kit.withKitID})
 
 kit.updateKitModel = endpoint.update(
+  'kitModels', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
+
+kit.deleteKitModel = endpoint.delete(
   'kitModels', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
 
 kit.mount = app => {
