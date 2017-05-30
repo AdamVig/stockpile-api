@@ -7,9 +7,9 @@ const kit = module.exports
 
 kit.withModels = (req, queryBuilder) => {
   return queryBuilder
-    .join('kitModels', 'kit.kitID', 'kitModels.kitID')
+    .join('kitModel', 'kit.kitID', 'kitModel.kitID')
 
-    .join('model', 'model.modelID', 'kitModels.modelID')
+    .join('model', 'model.modelID', 'kitModel.modelID')
     .select('model.modelID', 'model.name as model')
 
     .join('brand', 'brand.brandID', 'model.brandID')
@@ -22,7 +22,7 @@ kit.withModelDetails = (req, queryBuilder) => {
     .select('kitID')
 
   // Add models
-    .join('model', 'kitModels.modelID', 'model.modelID')
+    .join('model', 'kitModel.modelID', 'model.modelID')
     .select('model.modelID', 'model.name as model')
 
   // Add brands
@@ -37,21 +37,26 @@ kit.withKitID = (req, queryBuilder) => {
 
 endpoint.addAllMethods(kit, 'kit', 'kitID')
 
-kit.getAllKitModels = endpoint.getAll('kitModels', {
+kit.getAllKitModels = endpoint.getAll('kitModel', {
   modify: kit.withModelDetails,
   hasOrganizationID: false
 })
+
 kit.createKitModel = (req, res, next) => {
   if (req.body.modelID) {
     req.body.kitID = req.params.kitID
-    return endpoint.create('kitModels',
+    return endpoint.create('kitModel',
                            {hasOrganizationID: false})(req, res, next)
   } else {
     return next(new restify.BadRequestError('missing modelID in body'))
   }
 }
-kit.deleteKitModel = endpoint.delete('kitModels', 'modelID',
-                                     {modify: kit.withKitID})
+
+kit.updateKitModel = endpoint.update(
+  'kitModel', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
+
+kit.deleteKitModel = endpoint.delete(
+  'kitModel', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
 
 kit.mount = app => {
   /**
@@ -146,7 +151,8 @@ kit.mount = app => {
    *      "modelID": 0,
    *      "model": "",
    *      "brandID": 0,
-   *      "brand": ""
+   *      "brand": "",
+   *      "quantity": 0
    *    }
    *  ]
    * }
@@ -160,12 +166,30 @@ kit.mount = app => {
    * @apiPermission User
    *
    * @apiParam {Number} modelID ID of model
+   * @apiParam {Number} [quantity=1] How many of the model belong in the kit
    *
    * @apiSuccess (200) {String} message Descriptive message
    * @apiSuccess (200) {Number} id Always zero (composite key in the table)
    */
   app.put({name: 'create kit model', path: 'kit/:kitID/model'},
           auth.verify, kit.createKitModel)
+  /**
+   * @api {put} /kit/:kitID/model/:modelID Update kit model
+   * @apiName UpdateKitModel
+   * @apiGroup Kit
+   * @apiPermission User
+   *
+   * @apiParam {Number} quantity How many of the model belong in the kit
+   *
+   * @apiUse {json} Response Format
+   * {
+   *   "kitID": 0,
+   *   "modelID": 0,
+   *   "quantity": 0
+   * }
+   */
+  app.put({name: 'update kit model', path: 'kit/:kitID/model/:modelID'},
+          auth.verify, kit.updateKitModel)
   /**
    * @api {delete} /kit/:kitID/model/:modelID Delete a kit model
    * @apiName DeleteKitModel
