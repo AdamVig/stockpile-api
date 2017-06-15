@@ -108,6 +108,13 @@ module.exports.update =
 
 /**
  * Delete a row in a table, returning a descriptive message
+ *
+ * @apiDefine EndpointDelete
+ *
+ * @apiSuccess (200) {String} message Descriptive message
+ * @apiSuccess (200) id ID of deleted entity
+ * @apiSuccess (204) empty No body when item was already deleted
+ *
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
  * @param {function} [modify] Modify the query
@@ -125,7 +132,8 @@ module.exports.delete =
         .then((rowsAffected) => {
           if (rowsAffected > 0) {
             res.send({
-              message: module.exports.chooseMessage('delete', messages)
+              message: module.exports.chooseMessage('delete', messages),
+              id: req.params[columnName]
             })
           } else {
             res.send(204)

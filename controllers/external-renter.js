@@ -98,8 +98,7 @@ externalRenter.mount = app => {
    * @apiName DeleteExternalRenter
    * @apiGroup ExternalRenter
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del(
     {name: 'delete external renter', path: 'external-renter/:externalRenterID'},

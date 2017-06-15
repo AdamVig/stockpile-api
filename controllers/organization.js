@@ -68,8 +68,7 @@ organization.mount = app => {
    * @apiGroup Organization
    * @apiPermission Administrator
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del({name: 'delete organization', path: 'organization/:organizationID'},
           auth.verify, auth.checkAdmin, organization.delete)

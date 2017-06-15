@@ -142,8 +142,7 @@ user.mount = app => {
    *   `Archived` property to a date. This will automatically set the `email`
    *   and `password` fields of the user to `NULL`.
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del({name: 'delete user', path: 'user/:userID'},
           auth.verify, auth.checkAdmin, user.delete)

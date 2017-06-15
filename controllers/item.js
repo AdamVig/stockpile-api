@@ -189,8 +189,7 @@ item.mount = app => {
    * @apiGroup Item
    * @apiPermission User
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del({name: 'delete item', path: 'item/:barcode'}, auth.verify, item.delete)
   /**

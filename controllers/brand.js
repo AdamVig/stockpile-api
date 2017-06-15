@@ -100,8 +100,7 @@ brand.mount = app => {
    * @apiGroup Brand
    * @apiPermission User
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del({name: 'delete brand', path: 'brand/:brandID'},
           auth.verify, brand.delete)
