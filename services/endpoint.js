@@ -125,7 +125,8 @@ module.exports.delete =
         .then((rowsAffected) => {
           if (rowsAffected > 0) {
             res.send({
-              message: module.exports.chooseMessage('delete', messages)
+              message: module.exports.chooseMessage('delete', messages),
+              id: req.params[columnName]
             })
           } else {
             res.send(204)
