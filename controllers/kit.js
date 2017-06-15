@@ -133,8 +133,7 @@ kit.mount = app => {
    * @apiGroup Kit
    * @apiPermission User
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del({name: 'delete kit', path: 'kit/:kitID'}, auth.verify, kit.delete)
   /**
@@ -196,8 +195,7 @@ kit.mount = app => {
    * @apiGroup Kit
    * @apiPermission User
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del({name: 'delete kit model', path: 'kit/:kitID/model/:modelID'},
           auth.verify, kit.deleteKitModel)

@@ -105,8 +105,7 @@ customField.mount = app => {
    * @apiDescription Deleting a custom field will also delete all values
    *   associated with this field across all items in the organization.
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (204) empty No body when item was already deleted
+   * @apiUse EndpointDelete
    */
   app.del({name: 'delete custom field', path: 'custom-field/:customFieldID'},
           auth.verify, customField.delete)
