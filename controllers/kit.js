@@ -181,7 +181,7 @@ kit.mount = app => {
    *
    * @apiParam {Number} quantity How many of the model belong in the kit
    *
-   * @apiUse {json} Response Format
+   * @apiExample {json} Response Format
    * {
    *   "kitID": 0,
    *   "modelID": 0,
