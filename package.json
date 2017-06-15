@@ -13,7 +13,7 @@
     "test": "nyc ava",
     "lint": "eslint .",
     "docs": "yarn run apidoc && yarn run jsdoc",
-    "apidoc": "apidoc --input controllers/ --output docs/apidoc",
+    "apidoc": "apidoc --input controllers/ --input services/ --output docs/apidoc",
     "jsdoc": "jsdoc --configure .jsdoc.json"
   },
   "dependencies": {
