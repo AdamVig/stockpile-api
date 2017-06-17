@@ -8,7 +8,7 @@ const messages = {
 const organization = module.exports
 
 organization.get = endpoint.get('organization', 'organizationID', {messages})
-organization.create = endpoint.create('organization')
+organization.create = endpoint.create('organization', 'organizationID')
 organization.update = endpoint.update('organization', 'organizationID')
 organization.delete = endpoint.delete('organization', 'organizationID')
 

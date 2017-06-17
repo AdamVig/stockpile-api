@@ -34,7 +34,7 @@ const messages = {
 
 rental.getAll = endpoint.getAll('rental', {modify: rental.paginate})
 rental.get = endpoint.get('rental', 'rentalID', {messages})
-rental.create = endpoint.create('rental', {messages})
+rental.create = endpoint.create('rental', 'rentalID', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
 rental.delete = endpoint.delete('rental')
 
