@@ -79,10 +79,7 @@ module.exports.create =
 
       return db.create(tableName, columnName, req.body,
                        module.exports.bindModify(modify, req))
-        .then(([id]) => res.send({
-          id,
-          message: module.exports.chooseMessage('create', messages)
-        }))
+        .then(row => { return res.send(row) })
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
   }
