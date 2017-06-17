@@ -123,6 +123,7 @@ auth.authenticate = (req, res, next) => {
             .then(refreshTokenRow => {
               if (!refreshTokenRow) {
                 return db.create('refreshToken',
+                                 'userID',
                                  {userID: user.userID, refreshToken})
               } else {
                 return db.update('refreshToken', 'userID', user.userID,
@@ -190,9 +191,9 @@ auth.register = (req, res, next) => {
     return bcrypt.hash(req.body.password, auth.saltRounds)
       .then(hash => {
         req.body.password = hash
-        return db.create('user', req.body)
+        return db.create('user', 'userID', req.body)
       })
-      .then(([userID]) => {
+      .then(({userID}) => {
         return res.send(201, {
           id: userID,
           message: 'User successfully registered'

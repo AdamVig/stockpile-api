@@ -62,6 +62,7 @@ module.exports.get =
 /**
  * Create a row in a table, returning a descriptive message
  * @param {string} tableName Name of a database table
+ * @param {string} columnName Name of a column in the table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @param {boolean} [hasOrganizationID=true] If the table has an
@@ -69,14 +70,14 @@ module.exports.get =
  * @return {function} Endpoint handler
  */
 module.exports.create =
-  (tableName, {modify, messages, hasOrganizationID = true} = {}) => {
+  (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
     return (req, res, next) => {
       // Add organization ID if it is missing
       if (hasOrganizationID && !req.body.organizationID && req.user) {
         req.body.organizationID = req.user.organizationID
       }
 
-      return db.create(tableName, req.body, module.exports.bindModify(modify, req))
+      return db.create(tableName, req.body, columnName, module.exports.bindModify(modify, req))
         .then(([id]) => res.send({
           id,
           message: module.exports.chooseMessage('create', messages)
