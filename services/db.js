@@ -67,14 +67,25 @@ module.exports.buildWhere = (table, column, value, organizationID) => {
 /**
  * Create a row or rows in a table
  * @param {string} table Name of a database table
+ * @param {string} [column] Indexed column in database table
  * @param {object|array} data Row or rows to insert
  * @param {function} [modify=noop] Modify the query
  * @return {Promise.<object>} Resolved by result from database
+ * @throws MissingDataError
  */
-module.exports.create = (table, data, modify = () => {}) => {
+module.exports.create = (table, column, data, modify = () => {}) => {
   if (data) {
     return knex(table)
       .insert(data)
+      .then(([id]) => {
+        if (column) {
+          return knex(table)
+          .where(module.exports.buildWhere(table, column, id))
+            .first()
+        } else {
+          return id
+        }
+      })
   } else {
     throw new MissingDataError()
   }
