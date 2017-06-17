@@ -64,21 +64,24 @@ module.exports.get =
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
  * @param {function} [modify] Modify the query
+ * @param {function} [resModify] Modify the query to get the created entity
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @param {boolean} [hasOrganizationID=true] If the table has an
  *   `organizationID` column or not (used in building where clauses)
  * @return {function} Endpoint handler
  */
 module.exports.create =
-  (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
+  (tableName, columnName, {modify, resModify, messages, hasOrganizationID = true} = {}) => {
     return (req, res, next) => {
       // Add organization ID if it is missing
       if (hasOrganizationID && !req.body.organizationID && req.user) {
         req.body.organizationID = req.user.organizationID
       }
 
-      return db.create(tableName, columnName, req.body,
-                       module.exports.bindModify(modify, req))
+      return db.create(tableName, columnName, req.body, {
+        modify: module.exports.bindModify(modify, req),
+        resModify: module.exports.bindModify(resModify, req)
+      })
         .then(row => { return res.send(row) })
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
@@ -89,17 +92,20 @@ module.exports.create =
  * @param {string} tableName Name of a database table
  * @param {string} columnName Name of a column in the table
  * @param {function} [modify] Modify the query
+ * @param {function} [resModify] Modify the query to get the created entity
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @param {boolean} [hasOrganizationID=true] If the table has an
  *   `organizationID` column or not (used in building where clauses)
  * @return {function} Endpoint handler
  */
 module.exports.update =
-  (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
+  (tableName, columnName, {modify, resModify, messages, hasOrganizationID = true} = {}) => {
     return (req, res, next) => {
       return db.update(tableName, columnName, req.params[columnName], req.body,
-                       hasOrganizationID && req.user.organizationID,
-                       module.exports.bindModify(modify, req))
+                       hasOrganizationID && req.user.organizationID, {
+                         modify: module.exports.bindModify(modify, req),
+                         resModify: module.exports.bindModify(resModify, req)
+                       })
         .then(updatedRow => { return res.send(updatedRow) })
         .catch(err => module.exports.handleError(err, messages, next, req))
     }

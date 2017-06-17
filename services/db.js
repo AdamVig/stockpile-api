@@ -70,17 +70,19 @@ module.exports.buildWhere = (table, column, value, organizationID) => {
  * @param {string} [column] Indexed column in database table
  * @param {object|array} data Row or rows to insert
  * @param {function} [modify=noop] Modify the query
+ * @param {function} [resModify=noop] Modify the query to get the created entity
  * @return {Promise.<object>} Resolved by result from database
  * @throws MissingDataError
  */
-module.exports.create = (table, column, data, modify = () => {}) => {
+module.exports.create = (table, column, data, {modify = () => {}, resModify = () => {}}) => {
   if (data) {
     return knex(table)
       .insert(data)
       .then(([id]) => {
         if (column) {
           return knex(table)
-          .where(module.exports.buildWhere(table, column, id))
+            .where(module.exports.buildWhere(table, column, id))
+            .modify(resModify)
             .first()
         } else {
           return id
@@ -150,11 +152,12 @@ module.exports.getAll = (table, organizationID, modify = () => {}) => {
  * @param {object} data Data to update row with
  * @param {any} [organizationID] ID of organization
  * @param {function} [modify=noop] Modify the query
+ * @param {function} [resModify=noop] Modify the query to get the created entity
  * @return {Promise} Resolved when response is sent
  * @throws restify.NotFoundError when row is missing from db
  * @throws restify.UnprocessableEntityError when body is missing
  */
-module.exports.update = (table, column, value, data, organizationID, modify = () => {}) => {
+module.exports.update = (table, column, value, data, organizationID, {modify = () => {}, resModify = () => {}}) => {
   return knex(table)
     .where(module.exports.buildWhere(table, column, value, organizationID))
     .first()
@@ -162,6 +165,7 @@ module.exports.update = (table, column, value, data, organizationID, modify = ()
       if (row) {
         return knex(table)
           .where(column, value)
+          .modify(resModify)
           .update(data)
       } else {
         throw new NotFoundError()
