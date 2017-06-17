@@ -77,7 +77,8 @@ module.exports.create =
         req.body.organizationID = req.user.organizationID
       }
 
-      return db.create(tableName, req.body, columnName, module.exports.bindModify(modify, req))
+      return db.create(tableName, columnName, req.body,
+                       module.exports.bindModify(modify, req))
         .then(([id]) => res.send({
           id,
           message: module.exports.chooseMessage('create', messages)
@@ -244,7 +245,7 @@ module.exports.handleError = (err, messages, next, req) => {
 module.exports.addAllMethods = (controller, table, key, messages = {}) => {
   controller.getAll = module.exports.getAll(table, {messages})
   controller.get = module.exports.get(table, key, {messages})
-  controller.create = module.exports.create(table, {messages})
+  controller.create = module.exports.create(table, key, {messages})
   controller.update = module.exports.update(table, key, {messages})
   controller.delete = module.exports.delete(table, key, {messages})
 }
