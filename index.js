@@ -1,5 +1,4 @@
 const restify = require('restify')
-const restifyJSONHAL = require('restify-json-hal')
 const restifyLinks = require('restify-links')
 
 const auth = require('./controllers/auth')
@@ -31,12 +30,6 @@ app.use(filterRequestBody())
 
 // Handle OPTIONS requests and method not allowed errors
 app.on('MethodNotAllowed', options.handle)
-
-// Automatically add HATEAOS relations to responses
-app.use(restifyJSONHAL(app, {
-  overrideJSON: true,
-  makeObjects: true
-}))
 
 // Parse auth header
 app.use(auth.initialize)
