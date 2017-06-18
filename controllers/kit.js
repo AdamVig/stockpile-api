@@ -5,17 +5,6 @@ const endpoint = require('../services/endpoint')
 
 const kit = module.exports
 
-kit.withModels = (req, queryBuilder) => {
-  return queryBuilder
-    .join('kitModel', 'kit.kitID', 'kitModel.kitID')
-
-    .join('model', 'model.modelID', 'kitModel.modelID')
-    .select('model.modelID', 'model.name as model')
-
-    .join('brand', 'brand.brandID', 'model.brandID')
-    .select('brand.brandID', 'brand.name as brand')
-}
-
 kit.withModelDetails = (req, queryBuilder) => {
   return queryBuilder
     .where('kitID', req.params.kitID)

@@ -5,15 +5,6 @@ const test = require('ava')
 const fixt = require('./fixtures/kit')
 const kit = require('../controllers/kit')
 
-test('With models', t => {
-  const queryBuilder = {
-    join: sinon.stub().returnsThis(),
-    select: sinon.stub().returnsThis()
-  }
-  const result = kit.withModels(null, queryBuilder)
-  t.true(result === queryBuilder, 'returns query builder')
-})
-
 test('With model details', t => {
   const queryBuilder = {
     join: sinon.stub().returnsThis(),
