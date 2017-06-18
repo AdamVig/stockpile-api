@@ -170,14 +170,14 @@ module.exports.update = (table, column, value, data, organizationID, {modify = (
       if (row) {
         return knex(table)
           .where(column, value)
-          .modify(resModify)
           .update(data)
       } else {
         throw new NotFoundError()
       }
     }).then(() => {
       return knex(table)
-        .where(column, value)
+        .where(module.exports.buildWhere(table, column, value, organizationID))
+        .modify(resModify)
         .first()
     })
 }
