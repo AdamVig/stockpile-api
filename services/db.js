@@ -80,6 +80,11 @@ module.exports.create = (table, column, data, {modify = () => {}, resModify = ()
       .insert(data)
       .then(([id]) => {
         if (column) {
+          // Use ID from data when database does not return one
+          if (!id) {
+            id = data[column]
+          }
+
           return knex(table)
             .where(module.exports.buildWhere(table, column, id))
             .modify(resModify)
