@@ -6,6 +6,7 @@ const passportJWT = require('passport-jwt')
 const restify = require('restify')
 
 const db = require('../services/db')
+const userController = require('./user')
 
 const jwtStrategyOptions = {
   jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
@@ -191,14 +192,11 @@ auth.register = (req, res, next) => {
     return bcrypt.hash(req.body.password, auth.saltRounds)
       .then(hash => {
         req.body.password = hash
-        return db.create('user', 'userID', req.body)
-      })
-      .then(({userID}) => {
-        return res.send(201, {
-          id: userID,
-          message: 'User successfully registered'
+        return db.create('user', 'userID', req.body, {
+          resModify: userController.removePasswordAddRole.bind(null, req)
         })
       })
+      .then(user => { res.send(201, user) })
       .catch(next)
   } else {
     return next(new restify.BadRequestError())

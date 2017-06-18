@@ -56,10 +56,15 @@ item.withActiveRental = (req, queryBuilder) => {
     .orderBy('rental.startDate', 'ascending')
 }
 
-endpoint.addAllMethods(item, 'item', 'barcode')
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
                         {modify: item.withFieldsAndFilters, messages})
+item.create = endpoint.create('item', 'barcode',
+                              {resModify: item.withFieldsAndFilters})
+item.update = endpoint.update('item', 'barcode',
+                              {resModify: item.withFieldsAndFilters})
+item.delete = endpoint.delete('item', 'barcode'
+)
 item.getRentals = endpoint.getAll('rental', {modify: item.paginateRentals})
 item.getActiveRental = endpoint.get('rental', 'barcode',
                                     {modify: item.withActiveRental})
