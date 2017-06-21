@@ -74,7 +74,7 @@ module.exports.buildWhere = (table, column, value, organizationID) => {
  * @return {Promise.<object>} Resolved by result from database
  * @throws MissingDataError
  */
-module.exports.create = (table, column, data, {modify = () => {}, resModify = () => {}}) => {
+module.exports.create = (table, column, data, {modify = () => {}, resModify = () => {}} = {}) => {
   if (data) {
     return knex(table)
       .insert(data)
@@ -162,7 +162,7 @@ module.exports.getAll = (table, organizationID, modify = () => {}) => {
  * @throws restify.NotFoundError when row is missing from db
  * @throws restify.UnprocessableEntityError when body is missing
  */
-module.exports.update = (table, column, value, data, organizationID, {modify = () => {}, resModify = () => {}}) => {
+module.exports.update = (table, column, value, data, organizationID, {modify = () => {}, resModify = () => {}} = {}) => {
   return knex(table)
     .where(module.exports.buildWhere(table, column, value, organizationID))
     .first()
