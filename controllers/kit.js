@@ -8,7 +8,7 @@ const kit = module.exports
 kit.withModelDetails = (req, queryBuilder) => {
   return queryBuilder
     .where('kitID', req.params.kitID)
-    .select('kitID')
+    .select('kitID', 'quantity')
 
   // Add models
     .join('model', 'kitModel.modelID', 'model.modelID')
