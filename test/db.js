@@ -16,16 +16,13 @@ test.before('Set up test table', async t => {
 })
 
 test.serial('Creates a row', async t => {
-  await db.create(fixt.testTableName, fixt.testRow)
+  await db.create(fixt.testTableName, fixt.testRowPrimaryKey, fixt.testRow)
   const rows = await knex(fixt.testTableName)
   t.is(rows.length, 1)
 
-  // Try-catch necessary because t.throws does not work as expected
-  try {
-    db.create(fixt.testTableName, null)
-  } catch (err) {
-    t.pass('throws error when data is missing')
-  }
+  t.throws(() => {
+    db.create(fixt.testTableName, fixt.testRowPrimaryKey, null)
+  }, Error, 'throws error when data is missing')
 })
 
 test.serial('Gets a row', async t => {
@@ -53,7 +50,8 @@ test.serial('Deletes a row', async t => {
 })
 
 test.serial('Creates multiple rows', async t => {
-  await db.create(fixt.testTableName, [fixt.testRow, fixt.modifiedTestRow])
+  await db.create(fixt.testTableName, fixt.testRowPrimaryKey,
+                  [fixt.testRow, fixt.modifiedTestRow])
   const rows = await knex(fixt.testTableName)
   t.is(rows.length, 2)
 })
@@ -66,28 +64,29 @@ test.serial('Gets all rows', async t => {
 
 test('Throws error when getting nonexistent row', t => {
   t.throws(db.get(fixt.testTableName, fixt.testRowPrimaryKey,
-                  fixt.nonexistentRowName))
+                  fixt.nonexistentRowName), Error)
 })
 
 test('Throws error when creating duplicate row', async t => {
-  await db.create(fixt.testTableName, fixt.duplicateRow)
-  t.throws(db.create(fixt.testTableName, fixt.duplicateRow))
+  await db.create(fixt.testTableName, fixt.testRowPrimaryKey, fixt.duplicateRow)
+  t.throws(() => { db.create(fixt.testTableName, fixt.duplicateRow) }, Error)
 })
 
 test('Throws error when creating row with the wrong columns', async t => {
-  t.throws(db.create(fixt.testTableName, fixt.wrongColumnsTestRow))
+  t.throws(db.create(fixt.testTableName, fixt.testRowPrimaryKey,
+              fixt.wrongColumnsTestRow), Error)
 })
 
 test('Throws error when updating nonexistent row', t => {
   t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
                      fixt.nonexistentRowName,
-                     fixt.testRow))
+                     fixt.testRow), Error)
 })
 
 test('Throws error when updating row with the wrong columns', t => {
   t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
                      fixt.testRow[fixt.testRowPrimaryKey],
-                     fixt.wrongColumnsTestRow))
+                     fixt.wrongColumnsTestRow), Error)
 })
 
 test('Builds a where clause without organization ID', t => {
