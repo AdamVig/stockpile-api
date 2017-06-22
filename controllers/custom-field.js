@@ -14,7 +14,7 @@ customField.mount = app => {
   /**
    * @apiDefine CustomFieldResponse
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "customFieldID": 0,
    *   "organizationID": 0,
@@ -31,7 +31,7 @@ customField.mount = app => {
    *
    * @apiUse Pagination
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   results: [
    *     {
@@ -75,8 +75,7 @@ customField.mount = app => {
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created row
+   * @apiUse CustomFieldResponse
    */
   app.put({name: 'create custom field', path: 'custom-field'}, auth.verify,
           customField.create)

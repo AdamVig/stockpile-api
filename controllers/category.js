@@ -30,7 +30,7 @@ category.mount = app => {
   /**
    * @apiDefine CategoryResponse
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "categoryID": 0,
    *   "organizationID": 0,
@@ -45,7 +45,7 @@ category.mount = app => {
    *
    * @apiUse Pagination
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   results: [
    *     {
@@ -78,8 +78,7 @@ category.mount = app => {
    *
    * @apiParam {String{0...255}} name Name of category
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created row
+   * @apiUse CategoryResponse
    */
   app.put({name: 'create category', path: 'category'},
           auth.verify, category.create)

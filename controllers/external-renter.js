@@ -15,7 +15,7 @@ externalRenter.mount = app => {
   /**
    * @apiDefine ExternalRenterResponse
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "externalRenterID": 0,
    *   "organizationID": 0,
@@ -30,7 +30,7 @@ externalRenter.mount = app => {
    * @apiName GetCategories
    * @apiGroup ExternalRenter
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   results: [
    *     {
@@ -73,7 +73,7 @@ externalRenter.mount = app => {
    *   from token, but can be overridden)
    * @apiSuccess (200) {Number} id ID of created row
    *
-   * @apiSuccess (200) {String} message Descriptive message
+   * @apiUse ExternalRenterResponse
    */
   app.put({name: 'create external renter', path: 'externalRenter'},
           auth.verify, externalRenter.create)

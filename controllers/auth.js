@@ -79,8 +79,15 @@ auth.mount = app => {
    * @apiParam {Number} [roleID=2] Role, defaults to "Member"
    * @apiParam {String} [archived] Date user was archived (YYYY-MM-DD)
    *
-   * @apiSuccess (201) {Number} id ID of user
-   * @apiSuccess (201) {String} message Descriptive message
+   * @apiExample {json} Response Format
+   * {
+   *   "email": "",
+   *   "firstName": "",
+   *   "lastName": "",
+   *   "organizationID": 0,
+   *   "role": "",
+   *   "userID": 0
+   * }
    */
   app.post({name: 'register', path: 'auth/register'}, auth.register)
   /**

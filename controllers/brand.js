@@ -30,7 +30,7 @@ brand.mount = app => {
   /**
    * @apiDefine BrandResponse
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "brandID": 0,
    *   "organizationID": 0,
@@ -46,7 +46,7 @@ brand.mount = app => {
    *
    * @apiUse Pagination
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   results: [
    *     {
@@ -78,8 +78,7 @@ brand.mount = app => {
    *
    * @apiParam {String{0...255}} name Name of brand
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created row
+   * @apiUse BrandResponse
    */
   app.put({name: 'create brand', path: 'brand'}, auth.verify, brand.create)
   /**

@@ -49,7 +49,7 @@ rental.mount = app => {
   /**
    * @apiDefine RentalResponse
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "endDate": "2017-02-23T05:00:00.000Z",
    *   "organizationID": 0,
@@ -71,7 +71,7 @@ rental.mount = app => {
    *
    * @apiUse Pagination
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "results": [
    *     "endDate": "2017-02-23T05:00:00.000Z",
@@ -124,8 +124,7 @@ rental.mount = app => {
    *   from token, but can be overridden)
    * @apiParam {String{0..1000}} [notes] Notes about rental
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created row
+   * @apiUse RentalResponse
    */
   app.put({name: 'create rental', path: 'rental'}, auth.verify,
           rental.addUserID, rental.create)

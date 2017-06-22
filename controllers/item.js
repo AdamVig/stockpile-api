@@ -98,7 +98,7 @@ item.mount = app => {
   /**
    * @apiDefine ItemResponse
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "organizationID": 0,
    *   "modelID": 0,
@@ -132,7 +132,7 @@ item.mount = app => {
    * @apiParamExample Paginate response
    * /item?limit=10&offset=10
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   results: [
    *     {
@@ -170,8 +170,7 @@ item.mount = app => {
    * @apiParam {String} barcode Unique identifier of item
    * @apiParam {String{0..1000}} [notes] Notes about item
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created row
+   * @apiUse ItemResponse
    */
   app.put({name: 'create item', path: 'item'}, auth.verify, item.create)
   /**
@@ -205,7 +204,7 @@ item.mount = app => {
    *
    * @apiUse Pagination
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "results": [
    *     "endDate": "2017-02-23T05:00:00.000Z",

@@ -59,6 +59,18 @@ kit.mount = app => {
    *  "organizationID": 0
    * }
    */
+
+  /**
+   * @apiDefine KitModelResponse
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "kitID": 0,
+   *   "modelID": 0,
+   *   "quantity": 0
+   * }
+   */
+
   /**
    * @api {get} /kit Get all kits
    * @apiName GetAllKits
@@ -102,8 +114,7 @@ kit.mount = app => {
    *
    * @apiParam {String{0..255}} name Name of kit
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created kit
+   * @apiUse KitResponse
    */
   app.put({name: 'create kit', path: 'kit'}, auth.verify, kit.create)
   /**
@@ -157,8 +168,7 @@ kit.mount = app => {
    * @apiParam {Number} modelID ID of model
    * @apiParam {Number} [quantity=1] How many of the model belong in the kit
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id Always zero (composite key in the table)
+   * @apiUse KitModelResponse
    */
   app.put({name: 'create kit model', path: 'kit/:kitID/model'},
           auth.verify, kit.createKitModel)
@@ -170,12 +180,7 @@ kit.mount = app => {
    *
    * @apiParam {Number} quantity How many of the model belong in the kit
    *
-   * @apiExample {json} Response Format
-   * {
-   *   "kitID": 0,
-   *   "modelID": 0,
-   *   "quantity": 0
-   * }
+   * @apiUse KitModelResponse
    */
   app.put({name: 'update kit model', path: 'kit/:kitID/model/:modelID'},
           auth.verify, kit.updateKitModel)
