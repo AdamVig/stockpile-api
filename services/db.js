@@ -90,7 +90,11 @@ module.exports.create = (table, column, data, {modify = () => {}, resModify = ()
             .modify(resModify)
             .first()
         } else {
-          return id
+          // Get inserted row based on supplied data, may return wrong row
+          return knex(table)
+            .where(data)
+            .modify(resModify)
+            .first()
         }
       })
   } else {
