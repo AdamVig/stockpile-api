@@ -39,7 +39,7 @@ model.mount = app => {
   /**
    * @apiDefine ModelResponse
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   "modelID": 0,
    *   "brandID": 0,
@@ -55,7 +55,7 @@ model.mount = app => {
    *
    * @apiUse Pagination
    *
-   * @apiExample {json} Response format:
+   * @apiExample {json} Response Format
    * {
    *   results: [
    *     {
@@ -90,8 +90,7 @@ model.mount = app => {
    * @apiParam {String{0...255}} name Name of model
    * @apiParam {Number} brandID ID of a brand
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created row
+   * @apiUse ModelResponse
    */
   app.put({name: 'create model', path: 'model'}, auth.verify, model.create)
   /**

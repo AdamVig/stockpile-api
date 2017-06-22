@@ -30,7 +30,8 @@ test('Make token', t => {
 
 test('Registers a user', async t => {
   const req = {
-    body: fixt.user
+    body: fixt.user,
+    params: {}
   }
   const res = {
     send: sinon.spy()
@@ -39,7 +40,7 @@ test('Registers a user', async t => {
   await auth.register(req, res, next)
 
   const row = await knex(fixt.table)
-          .where(fixt.primaryKey, res.send.args[0][1].id)
+          .where(fixt.primaryKey, res.send.args[0][1].userID)
           .first()
 
   t.truthy(row, 'user was created')

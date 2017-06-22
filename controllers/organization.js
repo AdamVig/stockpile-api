@@ -8,7 +8,7 @@ const messages = {
 const organization = module.exports
 
 organization.get = endpoint.get('organization', 'organizationID', {messages})
-organization.create = endpoint.create('organization')
+organization.create = endpoint.create('organization', 'organizationID')
 organization.update = endpoint.update('organization', 'organizationID')
 organization.delete = endpoint.delete('organization', 'organizationID')
 
@@ -45,8 +45,7 @@ organization.mount = app => {
    *
    * @apiParam {String} name Name of organization
    *
-   * @apiSuccess (200) {String} message Descriptive message
-   * @apiSuccess (200) {Number} id ID of created row
+   * @apiUse OrganizationResponse
    */
   app.put({name: 'create organization', path: 'organization'},
           organization.create)

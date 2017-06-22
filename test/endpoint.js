@@ -115,7 +115,8 @@ test('Create', async t => {
     send: sinon.spy()
   }
   const next = sinon.spy()
-  await endpoint.create(fixt.table, fixt.messagesWithCreate)(req, res, next)
+  await endpoint.create(fixt.table, fixt.primaryKey,
+                        fixt.messagesWithCreate)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object')
@@ -127,7 +128,9 @@ test('Create', async t => {
     user: {organizationID: fixt.organizationID}
   }
   const nextMissingFields = sinon.spy()
-  await endpoint.create(fixt.table)(reqMissingFields, null, nextMissingFields)
+  await endpoint.create(fixt.table, fixt.testRowPrimaryKey)(reqMissingFields,
+                                                            null,
+                                                            nextMissingFields)
   t.true(nextMissingFields.calledWithMatch(sinon.match.instanceOf(Error)),
          'returns error when request body is missing a required field')
 
@@ -140,7 +143,8 @@ test('Create', async t => {
     send: sinon.spy()
   }
   const nextNoOrg = sinon.spy()
-  await endpoint.create(fixt.table)(reqNoOrg, resNoOrg, nextNoOrg)
+  await endpoint.create(fixt.table, fixt.testRowPrimaryKey)(reqNoOrg, resNoOrg,
+                                                            nextNoOrg)
   t.true(res.send.calledOnce, 'route sends a response when body has no org ID')
   t.true(res.send.calledWithMatch(sinon.match.object),
          'route responds with an object when body has no org ID')

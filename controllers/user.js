@@ -23,8 +23,9 @@ user.removePasswordAddRole = (req, queryBuilder) => {
 
 user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})
 user.get = endpoint.get('userInfo', 'userID', {messages})
-user.update = endpoint.update('userInfo', 'userID')
 user.delete = endpoint.delete('userInfo', 'userID')
+user.update = endpoint.update('user', 'userID',
+                              {resModify: user.removePasswordAddRole})
 
 // Change a user's password
 user.changeUserPassword = function changeUserPassword (req, res, next) {

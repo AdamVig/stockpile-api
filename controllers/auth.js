@@ -6,6 +6,7 @@ const passportJWT = require('passport-jwt')
 const restify = require('restify')
 
 const db = require('../services/db')
+const userController = require('./user')
 
 const jwtStrategyOptions = {
   jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
@@ -78,8 +79,15 @@ auth.mount = app => {
    * @apiParam {Number} [roleID=2] Role, defaults to "Member"
    * @apiParam {String} [archived] Date user was archived (YYYY-MM-DD)
    *
-   * @apiSuccess (201) {Number} id ID of user
-   * @apiSuccess (201) {String} message Descriptive message
+   * @apiExample {json} Response Format
+   * {
+   *   "email": "",
+   *   "firstName": "",
+   *   "lastName": "",
+   *   "organizationID": 0,
+   *   "role": "",
+   *   "userID": 0
+   * }
    */
   app.post({name: 'register', path: 'auth/register'}, auth.register)
   /**
@@ -123,6 +131,7 @@ auth.authenticate = (req, res, next) => {
             .then(refreshTokenRow => {
               if (!refreshTokenRow) {
                 return db.create('refreshToken',
+                                 'userID',
                                  {userID: user.userID, refreshToken})
               } else {
                 return db.update('refreshToken', 'userID', user.userID,
@@ -190,14 +199,11 @@ auth.register = (req, res, next) => {
     return bcrypt.hash(req.body.password, auth.saltRounds)
       .then(hash => {
         req.body.password = hash
-        return db.create('user', req.body)
-      })
-      .then(([userID]) => {
-        return res.send(201, {
-          id: userID,
-          message: 'User successfully registered'
+        return db.create('user', 'userID', req.body, {
+          resModify: userController.removePasswordAddRole.bind(null, req)
         })
       })
+      .then(user => { res.send(201, user) })
       .catch(next)
   } else {
     return next(new restify.BadRequestError())

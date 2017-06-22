@@ -87,19 +87,5 @@ Use the refresh token from the authentication response to get new access tokens 
   }
   ```
 
-## HAL
-[Hypertext Application Language (HAL)](http://stateless.co/hal_specification.html) is a "simple format that gives a consistent and easy way to hyperlink between resources in your API." It is similar to HATEOAS in that it makes the API explorable by providing links to related entities in each response.  
-
-On the Stockpile API, each response contains a `_links` property that contains several properties. For example, the main endpoint (just `/`) returns:  
-```JSON
-{
-    "_links": {
-        "self": {
-            "href": "/",
-            "method": "GET"
-        }
-    }
-}
-```
-
-Currently, support for HAL is broken. The above response should also contain links to all of the other top-level endpoints, allowing the client to explore the API based on the first response. You can track the progress of fixing HAL support in [#70 Fix HAL](https://github.com/AdamVig/stockpile-api/issues/70).  
+## HATEOAS
+To be truly RESTful, an API must be discoverable and self-documenting. Track [#70 Fix HATEOAS](https://github.com/AdamVig/stockpile-api/issues/70) to follow progress on the implementation of HATEOAS.  
