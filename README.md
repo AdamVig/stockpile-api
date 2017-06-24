@@ -2,10 +2,10 @@
 [![Coverage Status](https://coveralls.io/repos/github/stockpile-co/api/badge.svg?branch=master)](https://coveralls.io/github/stockpile-co/api?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/365ffb8a702c42eb8634bdcd19173d5f)](https://www.codacy.com/app/adamvig/api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stockpile-co/api&amp;utm_campaign=Badge_Grade)
 
-# stockpile-api
-The API for Stockpile, an app that manages stuff for organizations.  
+# stockpile-co / api
+The API for [Stockpile](https://stockpileapp.co), an app that manages stuff for organizations.  
 
-[Read the docs.](https://stockpile.adamvig.com/docs)
+[Read the docs.](https://stockpileapp.co/docs)
 
 See [stockpile-app](https://github.com/emmanuelroussel/stockpile-app) for the web and mobile application that consumes this API.  
 
