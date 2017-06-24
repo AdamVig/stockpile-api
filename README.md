@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/stockpile-co/api.svg?branch=master)](https://travis-ci.org/stockpile-co/api)
 [![Coverage Status](https://coveralls.io/repos/github/stockpile-co/api/badge.svg?branch=master)](https://coveralls.io/github/stockpile-co/api?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/365ffb8a702c42eb8634bdcd19173d5f)](https://www.codacy.com/app/adamvig/api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stockpile-co/api&amp;utm_campaign=Badge_Grade)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 # stockpile-co / api
 The API for [Stockpile](https://stockpileapp.co), an app that manages stuff for organizations.  
