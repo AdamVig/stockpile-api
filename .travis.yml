@@ -23,6 +23,8 @@ before_install:
 after_success:
   # Send test coverage to Coveralls
   - "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
+  # Send test coverage to Codacy
+  - "./node_modules/.bin/nyc report --reporter=lcovonly && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
 deploy:
   provider: script
   script: chmod +x scripts/deploy && ./scripts/deploy
