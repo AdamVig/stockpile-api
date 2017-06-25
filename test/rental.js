@@ -13,5 +13,5 @@ test('Add user ID', t => {
   const nextBad = sinon.spy()
   rental.addUserID(fixt.reqBad, null, nextBad)
   t.true(nextBad.calledWithMatch(sinon.match.instanceOf(Error)),
-        'next called with error')
+    'next called with error')
 })

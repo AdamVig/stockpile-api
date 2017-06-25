@@ -44,7 +44,7 @@ externalRenter.mount = app => {
    * }
    */
   app.get({name: 'get all external renters', path: 'external-renter'},
-          auth.verify, externalRenter.getAll)
+    auth.verify, externalRenter.getAll)
   /**
    * @api {get} /external-renter/:externalRenterID Get external renter
    * @apiName GetExternalRenter
@@ -76,7 +76,7 @@ externalRenter.mount = app => {
    * @apiUse ExternalRenterResponse
    */
   app.put({name: 'create external renter', path: 'externalRenter'},
-          auth.verify, externalRenter.create)
+    auth.verify, externalRenter.create)
   /**
    * @api {put} /external-renter/:externalRenterID Update an external renter
    * @apiName UpdateExternalRenter

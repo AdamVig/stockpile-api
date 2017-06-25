@@ -23,8 +23,8 @@ test.before('Create organization', async t => {
 
 test('Make token', t => {
   const token = auth.makeToken(fixt.makeToken.userID,
-                               fixt.makeToken.organizationID,
-                               fixt.makeToken.roleID)
+    fixt.makeToken.organizationID,
+    fixt.makeToken.roleID)
   t.truthy(token, 'returns token')
 })
 
@@ -46,7 +46,7 @@ test('Registers a user', async t => {
   t.truthy(row, 'user was created')
   t.true(res.send.calledOnce, 'response sent')
   t.true(res.send.calledWithMatch(201, sinon.match.object),
-         'sent 201 response with object')
+    'sent 201 response with object')
   t.false(next.called, 'no error')
 })
 
@@ -96,7 +96,7 @@ test('Authenticates a user', async t => {
   await auth.authenticate(req, resRefreshTokenUpdate, next)
 
   t.true(resRefreshTokenUpdate.send.calledWithMatch(sinon.match.object),
-         'responds with an object when refresh token already exists')
+    'responds with an object when refresh token already exists')
   t.false(next.called, 'no errors when refresh token already exists')
 
   const reqNoPassword = {
@@ -106,7 +106,7 @@ test('Authenticates a user', async t => {
   await auth.authenticate(reqNoPassword, null, nextNoPassword)
   t.true(nextNoPassword.calledWithMatch(
     sinon.match.instanceOf(restify.BadRequestError)),
-         'throws error when request is missing fields')
+    'throws error when request is missing fields')
 
   const reqBadEmail = {
     body: fixt.authUserBadEmail
@@ -115,7 +115,7 @@ test('Authenticates a user', async t => {
   await auth.authenticate(reqBadEmail, null, nextBadEmail)
   t.true(nextBadEmail.calledWithMatch(
     sinon.match.instanceOf(restify.UnauthorizedError)),
-         'throws error when user does not exist')
+    'throws error when user does not exist')
 })
 
 test('Returns error when email and password do not match', async t => {
@@ -189,7 +189,7 @@ test('Refresh token with wrong fields', t => {
   auth.refresh(fixt.refreshTokenReqWrongFields, null, next)
 
   t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)),
-         'throws error when wrong fields provided')
+    'throws error when wrong fields provided')
 })
 
 test('Authenticate token', async t => {
@@ -201,12 +201,12 @@ test('Authenticate token', async t => {
   const done = sinon.spy()
   await auth.authenticateToken(fixt.payload, done)
   t.true(done.calledWith(null, fixt.tokenUser),
-         'authenticates user')
+    'authenticates user')
 
   const doneNoUser = sinon.spy()
   await auth.authenticateToken(fixt.payloadNoUser, doneNoUser)
   t.true(doneNoUser.calledWithMatch(sinon.match.instanceOf(Error)),
-         'does not authenticate missing user')
+    'does not authenticate missing user')
 })
 
 test('Check user exists', t => {
@@ -225,7 +225,7 @@ test('Check user exists', t => {
   t.true(res.send.calledWith(200), 'success response sent')
   auth.checkUserExists(req, res, next)
   t.true(next.calledWith(sinon.match.instanceOf(restify.NotFoundError)),
-         'error passed to next handler')
+    'error passed to next handler')
 })
 
 test('Check admin', t => {
@@ -236,7 +236,7 @@ test('Check admin', t => {
   const nextUnauthorized = sinon.spy()
   auth.checkAdmin(fixt.checkAdminReqUnauthorized, null, nextUnauthorized)
   t.true(nextUnauthorized.calledWithMatch(sinon.match.instanceOf(Error)),
-        'next called with error')
+    'next called with error')
 })
 
 test('Check user matches', t => {
@@ -247,7 +247,7 @@ test('Check user matches', t => {
   const nextUnauthorized = sinon.spy()
   auth.checkUserMatches(fixt.checkUserReqUnauthorized, null, nextUnauthorized)
   t.true(nextUnauthorized.calledWithMatch(sinon.match.instanceOf(Error)),
-        'next called with error')
+    'next called with error')
 })
 
 test.after.always('Clean up database', async t => {

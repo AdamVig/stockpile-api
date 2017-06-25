@@ -60,7 +60,7 @@ test('Change password', async t => {
     sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
   t.false(resWrong.send.calledOnce, 'response not sent')
   t.true(notUpdatedUser.password === fixt.user.password,
-         'password is not updated')
+    'password is not updated')
 })
 
 test('Rentals for user', t => {

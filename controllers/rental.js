@@ -101,7 +101,7 @@ rental.mount = app => {
    * @apiUse RentalResponse
    */
   app.get({name: 'get rental', path: 'rental/:rentalID'},
-          auth.verify, rental.get)
+    auth.verify, rental.get)
   /**
    * @api {put} /rental Create a rental
    * @apiName CreateRental
@@ -127,7 +127,7 @@ rental.mount = app => {
    * @apiUse RentalResponse
    */
   app.put({name: 'create rental', path: 'rental'}, auth.verify,
-          rental.addUserID, rental.create)
+    rental.addUserID, rental.create)
   /**
    * @api {put} /rental/:rentalID Update a rental
    * @apiName UpdateRental
@@ -147,7 +147,7 @@ rental.mount = app => {
    * @apiUse RentalResponse
    */
   app.put({name: 'update rental', path: 'rental/:rentalID'},
-          auth.verify, rental.update)
+    auth.verify, rental.update)
   /**
    * @api {delete} /rental/:rentalID Delete a rental
    * @apiName DeleteRental
@@ -157,5 +157,5 @@ rental.mount = app => {
    * @apiUse EndpointDelete
    */
   app.del({name: 'delete rental', path: 'rental/:rentalID'},
-          auth.verify, auth.checkAdmin, rental.delete)
+    auth.verify, auth.checkAdmin, rental.delete)
 }

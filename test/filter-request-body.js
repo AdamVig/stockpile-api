@@ -18,5 +18,5 @@ test('Filter request body', t => {
 
   const reqNoBody = {}
   t.notThrows(() => filterRequestBody()(reqNoBody, null, next), {},
-              'passes through when no request body exists')
+    'passes through when no request body exists')
 })

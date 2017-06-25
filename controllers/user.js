@@ -17,7 +17,7 @@ user.removePasswordAddRole = (req, queryBuilder) => {
   return queryBuilder
     .join('role', 'user.roleID', 'role.roleID')
     .select('userID', 'email', 'firstName', 'lastName', 'organizationID',
-            'role.name as role')
+    'role.name as role')
     .modify(paginate.paginateQuery, req, 'user')
 }
 
@@ -106,7 +106,7 @@ user.mount = app => {
    * }
    */
   app.get({name: 'get all users', path: 'user'},
-          auth.verify, auth.checkAdmin, user.getAll)
+    auth.verify, auth.checkAdmin, user.getAll)
   /**
    * @api {get} /user/:userID Get a user
    * @apiName GetUser
@@ -116,7 +116,7 @@ user.mount = app => {
    * @apiUse UserResponse
    */
   app.get({name: 'get user', path: 'user/:userID'},
-          auth.verify, auth.checkUserMatches, user.get)
+    auth.verify, auth.checkUserMatches, user.get)
   /**
    * @api {put} /user/:userID Update a user
    * @apiName UpdateUser
@@ -131,7 +131,7 @@ user.mount = app => {
    * @apiUse UserResponse
    */
   app.put({name: 'update user', path: 'user/:userID'},
-          auth.verify, auth.checkUserMatches, user.update)
+    auth.verify, auth.checkUserMatches, user.update)
   /**
    * @api {delete} /user/:userID Delete a user
    * @apiName DeleteUser
@@ -146,7 +146,7 @@ user.mount = app => {
    * @apiUse EndpointDelete
    */
   app.del({name: 'delete user', path: 'user/:userID'},
-          auth.verify, auth.checkAdmin, user.delete)
+    auth.verify, auth.checkAdmin, user.delete)
   /**
    * @api {put} /user/:userID/password Change a user's password
    * @apiName ChangeUserPassword
@@ -159,7 +159,7 @@ user.mount = app => {
    * @apiSuccess (200) {String} message Descriptive message
    */
   app.put({name: 'change user password', path: 'user/:userID/password'},
-          auth.verify, auth.checkUserMatches, user.changeUserPassword)
+    auth.verify, auth.checkUserMatches, user.changeUserPassword)
   /**
    * @api {get} /user/:userID/rentals Get all rentals made by a user
    * @apiName GetUserRentals
@@ -182,5 +182,5 @@ user.mount = app => {
    * }
    */
   app.get({name: 'get user rentals', path: 'user/:userID/rentals'}, auth.verify,
-          user.getRentals)
+    user.getRentals)
 }

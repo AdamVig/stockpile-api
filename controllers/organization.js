@@ -31,7 +31,7 @@ organization.mount = app => {
    * @apiUse OrganizationResponse
    */
   app.get({name: 'get organization', path: 'organization/:organizationID'},
-          auth.verify, organization.get)
+    auth.verify, organization.get)
   /**
    * @api {put} /organization Create an organization
    * @apiName CreateOrganization
@@ -48,7 +48,7 @@ organization.mount = app => {
    * @apiUse OrganizationResponse
    */
   app.put({name: 'create organization', path: 'organization'},
-          organization.create)
+    organization.create)
   /**
    * @api {put} /organization/:organizationID Update an organization
    * @apiName UpdateOrganization
@@ -60,7 +60,7 @@ organization.mount = app => {
    * @apiUse OrganizationResponse
    */
   app.put({name: 'update organization', path: 'organization/:organizationID'},
-          auth.verify, auth.checkAdmin, organization.update)
+    auth.verify, auth.checkAdmin, organization.update)
   /**
    * @api {delete} /organization/:organizationID Delete an organization
    * @apiName DeleteOrganization
@@ -70,5 +70,5 @@ organization.mount = app => {
    * @apiUse EndpointDelete
    */
   app.del({name: 'delete organization', path: 'organization/:organizationID'},
-          auth.verify, auth.checkAdmin, organization.delete)
+    auth.verify, auth.checkAdmin, organization.delete)
 }

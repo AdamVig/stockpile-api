@@ -27,24 +27,24 @@ test.serial('Creates a row', async t => {
 
 test.serial('Gets a row', async t => {
   const row = await db.get(fixt.testTableName, fixt.testRowPrimaryKey,
-                           fixt.testRow[fixt.testRowPrimaryKey])
+    fixt.testRow[fixt.testRowPrimaryKey])
   t.deepEqual(row, fixt.testRow)
 })
 
 test.serial('Updates a row', async t => {
   await db.update(fixt.testTableName, fixt.testRowPrimaryKey,
-                  fixt.testRow[fixt.testRowPrimaryKey], fixt.modifiedTestRow,
-                  fixt.organizationID)
+    fixt.testRow[fixt.testRowPrimaryKey], fixt.modifiedTestRow,
+    fixt.organizationID)
   const updatedRow = await knex(fixt.testTableName)
           .where(fixt.testRowPrimaryKey,
-                 fixt.modifiedTestRow[fixt.testRowPrimaryKey])
+    fixt.modifiedTestRow[fixt.testRowPrimaryKey])
           .first()
   t.deepEqual(fixt.modifiedTestRow, updatedRow)
 })
 
 test.serial('Deletes a row', async t => {
   await db.delete(fixt.testTableName, fixt.testRowPrimaryKey,
-               fixt.modifiedTestRow[fixt.testRowPrimaryKey])
+    fixt.modifiedTestRow[fixt.testRowPrimaryKey])
   const rows = await knex(fixt.testTableName)
   t.is(rows.length, 0)
 })
@@ -64,7 +64,7 @@ test.serial('Gets all rows', async t => {
 
 test('Throws error when getting nonexistent row', t => {
   t.throws(db.get(fixt.testTableName, fixt.testRowPrimaryKey,
-                  fixt.nonexistentRowName), Error)
+    fixt.nonexistentRowName), Error)
 })
 
 test('Throws error when creating duplicate row', async t => {
@@ -74,36 +74,36 @@ test('Throws error when creating duplicate row', async t => {
 
 test('Throws error when creating row with the wrong columns', async t => {
   t.throws(db.create(fixt.testTableName, fixt.testRowPrimaryKey,
-              fixt.wrongColumnsTestRow), Error)
+    fixt.wrongColumnsTestRow), Error)
 })
 
 test('Throws error when updating nonexistent row', t => {
   t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
-                     fixt.nonexistentRowName,
-                     fixt.testRow), Error)
+    fixt.nonexistentRowName,
+    fixt.testRow), Error)
 })
 
 test('Throws error when updating row with the wrong columns', t => {
   t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
-                     fixt.testRow[fixt.testRowPrimaryKey],
-                     fixt.wrongColumnsTestRow), Error)
+    fixt.testRow[fixt.testRowPrimaryKey],
+    fixt.wrongColumnsTestRow), Error)
 })
 
 test('Builds a where clause without organization ID', t => {
   const whereClause = db.buildWhere(fixt.whereClauseTable, fixt.column,
-                                    fixt.value)
+    fixt.value)
   t.deepEqual(whereClause, fixt.expectedWhereClauseNoOrg)
 })
 
 test('Builds a where clause with an organization ID', t => {
   const whereClause = db.buildWhere(fixt.whereClauseTable, fixt.column,
-                                    fixt.value, fixt.organizationID)
+    fixt.value, fixt.organizationID)
   t.deepEqual(whereClause, fixt.expectedWhereClause)
 })
 
 test('Builds a where clause with only organization ID', t => {
   const whereClause = db.buildWhere(fixt.whereClauseTable, null, null,
-                                    fixt.organizationID)
+    fixt.organizationID)
   t.deepEqual(whereClause, fixt.expectedWhereClauseOrg)
 })
 

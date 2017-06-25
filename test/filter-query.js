@@ -14,7 +14,7 @@ test('Filter query', t => {
   wrongParamNames.set(fixt.wrongNames[1], fixt.wrongNames[1])
   filterQuery(fixt.req, wrongParamNames)(queryBuilderNoEffect)
   t.false(queryBuilderNoEffect.where.called,
-          'has no effect when no params match')
+    'has no effect when no params match')
   const queryBuilder = {
     where: sinon.spy()
   }
@@ -23,5 +23,5 @@ test('Filter query', t => {
   paramNames.set(fixt.names[1], fixt.names[1])
   filterQuery(fixt.req, paramNames)(queryBuilder)
   t.true(queryBuilder.where.calledTwice,
-          'each param is added to query')
+    'each param is added to query')
 })
