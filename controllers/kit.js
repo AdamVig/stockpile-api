@@ -35,8 +35,8 @@ kit.createKitModel = (req, res, next) => {
   if (req.body.modelID) {
     req.body.kitID = req.params.kitID
     return endpoint.create('kitModel',
-                           null,
-                           {hasOrganizationID: false})(req, res, next)
+      null,
+      {hasOrganizationID: false})(req, res, next)
   } else {
     return next(new restify.BadRequestError('missing modelID in body'))
   }
@@ -158,7 +158,7 @@ kit.mount = app => {
    * }
    */
   app.get({name: 'get all kit models', path: 'kit/:kitID/model'},
-          auth.verify, kit.getAllKitModels)
+    auth.verify, kit.getAllKitModels)
    /**
    * @api {put} /kit/:kitID/model Create kit model
    * @apiName CreateKitModel
@@ -171,7 +171,7 @@ kit.mount = app => {
    * @apiUse KitModelResponse
    */
   app.put({name: 'create kit model', path: 'kit/:kitID/model'},
-          auth.verify, kit.createKitModel)
+    auth.verify, kit.createKitModel)
   /**
    * @api {put} /kit/:kitID/model/:modelID Update kit model
    * @apiName UpdateKitModel
@@ -183,7 +183,7 @@ kit.mount = app => {
    * @apiUse KitModelResponse
    */
   app.put({name: 'update kit model', path: 'kit/:kitID/model/:modelID'},
-          auth.verify, kit.updateKitModel)
+    auth.verify, kit.updateKitModel)
   /**
    * @api {delete} /kit/:kitID/model/:modelID Delete a kit model
    * @apiName DeleteKitModel
@@ -193,5 +193,5 @@ kit.mount = app => {
    * @apiUse EndpointDelete
    */
   app.del({name: 'delete kit model', path: 'kit/:kitID/model/:modelID'},
-          auth.verify, kit.deleteKitModel)
+    auth.verify, kit.deleteKitModel)
 }

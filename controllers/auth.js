@@ -106,7 +106,7 @@ auth.mount = app => {
    * @apiError 401 Token is not valid
    */
   app.head({name: 'verify', path: 'auth/verify'},
-           auth.verify, auth.checkUserExists)
+    auth.verify, auth.checkUserExists)
 }
 
 // Check user credentials and return token if valid
@@ -124,18 +124,18 @@ auth.authenticate = (req, res, next) => {
         if (valid === true) {
           const token = makeToken(user.userID, user.organizationID, user.roleID)
           const refreshToken = user.userID +
-                crypto.randomBytes(40).toString('hex')
+            crypto.randomBytes(40).toString('hex')
 
           // Save refresh token for later validation
           return db('refreshToken').where('userID', user.userID).first()
             .then(refreshTokenRow => {
               if (!refreshTokenRow) {
                 return db.create('refreshToken',
-                                 'userID',
-                                 {userID: user.userID, refreshToken})
+                  'userID',
+                  {userID: user.userID, refreshToken})
               } else {
                 return db.update('refreshToken', 'userID', user.userID,
-                                 {refreshToken})
+                  {refreshToken})
               }
             })
             .then(() => {
@@ -175,7 +175,7 @@ auth.refresh = (req, res, next) => {
           return db('user').where('userID', req.body.userID).first()
             .then(user => {
               const token = makeToken(user.userID, user.organizationID,
-                                      user.roleID)
+                user.roleID)
               return res.send({token, message: 'Token refreshed successfully'})
             })
         } else {

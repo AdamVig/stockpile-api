@@ -48,5 +48,5 @@ test('Create kit model with no model ID', async t => {
   const next = sinon.spy()
   await kit.createKitModel(req, res, next)
   t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)),
-         'throws bad request error')
+    'throws bad request error')
 })

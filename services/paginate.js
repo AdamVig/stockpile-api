@@ -56,7 +56,7 @@ module.exports.addLinks = (req, res, tableName) => {
     .then(({count}) => {
       // Generate and add links to response headers
       const links = module.exports.createLinks(req.path(), req.params.limit,
-                                               req.params.offset, count)
+        req.params.offset, count)
       res.links(links)
     })
 }

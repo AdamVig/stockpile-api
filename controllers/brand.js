@@ -92,7 +92,7 @@ brand.mount = app => {
    * @apiUse BrandResponse
    */
   app.put({name: 'update brand', path: 'brand/:brandID'},
-          auth.verify, brand.update)
+    auth.verify, brand.update)
   /**
    * @api {delete} /brand/:brandID Delete a brand
    * @apiName DeleteBrand
@@ -102,5 +102,5 @@ brand.mount = app => {
    * @apiUse EndpointDelete
    */
   app.del({name: 'delete brand', path: 'brand/:brandID'},
-          auth.verify, brand.delete)
+    auth.verify, brand.delete)
 }

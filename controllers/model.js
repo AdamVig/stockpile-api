@@ -105,7 +105,7 @@ model.mount = app => {
    * @apiUse ModelResponse
    */
   app.put({name: 'update model', path: 'model/:modelID'},
-          auth.verify, model.update)
+    auth.verify, model.update)
   /**
    * @api {delete} /model/:modelID Delete a model
    * @apiName DeleteModel
@@ -115,7 +115,7 @@ model.mount = app => {
    * @apiUse EndpointDelete
    */
   app.del({name: 'delete model', path: 'model/:modelID'},
-          auth.verify, model.delete)
+    auth.verify, model.delete)
   /**
    * @api {get} /model/:modelID/kits Get model kits
    * @apiName GetModelKits
@@ -134,5 +134,5 @@ model.mount = app => {
    * }
    */
   app.get({name: 'get model kits', path: 'model/:modelID/kits'}, auth.verify,
-          model.getKits)
+    model.getKits)
 }

@@ -58,7 +58,7 @@ item.withActiveRental = (req, queryBuilder) => {
 
 item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
 item.get = endpoint.get('item', 'barcode',
-                        {modify: item.withFieldsAndFilters, messages})
+  {modify: item.withFieldsAndFilters, messages})
 item.create = endpoint.create('item', 'barcode',
                               {resModify: item.withFieldsAndFilters})
 item.update = endpoint.update('item', 'barcode',
@@ -84,8 +84,8 @@ item.getCustomFieldValue = endpoint.get('itemCustomFieldValue', 'customFieldID',
   hasOrganizationID: false
 })
 item.updateCustomFieldValue = endpoint.update('itemCustomFieldValue',
-                                              'customFieldID',
-                                              {modify: item.forItem})
+  'customFieldID',
+  {modify: item.forItem})
 
 item.mount = app => {
   /**
@@ -220,7 +220,7 @@ item.mount = app => {
    * }
    */
   app.get({name: 'get item rentals', path: 'item/:barcode/rentals'},
-          auth.verify, item.getRentals)
+    auth.verify, item.getRentals)
     /**
    * @api {get} /item/:barcode/rental/active Get active rental of an item
    * @apiName GetItemActiveRental
@@ -243,7 +243,7 @@ item.mount = app => {
    * @apiError 404 No active rental
    */
   app.get({name: 'get item active rental', path: 'item/:barcode/rental/active'},
-          auth.verify, item.getActiveRental)
+    auth.verify, item.getActiveRental)
   /**
    * @api {get} /item/:barcode/status Get status of an item
    * @apiName GetItemStatus
@@ -266,7 +266,7 @@ item.mount = app => {
    * }
    */
   app.get({name: 'get item status', path: 'item/:barcode/status'},
-          auth.verify, item.getStatus)
+    auth.verify, item.getStatus)
   /**
    * @api {get} /item/:barcode/custom-field Get item custom field values
    * @apiName GetItemCustomFieldValues

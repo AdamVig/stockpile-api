@@ -18,7 +18,7 @@ test('Logs request', t => {
   log.onRequest(req, null, next)
   t.true(req.log.info.calledOnce, 'should output to log once')
   t.true(req.log.info.calledWithExactly({req}, sinon.match.string),
-         'should log request with description')
+    'should log request with description')
   t.true(next.calledOnce, 'should call next() once')
 })
 
@@ -27,5 +27,5 @@ test('Logs app start', t => {
   log.onAppStart(fixt.app)
   t.true(logSpy.calledOnce, 'should output to log once')
   t.true(logSpy.calledWith(sinon.match.string, fixt.app.name, fixt.app.url),
-        'should log application name and URL')
+    'should log application name and URL')
 })

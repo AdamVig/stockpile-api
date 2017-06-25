@@ -24,7 +24,7 @@ module.exports.getAll =
   (tableName, {modify, messages, hasOrganizationID = true} = {}) => {
     return (req, res, next) => {
       return db.getAll(tableName, hasOrganizationID && req.user.organizationID,
-                       module.exports.bindModify(modify, req))
+        module.exports.bindModify(modify, req))
         .then(results => {
           // If pagination parameters in request, add pagination links
           if (req.params && (req.params.limit || req.params.offset)) {
@@ -52,8 +52,8 @@ module.exports.get =
   (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
     return (req, res, next) => {
       return db.get(tableName, columnName, req.params[columnName],
-                    hasOrganizationID && req.user.organizationID,
-                    module.exports.bindModify(modify, req))
+        hasOrganizationID && req.user.organizationID,
+        module.exports.bindModify(modify, req))
         .then(row => res.send(row))
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
@@ -102,10 +102,10 @@ module.exports.update =
   (tableName, columnName, {modify, resModify, messages, hasOrganizationID = true} = {}) => {
     return (req, res, next) => {
       return db.update(tableName, columnName, req.params[columnName], req.body,
-                       hasOrganizationID && req.user.organizationID, {
-                         modify: module.exports.bindModify(modify, req),
-                         resModify: module.exports.bindModify(resModify, req)
-                       })
+        hasOrganizationID && req.user.organizationID, {
+          modify: module.exports.bindModify(modify, req),
+          resModify: module.exports.bindModify(resModify, req)
+        })
         .then(updatedRow => { return res.send(updatedRow) })
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
@@ -132,8 +132,8 @@ module.exports.delete =
   (tableName, columnName, {modify, messages, hasOrganizationID = true} = {}) => {
     return (req, res, next) => {
       return db.delete(tableName, columnName, req.params[columnName],
-                       hasOrganizationID && req.user.organizationID,
-                       module.exports.bindModify(modify, req))
+        hasOrganizationID && req.user.organizationID,
+        module.exports.bindModify(modify, req))
         .then((rowsAffected) => {
           if (rowsAffected > 0) {
             res.send({

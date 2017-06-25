@@ -29,11 +29,11 @@ test('Get all', async t => {
   await endpoint.getAll(fixt.table)(req, res, next)
   t.true(res.send.calledOnce, 'sends one response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-         'responds with an object')
+    'responds with an object')
   // Two items inserted, so should be two or more in the table
   t.true(res.send.calledWithMatch(sinon.match(response =>
                                               response.results.length >= 2)),
-         'responds with the right number of items')
+    'responds with the right number of items')
   t.false(next.called, 'no errors')
 
   const reqMissingTable = {
@@ -43,9 +43,9 @@ test('Get all', async t => {
   }
   const nextMissingTable = sinon.spy()
   await endpoint.getAll(fixt.missingTable)(reqMissingTable, null,
-                                            nextMissingTable)
+    nextMissingTable)
   t.true(nextMissingTable.calledWithMatch(sinon.match.instanceOf(Error)),
-         'returns error when getting missing row')
+    'returns error when getting missing row')
 })
 
 test('Get all with pagination', async t => {
@@ -65,11 +65,11 @@ test('Get all with pagination', async t => {
   t.true(res.links.calledOnce, 'sets link header')
   t.true(res.send.calledOnce, 'sends one response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-         'responds with an object')
+    'responds with an object')
   // Two items inserted, so should be two or more in the table
   t.true(res.send.calledWithMatch(sinon.match(response =>
                                               response.results.length >= 2)),
-         'responds with the right number of items')
+    'responds with the right number of items')
   t.false(next.called, 'no errors')
 })
 
@@ -92,7 +92,7 @@ test('Get', async t => {
   await endpoint.get(fixt.table, fixt.primaryKey)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-                                  'route responds with an object')
+    'route responds with an object')
   t.false(next.called, 'no errors')
 
   const reqMissing = {
@@ -103,7 +103,7 @@ test('Get', async t => {
   const nextMissing = sinon.spy()
   await endpoint.get(fixt.table, fixt.primaryKey)(reqMissing, null, nextMissing)
   t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
-         'returns error when getting missing row')
+    'returns error when getting missing row')
 })
 
 test('Create', async t => {
@@ -116,10 +116,10 @@ test('Create', async t => {
   }
   const next = sinon.spy()
   await endpoint.create(fixt.table, fixt.primaryKey,
-                        fixt.messagesWithCreate)(req, res, next)
+    fixt.messagesWithCreate)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-         'route responds with an object')
+    'route responds with an object')
   t.false(next.called, 'no errors')
 
   const reqMissingFields = {
@@ -129,10 +129,10 @@ test('Create', async t => {
   }
   const nextMissingFields = sinon.spy()
   await endpoint.create(fixt.table, fixt.testRowPrimaryKey)(reqMissingFields,
-                                                            null,
-                                                            nextMissingFields)
+    null,
+    nextMissingFields)
   t.true(nextMissingFields.calledWithMatch(sinon.match.instanceOf(Error)),
-         'returns error when request body is missing a required field')
+    'returns error when request body is missing a required field')
 
   const reqNoOrg = {
     body: fixt.rowToCreateNoOrg,
@@ -144,10 +144,10 @@ test('Create', async t => {
   }
   const nextNoOrg = sinon.spy()
   await endpoint.create(fixt.table, fixt.testRowPrimaryKey)(reqNoOrg, resNoOrg,
-                                                            nextNoOrg)
+    nextNoOrg)
   t.true(res.send.calledOnce, 'route sends a response when body has no org ID')
   t.true(res.send.calledWithMatch(sinon.match.object),
-         'route responds with an object when body has no org ID')
+    'route responds with an object when body has no org ID')
   t.false(next.called, 'no errors when body has no org ID')
 })
 
@@ -171,7 +171,7 @@ test('Update', async t => {
   await endpoint.update(fixt.table, fixt.primaryKey)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-         'route responds with an object')
+    'route responds with an object')
   t.false(next.called, 'no errors')
 
   const reqMissing = {
@@ -182,9 +182,9 @@ test('Update', async t => {
   }
   const nextMissing = sinon.spy()
   await endpoint.update(fixt.table, fixt.primaryKey)(reqMissing, null,
-                                                     nextMissing)
+    nextMissing)
   t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
-         'returns error when updating nonexistent row')
+    'returns error when updating nonexistent row')
 })
 
 test('Delete', async t => {
@@ -204,10 +204,10 @@ test('Delete', async t => {
   }
   const next = sinon.spy()
   await endpoint.delete(fixt.table, fixt.primaryKey,
-                        fixt.messagesWithDelete)(req, res, next)
+    fixt.messagesWithDelete)(req, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-         'route responds with an object')
+    'route responds with an object')
 
   const reqMissing = {
     log: {error: sinon.spy()},
@@ -216,9 +216,9 @@ test('Delete', async t => {
   }
   const nextMissing = sinon.spy()
   await endpoint.delete(fixt.table, fixt.primaryKey)(reqMissing, null,
-                                                     nextMissing)
+    nextMissing)
   t.true(nextMissing.calledWithMatch(sinon.match.instanceOf(Error)),
-         'returns error when deleting nonexistent row')
+    'returns error when deleting nonexistent row')
 })
 
 test('Default', async t => {
@@ -228,50 +228,50 @@ test('Default', async t => {
   await endpoint.default()(null, res, null)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
-                                  'route responds with an object')
+    'route responds with an object')
 })
 
 test('Add all methods', t => {
   const controller = {}
   endpoint.addAllMethods(controller, fixt.table, fixt.primaryKey)
   t.deepEqual(Object.keys(controller), fixt.allMethodNames,
-         'all methods are defined on controller')
+    'all methods are defined on controller')
 })
 
 test('Choose message', t => {
   // Uses default case when message type is not defined
   const actualDefaultMessage = endpoint.chooseMessage('doesNotExist',
-                                                      fixt.customMessages)
+    fixt.customMessages)
   // Uses custom message when passed object has the type defined
   const actualCustomMessage = endpoint.chooseMessage('conflict',
-                                                     fixt.customMessages)
+    fixt.customMessages)
   // Uses a default message for the type when passed object does not have it
   const actualMessageDefault = endpoint.chooseMessage('badRequest',
-                                                      fixt.customMessages)
+    fixt.customMessages)
   t.is(actualDefaultMessage, fixt.expectedDefaultMessage,
-          'default message works')
+    'default message works')
   t.is(actualCustomMessage, fixt.expectedCustomMessage, 'custom message works')
   t.is(actualMessageDefault, fixt.defaultBadRequestMessage,
-          'message default works')
+    'message default works')
 })
 
 test('Choose error', t => {
   const actualBadRequest = endpoint.chooseError(fixt.errors[0],
-                                                fixt.customMessages)
+    fixt.customMessages)
   const actualMissing = endpoint.chooseError(fixt.errors[1],
-                                             fixt.customMessages)
+    fixt.customMessages)
   const actualDuplicate = endpoint.chooseError(fixt.errors[2],
-                                               fixt.customMessages)
+    fixt.customMessages)
   const actualUndefined = endpoint.chooseError(fixt.errors[3],
-                                               fixt.customMessages)
+    fixt.customMessages)
   t.true(actualBadRequest.message === fixt.defaultBadRequestMessage,
-         'handles bad request error')
+    'handles bad request error')
   t.true(actualMissing.message === fixt.customMessages.missing,
-         'handles missing error')
+    'handles missing error')
   t.true(actualDuplicate.message === fixt.customMessages.conflict,
-         'handles duplicate error')
+    'handles duplicate error')
   t.true(actualUndefined.message === fixt.expectedDefaultMessage,
-         'handles undefined error')
+    'handles undefined error')
 })
 
 test('Handle error', t => {

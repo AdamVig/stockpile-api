@@ -57,7 +57,7 @@ category.mount = app => {
    * }
    */
   app.get({name: 'get all categories', path: 'category'},
-          auth.verify, category.getAll)
+    auth.verify, category.getAll)
   /**
    * @api {get} /category/:categoryID Get category
    * @apiName GetCategory
@@ -66,7 +66,7 @@ category.mount = app => {
    * @apiUse CategoryResponse
    */
   app.get({name: 'get category', path: 'category/:categoryID'},
-          auth.verify, category.get)
+    auth.verify, category.get)
   /**
    * @api {put} /category Create a category
    * @apiName CreateCategory
@@ -81,7 +81,7 @@ category.mount = app => {
    * @apiUse CategoryResponse
    */
   app.put({name: 'create category', path: 'category'},
-          auth.verify, category.create)
+    auth.verify, category.create)
   /**
    * @api {put} /category/:categoryID Update a category
    * @apiName UpdateCategory
@@ -92,7 +92,7 @@ category.mount = app => {
    * @apiUse CategoryResponse
    */
   app.put({name: 'update category', path: 'category/:categoryID'},
-          auth.verify, category.update)
+    auth.verify, category.update)
   /**
    * @api {delete} /category/:categoryID Delete a category
    * @apiName DeleteCategory
@@ -101,5 +101,5 @@ category.mount = app => {
    * @apiUse EndpointDelete
    */
   app.del({name: 'delete category', path: 'category/:categoryID'},
-          auth.verify, category.delete)
+    auth.verify, category.delete)
 }

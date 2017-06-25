@@ -74,29 +74,29 @@ test('Add links', async t => {
 
 test('Create links with no previous or next pages', t => {
   const links = paginate.createLinks(fixt.path, fixt.paramsNoPrevNext.limit,
-                                     fixt.paramsNoPrevNext.offset,
-                                     fixt.paramsNoPrevNext.count)
+    fixt.paramsNoPrevNext.offset,
+    fixt.paramsNoPrevNext.count)
   t.deepEqual(links, fixt.linksNoPrevNextExpected, 'creates links correctly')
 })
 
 test('Create "last" link with odd total', t => {
   const links = paginate.createLinks(fixt.path, fixt.paramsOddTotal.limit,
-                                     fixt.paramsOddTotal.offset,
-                                     fixt.paramsOddTotal.count)
+    fixt.paramsOddTotal.offset,
+    fixt.paramsOddTotal.count)
   t.is(links.last, fixt.lastLinkOddTotalExpected, 'creates links correctly')
 })
 
 test('Create links with previous but not next page', t => {
   const links = paginate.createLinks(fixt.path, fixt.paramsPrev.limit,
-                                     fixt.paramsPrev.offset,
-                                     fixt.paramsPrev.count)
+    fixt.paramsPrev.offset,
+    fixt.paramsPrev.count)
   t.deepEqual(links, fixt.linksPrevExpected, 'creates links correctly')
 })
 
 test('Create links with next but not previous page', t => {
   const links = paginate.createLinks(fixt.path, fixt.paramsNext.limit,
-                                     fixt.paramsNext.offset,
-                                     fixt.paramsNext.count)
+    fixt.paramsNext.offset,
+    fixt.paramsNext.count)
   t.deepEqual(links, fixt.linksNextExpected, 'creates links correctly')
 })
 
