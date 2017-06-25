@@ -1,11 +1,12 @@
 [![Build Status](https://travis-ci.org/stockpile-co/api.svg?branch=master)](https://travis-ci.org/stockpile-co/api)
 [![Coverage Status](https://coveralls.io/repos/github/stockpile-co/api/badge.svg?branch=master)](https://coveralls.io/github/stockpile-co/api?branch=master)
-[![Code Climate](https://codeclimate.com/github/AdamVig/stockpile-api/badges/gpa.svg)](https://codeclimate.com/github/AdamVig/stockpile-api)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/365ffb8a702c42eb8634bdcd19173d5f)](https://www.codacy.com/app/adamvig/api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stockpile-co/api&amp;utm_campaign=Badge_Grade)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-# stockpile-api
-The API for Stockpile, an app that manages stuff for organizations.  
+# stockpile-co / api
+The API for [Stockpile](https://stockpileapp.co), an app that manages stuff for organizations.  
 
-[Read the docs.](https://stockpile.adamvig.com/docs)
+[Read the docs.](https://stockpileapp.co/docs)
 
 See [stockpile-app](https://github.com/emmanuelroussel/stockpile-app) for the web and mobile application that consumes this API.  
 
@@ -19,7 +20,6 @@ Yarn presents the same API as npm for running scripts. The scripts below are def
  * `yarn run docs` generate documentation using [Docco](https://jashkenas.github.io/docco/)
 
 ## File Structure
-- `.codeclimate.yml` CodeClimate code-quality tool configuration
 - `.editorconfig` editor configuration to ensure consistent indentation and line-endings
 - `.env.example` template file for environment variables, should be copied and renamed to `.env`
 - `.jsdoc.json` JSDoc documentation configuration
