@@ -18,7 +18,9 @@ organization.mount = app => {
    * @apiExample {json} Response Format
    * {
    *   "organizationID": 0,
-   *   "name": ""
+   *   "name": "",
+   *   "email": "",
+   *   "stripeCustomerID": ""
    * }
    */
 
@@ -44,6 +46,8 @@ organization.mount = app => {
    *   a token to send for this endpoint.
    *
    * @apiParam {String} name Name of organization
+   * @apiParam {String} email Email for organization
+   * @apiParam {String} [stripeCustomerID] Unique identifier of the organization's Stripe customer
    *
    * @apiUse OrganizationResponse
    */
