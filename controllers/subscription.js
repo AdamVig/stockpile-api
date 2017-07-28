@@ -74,11 +74,11 @@ subscription.subscription = (req, res, next) => {
       if (err.type === 'StripeCardError') {
         return next(new restify.PaymentRequiredError(err.message))
       } else {
-          /**
-           * Handle any other types of unexpected errors: StripeAPIError, StripeConnectionError,
-           * StripeInvalidRequestError, and StripeAuthenticationError
-           * See https://stripe.com/docs/api#errors for full reference
-           */
+        /**
+         * Handle any other types of unexpected errors: StripeAPIError, StripeConnectionError,
+         * StripeInvalidRequestError, and StripeAuthenticationError
+         * See https://stripe.com/docs/api#errors for full reference
+         */
         return next(new restify.InternalServerError(err.message))
       }
     })
