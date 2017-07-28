@@ -1,13 +1,13 @@
+// Load environment variables, throw error if any variables are missing
+require('dotenv-safe').load({
+  allowEmptyValues: true
+})
+
 const restify = require('restify')
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
 const auth = require('./auth')
 const db = require('../services/db')
-
-// Load environment variables, throw error if any variables are missing
-require('dotenv-safe').load({
-  allowEmptyValues: true
-})
 
 const subscription = module.exports
 
