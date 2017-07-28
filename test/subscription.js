@@ -78,11 +78,10 @@ test.after.always('Clean up created data', async t => {
 
   // Delete organization and customer by email address, because IDs were not returned from failed subscription
   await knex('organization').where('email', fixt.missing.req.body.organization.email).del()
-  customers.data
+  const createdCustomers = customers.data
     .filter(customer => customer.email === fixt.missing.req.body.organization.email)
-    .map(async customer => stripe.customers.del(customer.id))
 
-  customers.data
-    .filter(customer => customer.email === fixt.declined.req.body.organization.email)
-    .map(async customer => stripe.customers.del(customer.id))
+  for (const customer of createdCustomers) {
+    await stripe.customers.del(customer.id)
+  }
 })
