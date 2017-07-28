@@ -12,7 +12,7 @@ const fixt = require('./fixtures/subscription')
 const knex = require('./fixtures/knex-instance')
 const subscription = require('../controllers/subscription')
 
-test('Subscribe Successfully', async t => {
+test('Subscribe successfully', async t => {
   const res = {
     send: sinon.spy()
   }
