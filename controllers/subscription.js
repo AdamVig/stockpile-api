@@ -40,63 +40,59 @@ subscription.subscription = (req, res, next) => {
       email: req.body.organization.email,
       source: req.body.token,
       plan: 'monthly-normal'
-    })
-      .then(customer => {
-        const organization = req.body.organization
-        if (customer) {
-          organization.stripeCustomerID = customer.id
-        }
-        return db.create('organization', 'organizationID', organization)
-      })
-      .then(organization => {
-        const user = req.body.user
-        if (organization) {
-          user.organizationID = organization.organizationID
-        }
+    }).then(customer => {
+      const organization = req.body.organization
+      if (customer) {
+        organization.stripeCustomerID = customer.id
+      }
+      return db.create('organization', 'organizationID', organization)
+    }).then(organization => {
+      const user = req.body.user
+      if (organization) {
+        user.organizationID = organization.organizationID
+      }
 
-        // Set first user in organization to 'Admin' role
-        user.roleID = 1
+      // Set first user in organization to 'Admin' role
+      user.roleID = 1
 
-        const creatingUser = auth.hashPassword(user.password)
-          .then(hash => {
-            user.password = hash
-            return db.create('user', 'userID', user)
-          })
-
-        return Promise.all([
-          organization.organizationID,
-          organization.stripeCustomerID,
-          creatingUser
-        ])
-      })
-      .then(([organizationID, stripeCustomerID, user]) => {
-        return res.send(201, {
-          message: 'Subscription created',
-          organizationID,
-          stripeCustomerID,
-          userID: user.userID
+      const creatingUser = auth.hashPassword(user.password)
+        .then(hash => {
+          user.password = hash
+          return db.create('user', 'userID', user)
         })
+
+      return Promise.all([
+        organization.organizationID,
+        organization.stripeCustomerID,
+        creatingUser
+      ])
+    }).then(([organizationID, stripeCustomerID, user]) => {
+      return res.send(201, {
+        message: 'Subscription created',
+        organizationID,
+        stripeCustomerID,
+        userID: user.userID
       })
-      .catch(err => {
-        // See https://stripe.com/docs/api#errors for full reference
-        switch (err.type) {
-          // Invalid parameters were supplied to Stripe's API
-          case 'StripeInvalidRequestError':
-            return next(new restify.BadRequestError(err.message))
-          // A declined card error
-          case 'StripeCardError':
-            return next(new restify.PaymentRequiredError(err.message))
-          case 'RateLimitError':
-            // Too many requests made to the API too quickly
-            return next(new restify.RequestThrottledError(err.message))
-          case 'StripeAuthenticationError':
-            // You probably used an incorrect API key
-            return next(new restify.UnauthorizedError(err.message))
-          default:
-            // Handle any other types of unexpected errors, including StripeAPIError and StripeConnectionError
-            return next(new restify.InternalServerError(err.message))
-        }
-      })
+    }).catch(err => {
+      // See https://stripe.com/docs/api#errors for full reference
+      switch (err.type) {
+        // Invalid parameters were supplied to Stripe's API
+        case 'StripeInvalidRequestError':
+          return next(new restify.BadRequestError(err.message))
+        // A declined card error
+        case 'StripeCardError':
+          return next(new restify.PaymentRequiredError(err.message))
+        case 'RateLimitError':
+          // Too many requests made to the API too quickly
+          return next(new restify.RequestThrottledError(err.message))
+        case 'StripeAuthenticationError':
+          // You probably used an incorrect API key
+          return next(new restify.UnauthorizedError(err.message))
+        default:
+          // Handle any other types of unexpected errors, including StripeAPIError and StripeConnectionError
+          return next(new restify.InternalServerError(err.message))
+      }
+    })
   } else {
     return next(new restify.BadRequestError('Missing user or organization'))
   }
