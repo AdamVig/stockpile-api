@@ -212,7 +212,7 @@ auth.register = (req, res, next) => {
         })
       })
       .then(user => { res.send(201, user) })
-      .catch(next)
+      .catch(console.error)
   } else {
     return next(new restify.BadRequestError())
   }
