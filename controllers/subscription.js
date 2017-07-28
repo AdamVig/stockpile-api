@@ -42,15 +42,11 @@ subscription.subscription = (req, res, next) => {
       plan: 'monthly-normal'
     }).then(customer => {
       const organization = req.body.organization
-      if (customer) {
-        organization.stripeCustomerID = customer.id
-      }
+      organization.stripeCustomerID = customer.id
       return db.create('organization', 'organizationID', organization)
     }).then(organization => {
       const user = req.body.user
-      if (organization) {
-        user.organizationID = organization.organizationID
-      }
+      user.organizationID = organization.organizationID
 
       // Set first user in organization to 'Admin' role
       user.roleID = 1
@@ -74,23 +70,16 @@ subscription.subscription = (req, res, next) => {
         userID: user.userID
       })
     }).catch(err => {
-      // See https://stripe.com/docs/api#errors for full reference
-      switch (err.type) {
-        // Invalid parameters were supplied to Stripe's API
-        case 'StripeInvalidRequestError':
-          return next(new restify.BadRequestError(err.message))
-        // A declined card error
-        case 'StripeCardError':
-          return next(new restify.PaymentRequiredError(err.message))
-        case 'RateLimitError':
-          // Too many requests made to the API too quickly
-          return next(new restify.RequestThrottledError(err.message))
-        case 'StripeAuthenticationError':
-          // You probably used an incorrect API key
-          return next(new restify.UnauthorizedError(err.message))
-        default:
-          // Handle any other types of unexpected errors, including StripeAPIError and StripeConnectionError
-          return next(new restify.InternalServerError(err.message))
+      // A declined card error
+      if (err.type === 'StripeCardError') {
+        return next(new restify.PaymentRequiredError(err.message))
+      } else {
+          /**
+           * Handle any other types of unexpected errors: StripeAPIError, StripeConnectionError,
+           * StripeInvalidRequestError, and StripeAuthenticationError
+           * See https://stripe.com/docs/api#errors for full reference
+           */
+        return next(new restify.InternalServerError(err.message))
       }
     })
   } else {
