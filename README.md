@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/stockpile-co/api.svg?branch=master)](https://travis-ci.org/stockpile-co/api)
 [![Coverage Status](https://coveralls.io/repos/github/stockpile-co/api/badge.svg?branch=master)](https://coveralls.io/github/stockpile-co/api?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/365ffb8a702c42eb8634bdcd19173d5f)](https://www.codacy.com/app/adamvig/api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stockpile-co/api&amp;utm_campaign=Badge_Grade)
+[![NSP Status](https://nodesecurity.io/orgs/stockpile-co/projects/599e247f-7ec0-4dfe-a7b1-6dadbed908f0/badge)](https://nodesecurity.io/orgs/stockpile-co/projects/599e247f-7ec0-4dfe-a7b1-6dadbed908f0)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 # stockpile-co / api
