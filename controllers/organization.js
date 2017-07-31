@@ -8,7 +8,6 @@ const messages = {
 const organization = module.exports
 
 organization.get = endpoint.get('organization', 'organizationID', {messages})
-organization.create = endpoint.create('organization', 'organizationID')
 organization.update = endpoint.update('organization', 'organizationID')
 organization.delete = endpoint.delete('organization', 'organizationID')
 
@@ -18,7 +17,9 @@ organization.mount = app => {
    * @apiExample {json} Response Format
    * {
    *   "organizationID": 0,
-   *   "name": ""
+   *   "name": "",
+   *   "email": "",
+   *   "stripeCustomerID": ""
    * }
    */
 
@@ -32,23 +33,6 @@ organization.mount = app => {
    */
   app.get({name: 'get organization', path: 'organization/:organizationID'},
     auth.verify, organization.get)
-  /**
-   * @api {put} /organization Create an organization
-   * @apiName CreateOrganization
-   * @apiGroup Organization
-   * @apiPermission Public
-   *
-   * @apiDescription An organization is the overall entity that most other
-   *   entities reside under. This endpoint is public because an organization
-   *   must be created before a user can be created, so the client wouldn't have
-   *   a token to send for this endpoint.
-   *
-   * @apiParam {String} name Name of organization
-   *
-   * @apiUse OrganizationResponse
-   */
-  app.put({name: 'create organization', path: 'organization'},
-    organization.create)
   /**
    * @api {put} /organization/:organizationID Update an organization
    * @apiName UpdateOrganization

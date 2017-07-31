@@ -21,7 +21,15 @@ const makeToken = module.exports.makeToken = (userID, organizationID, roleID) =>
 
 const auth = module.exports
 
-auth.saltRounds = 10
+/**
+ * Hash password
+ * @param {string} password Plaintext password
+ * @return {Promise<String>} Hashed password
+ */
+auth.hashPassword = (password) => {
+  const saltRounds = 10
+  return bcrypt.hash(password, saltRounds)
+}
 
 auth.mount = app => {
   /**
@@ -196,7 +204,7 @@ auth.register = (req, res, next) => {
   const bodyKeys = Object.keys(req.body)
   // Check request body contains all required keys
   if (required.every(key => bodyKeys.includes(key))) {
-    return bcrypt.hash(req.body.password, auth.saltRounds)
+    return auth.hashPassword(req.body.password)
       .then(hash => {
         req.body.password = hash
         return db.create('user', 'userID', req.body, {
@@ -204,7 +212,7 @@ auth.register = (req, res, next) => {
         })
       })
       .then(user => { res.send(201, user) })
-      .catch(next)
+      .catch(console.error)
   } else {
     return next(new restify.BadRequestError())
   }

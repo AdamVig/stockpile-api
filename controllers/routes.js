@@ -9,6 +9,7 @@ const main = require('./main')
 const model = require('./model')
 const organization = require('./organization')
 const rental = require('./rental')
+const subscription = require('./subscription')
 const user = require('./user')
 
 // Define endpoints on application
@@ -24,5 +25,6 @@ module.exports = app => {
   model.mount(app)
   organization.mount(app)
   rental.mount(app)
+  subscription.mount(app)
   user.mount(app)
 }

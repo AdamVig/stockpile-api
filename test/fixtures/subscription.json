@@ -1,0 +1,57 @@
+{
+  "successful": {
+    "req": {
+      "userID": "",
+      "organizationID": "",
+      "stripeCustomerID": "",
+      "body": {
+        "token": "tok_visa",
+        "organization": {
+          "name": "subscription-test-organization",
+          "email": "test-subscription-org@stockpileapp.co"
+        },
+        "user": {
+          "firstName": "Test",
+          "lastName": "User",
+          "email": "test-subscription-user@stockpileapp.co",
+          "password": "test-password"
+        }
+      }
+    }
+  },
+  "missing": {
+    "req": {
+      "userID": "",
+      "organizationID": "",
+      "stripeCustomerID": "",
+      "body": {
+        "token": "tok_visa",
+        "organization": {
+          "name": "subscription-test-organization-missing",
+          "email": "test-subscription-org-missing@stockpileapp.co"
+        },
+        "user": {}
+      }
+    }
+  },
+  "declined": {
+    "req": {
+      "userID": "",
+      "organizationID": "",
+      "stripeCustomerID": "",
+      "body": {
+        "token": "tok_chargeDeclined",
+        "organization": {
+          "name": "subscription-test-organization-declined",
+          "email": "test-subscription-org-declined@stockpileapp.co"
+        },
+        "user": {
+          "firstName": "Test",
+          "lastName": "User",
+          "email": "test-subscription-user-declined@stockpileapp.co",
+          "password": "test-password"
+        }
+      }
+    }
+  }
+}

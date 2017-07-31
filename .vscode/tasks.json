@@ -1,53 +1,23 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
-    "version": "0.1.0",
-    "command": "npm",
-    "isShellCommand": true,
-    "showOutput": "always",
-    "suppressTaskName": true,
+    "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "install",
-            "args": ["install"]
+            "type": "npm",
+            "script": "dev",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
-            "taskName": "update",
-            "args": ["update"]
-        },
-        {
-            "taskName": "test",
-            "isTestCommand": true,
-            "args": ["test"]
-        },
-        {
-            "taskName": "dev",
-            "isBuildCommand": true,
-            "args": ["run", "dev"]
-        },
-        {
-            "taskName": "start",
-            "args": ["start"]
-        },
-        {
-            "taskName": "stop",
-            "args": ["stop"]
-        },
-        {
-            "taskName": "lint",
-            "args": ["run", "lint"]
-        },
-        {
-            "taskName": "docs",
-            "args": ["run", "docs"]
-        },
-        {
-            "taskName": "apidoc",
-            "args": ["run", "apidoc"]
-        },
-        {
-            "taskName": "jsdoc",
-            "args": ["run", "jsdoc"]
+            "type": "npm",
+            "script": "test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
     ]
 }
