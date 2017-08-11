@@ -36,13 +36,26 @@ subscription.mount = app => {
 
 subscription.subscription = (req, res, next) => {
   if (req.body.organization && req.body.user) {
+    // Create Stripe customer from token
     return stripe.customers.create({
       email: req.body.organization.email,
-      source: req.body.token,
-      plan: 'monthly-normal'
+      source: req.body.token
     }).then(customer => {
+      // Subscribe customer to monthly plan
+      const creatingSubscription = stripe.subscriptions.create({
+        customer: customer.id,
+        items: [
+          {
+            plan: 'monthly'
+          }
+        ]
+      })
+
+      return Promise.all([creatingSubscription, customer])
+    }).then(([subscriptionCreated, customer]) => {
       const organization = req.body.organization
       organization.stripeCustomerID = customer.id
+      // Create organization
       return db.create('organization', 'organizationID', organization)
     }).then(organization => {
       const user = req.body.user
@@ -51,6 +64,7 @@ subscription.subscription = (req, res, next) => {
       // Set first user in organization to 'Admin' role
       user.roleID = 1
 
+      // Create user
       const creatingUser = auth.hashPassword(user.password)
         .then(hash => {
           user.password = hash
