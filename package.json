@@ -12,7 +12,7 @@
     "dev": "nodemon index.js",
     "test": "nyc ava",
     "lint": "eslint . --ignore-path .gitignore",
-    "docs": "yarn run apidoc && yarn run jsdoc",
+    "docs": "npm run apidoc && npm run jsdoc",
     "apidoc": "apidoc --input controllers/ --input services/ --output docs/apidoc",
     "jsdoc": "jsdoc --configure .jsdoc.json"
   },
