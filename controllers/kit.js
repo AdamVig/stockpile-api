@@ -36,14 +36,15 @@ kit.createKitModel = (req, res, next) => {
     req.body.kitID = req.params.kitID
     return endpoint.create('kitModel',
       null,
-      {hasOrganizationID: false})(req, res, next)
+      {hasOrganizationID: false, resModify: kit.withModelDetails})(req, res, next)
   } else {
     return next(new restify.BadRequestError('missing modelID in body'))
   }
 }
 
 kit.updateKitModel = endpoint.update(
-  'kitModel', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
+  'kitModel', 'modelID',
+  {hasOrganizationID: false, modify: kit.withKitID, resModify: kit.withModelDetails})
 
 kit.deleteKitModel = endpoint.delete(
   'kitModel', 'modelID', {hasOrganizationID: false, modify: kit.withKitID})
@@ -67,7 +68,10 @@ kit.mount = app => {
    * {
    *   "kitID": 0,
    *   "modelID": 0,
-   *   "quantity": 0
+   *   "quantity": 0,
+   *   "model": "",
+   *   "brandID": 0,
+   *   "brand": ""
    * }
    */
 

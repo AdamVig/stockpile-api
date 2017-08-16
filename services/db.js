@@ -65,6 +65,20 @@ module.exports.buildWhere = (table, column, value, organizationID) => {
 }
 
 /**
+ * Add a table name to every key in an object intended to be used for a `where` query to remove ambiguity
+ * @param {object} data A hash of keys and values
+ * @param {string} table A table name
+ * @return {object} A hash of non-ambiguous keys and their values
+ */
+module.exports.disambiguateKeys = (data, table) => {
+  let newData = {}
+  for (const key of Object.keys(data)) {
+    newData[`${table}.${key}`] = data[key]
+  }
+  return newData
+}
+
+/**
  * Create a row or rows in a table
  * @param {string} table Name of a database table
  * @param {string} [column] Indexed column in database table
@@ -92,7 +106,7 @@ module.exports.create = (table, column, data, {modify = () => {}, resModify = ()
         } else {
           // Get inserted row based on supplied data, may return wrong row
           return knex(table)
-            .where(data)
+            .where(module.exports.disambiguateKeys(data, table))
             .modify(resModify)
             .first()
         }
