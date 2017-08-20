@@ -12,11 +12,16 @@ const config = require('../package')
 
 const streams = [
   {
-    path: `${config.name}.log`,
-    level: 'trace'
+    level: 'debug',
+    path: `logs/${config.name}.log`,
+    type: 'rotating-file',
+    // Make a new file every five days
+    period: '5d',
+    // Keep the three previous log files
+    count: 3
   },
   {
-    level: 'trace',
+    level: 'debug',
     stream: bunyanFormat({outputMode: 'long'}, process.stdout)
   }
 ]
