@@ -5,10 +5,12 @@ const options = module.exports
 options.handle = (req, res, next) => {
   // Handle OPTIONS requests
   if (req.method.toLowerCase() === 'options') {
-    return res.send(204)
+    res.send(204)
+    return next()
 
   // If not OPTIONS request, rethrow error
   } else {
-    return res.send(new restify.MethodNotAllowedError())
+    res.send(new restify.MethodNotAllowedError())
+    return next()
   }
 }

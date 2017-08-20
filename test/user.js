@@ -41,7 +41,8 @@ test('Change password', async t => {
         .where('userID', fixt.user.userID)
         .first()
   t.true(res.send.calledOnce, 'response sent')
-  t.false(next.called, 'next not called')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
   t.true(updatedUser.password !== fixt.user.password, 'password is updated')
 
   // Update password in fixture

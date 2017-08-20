@@ -77,12 +77,13 @@ subscription.subscription = (req, res, next) => {
         creatingUser
       ])
     }).then(([organizationID, stripeCustomerID, user]) => {
-      return res.send(201, {
+      res.send(201, {
         message: 'Subscription created',
         organizationID,
         stripeCustomerID,
         userID: user.userID
       })
+      return next()
     }).catch(err => {
       // A declined card error
       if (err.type === 'StripeCardError') {
