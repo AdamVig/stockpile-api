@@ -15,7 +15,7 @@ require('dotenv-safe').load({
 // Create application
 const app = module.exports = restify.createServer({
   name: config.name,
-  log: log,
+  log,
   version: config.version
 })
 
@@ -25,7 +25,12 @@ app.pre(log.onRequest)
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
-app.use(restifyLinks())
+
+// Set name for links middleware
+const links = restifyLinks()
+Object.defineProperty(links, 'name', {value: 'links'})
+app.use(links)
+
 app.use(filterRequestBody())
 
 // Handle OPTIONS requests and method not allowed errors

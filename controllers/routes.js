@@ -27,4 +27,12 @@ module.exports = app => {
   rental.mount(app)
   subscription.mount(app)
   user.mount(app)
+
+  // Dynamically assign a function name to each route handler so it shows up in logs correctly
+  for (const routeName of Object.keys(app.routes)) {
+    const routeMiddleware = app.routes[routeName]
+    // Assumes that route handler is always the last in the middleware chain
+    const routeHandler = routeMiddleware[routeMiddleware.length - 1]
+    Object.defineProperty(routeHandler, 'name', {value: routeName})
+  }
 }
