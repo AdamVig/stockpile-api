@@ -57,7 +57,6 @@
       "Main"
     ],
     "template": {
-      "withCompare": false,
       "withGenerator": false
     },
     "header": {
