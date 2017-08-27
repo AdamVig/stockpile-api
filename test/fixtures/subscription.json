@@ -3,7 +3,6 @@
     "req": {
       "userID": "",
       "organizationID": "",
-      "stripeCustomerID": "",
       "body": {
         "token": "tok_visa",
         "organization": {
@@ -23,7 +22,6 @@
     "req": {
       "userID": "",
       "organizationID": "",
-      "stripeCustomerID": "",
       "body": {
         "token": "tok_visa",
         "organization": {

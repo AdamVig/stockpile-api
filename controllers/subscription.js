@@ -3,6 +3,7 @@ require('dotenv-safe').load({
   allowEmptyValues: true
 })
 
+const moment = require('moment')
 const restify = require('restify')
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
@@ -28,7 +29,6 @@ subscription.mount = app => {
    *
    * @apiSuccess (201) {String} message Descriptive message
    * @apiSuccess (201) {String} organizationID
-   * @apiSuccess (201) {String} stripeCustomerID
    * @apiSuccess (201) {String} userID
    */
   app.post({ name: 'subscription', path: 'subscription' }, subscription.subscription)
@@ -52,12 +52,30 @@ subscription.subscription = (req, res, next) => {
       })
 
       return Promise.all([creatingSubscription, customer])
-    }).then(([subscriptionCreated, customer]) => {
-      const organization = req.body.organization
-      organization.stripeCustomerID = customer.id
+    }).then(([stripeSubscription, customer]) => {
       // Create organization
-      return db.create('organization', 'organizationID', organization)
-    }).then(organization => {
+      return Promise.all([
+        stripeSubscription,
+        customer,
+        db.create('organization', 'organizationID', req.body.organization)
+      ])
+    }).then(([stripeSubscription, customer, organization]) => {
+      // Convert Stripe timestamp to MySQL datetime format, maintaining UTC timezone
+      const periodEnd = moment.unix(stripeSubscription.current_period_end).utcOffset(0).format('YYYY-MM-DD HH:mm:ss')
+      const subscription = {
+        organizationID: organization.organizationID,
+        stripeCustomer: customer.id,
+        valid: 1, // `1` means `true`
+        subscriptionStatusID: 1, // `TRIAL` status
+        statusUntil: periodEnd
+      }
+
+      // Create subscription
+      return Promise.all([
+        db.create('subscription', 'subscriptionID', subscription),
+        organization
+      ])
+    }).then(([subscription, organization]) => {
       const user = req.body.user
       user.organizationID = organization.organizationID
 
@@ -73,14 +91,12 @@ subscription.subscription = (req, res, next) => {
 
       return Promise.all([
         organization.organizationID,
-        organization.stripeCustomerID,
         creatingUser
       ])
-    }).then(([organizationID, stripeCustomerID, user]) => {
+    }).then(([organizationID, user]) => {
       return res.send(201, {
         message: 'Subscription created',
         organizationID,
-        stripeCustomerID,
         userID: user.userID
       })
     }).catch(err => {

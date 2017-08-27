@@ -23,7 +23,6 @@ test('Subscribe successfully', async t => {
     const result = res.send.args[0][1]
     fixt.successful.userID = result.userID
     fixt.successful.organizationID = result.organizationID
-    fixt.successful.stripeCustomerID = result.stripeCustomerID
   }
 
   t.true(res.send.calledOnce, 'response sent')
@@ -74,12 +73,14 @@ test.after.always('Clean up created data', async t => {
 
   await knex('user').where('userID', fixt.successful.userID).del()
   await knex('organization').where('organizationID', fixt.successful.organizationID).del()
-  await stripe.customers.del(fixt.successful.stripeCustomerID)
 
-  // Delete organization and customer by email address, because IDs were not returned from failed subscription
+  // Delete organization by email address, because IDs were not returned from failed subscription
   await knex('organization').where('email', fixt.missing.req.body.organization.email).del()
+
+  // Delete Stripe customers by email
   const createdCustomers = customers.data
-    .filter(customer => customer.email === fixt.missing.req.body.organization.email)
+    .filter(customer => (customer.email === fixt.missing.req.body.organization.email ||
+      customer.email === fixt.successful.req.body.organization.email))
 
   for (const customer of createdCustomers) {
     await stripe.customers.del(customer.id)

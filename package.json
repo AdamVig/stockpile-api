@@ -25,6 +25,7 @@
     "dotenv-safe": "^4.0.3",
     "jsonwebtoken": "^7.4.2",
     "knex": "^0.12.6",
+    "moment": "2.18.1",
     "mysql": "^2.14.1",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
