@@ -16,17 +16,25 @@ model.withKits = (req, queryBuilder) => {
     .join('kit', 'kitModel.kitID', 'kit.kitID')
 }
 
+model.withBrand = (req, queryBuilder) => {
+  return queryBuilder
+    .select('model.*')
+    .join('brand', 'model.brandID', 'brand.brandID')
+    .select('brand.name as brand')
+}
+
 endpoint.addAllMethods(model, 'model', 'modelID')
 model.getKits = endpoint.getAll('model', {modify: model.withKits})
 
 // Add pagination to query
-model.withPagination = (req, queryBuilder) => {
+model.withPaginationAndBrand = (req, queryBuilder) => {
   return queryBuilder
+    .modify(model.withBrand.bind(null, req))
     .modify(paginate.paginateQuery, req, 'model')
 }
 
-model.getAll = endpoint.getAll('model', {modify: model.withPagination})
-model.get = endpoint.get('model', 'modelID', {messages})
+model.getAll = endpoint.getAll('model', {modify: model.withPaginationAndBrand})
+model.get = endpoint.get('model', 'modelID', {messages, modify: model.withBrand})
 
 model.mount = app => {
   /**
@@ -44,7 +52,8 @@ model.mount = app => {
    *   "modelID": 0,
    *   "brandID": 0,
    *   "organizationID": 0,
-   *   "name": ""
+   *   "name": "",
+   *   "brand": ""
    * }
    */
 
@@ -62,7 +71,8 @@ model.mount = app => {
    *       "modelID": 0,
    *       "brandID": 0,
    *       "organizationID": 0,
-   *       "name": ""
+   *       "name": "",
+   *       "brand": ""
    *     }
    *   ]
    * }
