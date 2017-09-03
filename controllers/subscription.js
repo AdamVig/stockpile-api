@@ -12,6 +12,15 @@ const db = require('../services/db')
 
 const subscription = module.exports
 
+// Status names and IDs from the `subscriptionStatus` table
+subscription.subscriptionStatus = {
+  TRIAL: 1,
+  TRIAL_EXPIRED: 2,
+  VALID: 3,
+  EXPIRED: 4,
+  CANCELED: 5
+}
+
 subscription.mount = app => {
   /**
    * @api {post} /subscription Create a subscription for an organization
@@ -32,6 +41,30 @@ subscription.mount = app => {
    * @apiSuccess (201) {String} userID
    */
   app.post({ name: 'subscription', path: 'subscription' }, subscription.subscription)
+
+  /**
+   * @api {post} /subscription/hook Receive subscription updates from Stripe
+   * @apiName SubscriptionHook
+   * @apiGroup Subscription
+   *
+   * @apiDescription Stripe is configured to send requests to this endpoint when events occur with customer accounts.
+   * See the [Stripe webhook documentation](https://stripe.com/docs/webhooks). **This endpoint should not be used by
+   * any service other than Stripe.**
+   *
+   * @apiParam {string} id Unique identifier for the object.
+   * @apiParam {string} object String representing the object’s type. Objects of the same type share the same value.
+   * @apiParam {string} api_version The Stripe API version used to render `data`.
+   * @apiParam {number} created Time at which the object was created. Measured in seconds since the Unix epoch.
+   * @apiParam {object} data Object containing data associated with the event.
+   * @apiParam {boolean} livemode Flag indicating whether the object exists in live mode or test mode.
+   * @apiParam {number} pending_webhooks Number of webhooks yet to be delivered successfully (return a 20x response) to
+   * the URLs you’ve specified.
+   * @apiParam {object} request Information on the API request that instigated the event.
+   * @apiParam {string} type Description of the event: e.g. `invoice.created`, `charge.refunded`, etc.
+   *
+   * @apiSuccess (200) empty Empty response body to acknowledge receipt
+   */
+  app.post({ name: 'subscription hook', path: 'subscription/hook' }, subscription.subscriptionHook)
 }
 
 subscription.subscription = (req, res, next) => {
@@ -48,7 +81,8 @@ subscription.subscription = (req, res, next) => {
           {
             plan: 'monthly'
           }
-        ]
+        ],
+        trial_period_days: 60
       })
 
       return Promise.all([creatingSubscription, customer])
@@ -60,6 +94,7 @@ subscription.subscription = (req, res, next) => {
         db.create('organization', 'organizationID', req.body.organization)
       ])
     }).then(([stripeSubscription, customer, organization]) => {
+      // TODO abstract into a separate function
       // Convert Stripe timestamp to MySQL datetime format, maintaining UTC timezone
       const periodEnd = moment.unix(stripeSubscription.current_period_end).utcOffset(0).format('YYYY-MM-DD HH:mm:ss')
       const subscription = {
@@ -94,11 +129,12 @@ subscription.subscription = (req, res, next) => {
         creatingUser
       ])
     }).then(([organizationID, user]) => {
-      return res.send(201, {
+      res.send(201, {
         message: 'Subscription created',
         organizationID,
         userID: user.userID
       })
+      return next()
     }).catch(err => {
       // A declined card error
       if (err.type === 'StripeCardError') {
@@ -115,4 +151,69 @@ subscription.subscription = (req, res, next) => {
   } else {
     return next(new restify.BadRequestError('Missing user or organization'))
   }
+}
+
+subscription.subscriptionHook = (req, res, next) => {
+  // Get customer from request if it exists
+  let customer
+  if (req.body.data.object) {
+    customer = req.body.data.object.customer
+  }
+
+  // Throw error and do not continue if customer is undefined
+  if (!customer) {
+    next(new restify.BadRequestError('could not get Stripe customer from webhook request'))
+    return
+  }
+
+  return stripe.subscriptions.list({
+    customer
+  }).then((subscriptions) => {
+    // Customer should only have one subscription, so use first one in list
+    const stripeSubscription = subscriptions.data[0]
+
+    // Change subscription to cancelled if customer has no active subscriptions
+    if (!stripeSubscription) {
+      return db.update('subscription', 'stripeCustomer', customer, {
+        valid: false,
+        subscriptionStatusID: subscription.subscriptionStatus.CANCELED,
+        statusUntil: null
+      })
+    }
+
+    // Get date when status is relevant until, default to `null`
+    let statusUntil = null
+    if (stripeSubscription.current_period_end) {
+      statusUntil = moment.unix(stripeSubscription.current_period_end).utcOffset(0).format('YYYY-MM-DD HH:mm:ss')
+    }
+
+    if (stripeSubscription.status === 'trialing') {
+      return db.update('subscription', 'stripeCustomer', customer, {
+        valid: true,
+        subscriptionStatusID: subscription.subscriptionStatus.TRIAL,
+        statusUntil
+      })
+    } else if (stripeSubscription.status === 'active') {
+      return db.update('subscription', 'stripeCustomer', customer, {
+        valid: true,
+        subscriptionStatusID: subscription.subscriptionStatus.VALID,
+        statusUntil
+      })
+    } else if (stripeSubscription.status === 'past_due' || subscription.status === 'unpaid') {
+      return db.update('subscription', 'stripeCustomer', customer, {
+        valid: false,
+        subscriptionStatusID: subscription.subscriptionStatus.EXPIRED,
+        statusUntil: null
+      })
+    } else if (stripeSubscription.status === 'canceled') {
+      return db.update('subscription', 'stripeCustomer', customer, {
+        valid: false,
+        subscriptionStatusID: subscription.subscriptionStatus.CANCELED,
+        statusUntil: null
+      })
+    }
+  }).then(() => {
+    res.send(200)
+    next()
+  }).catch(next)
 }
