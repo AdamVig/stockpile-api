@@ -68,7 +68,8 @@ test('Subscribe successfully', async t => {
   }
 
   t.true(res.send.calledOnce, 'response sent')
-  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'does not throw error')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 })
 
 test('Without user or organization', async t => {

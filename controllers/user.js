@@ -45,9 +45,10 @@ user.changeUserPassword = function changeUserPassword (req, res, next) {
                        {password: hashedPassword}, req.user.organizationID)
     })
     .then((result) => {
-      return res.send({
+      res.send({
         message: 'Password successfully changed'
       })
+      return next()
     })
     .catch(next)
 }

@@ -15,24 +15,35 @@ require('dotenv-safe').load({
 // Create application
 const app = module.exports = restify.createServer({
   name: config.name,
-  log: log,
+  log,
   version: config.version
 })
-
-// Log every incoming request
-app.pre(log.onRequest)
 
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
-app.use(restifyLinks())
+
+// Set name for links middleware
+const links = restifyLinks()
+Object.defineProperty(links, 'name', {value: 'links'})
+app.use(links)
+
 app.use(filterRequestBody())
 
 // Handle OPTIONS requests and method not allowed errors
 app.on('MethodNotAllowed', options.handle)
 
+// Log incoming requests
+app.use(log.onRequest)
+
 // Parse auth header
 app.use(auth.initialize)
+
+// Log errors
+app.on('restifyError', log.onError)
+
+// Log outgoing responses
+app.on('after', log.onResponse)
 
 // Load all routes
 require('./controllers/routes')(app)

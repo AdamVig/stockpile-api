@@ -34,7 +34,8 @@ test('Get all', async t => {
   t.true(res.send.calledWithMatch(sinon.match(response =>
                                               response.results.length >= 2)),
     'responds with the right number of items')
-  t.false(next.called, 'no errors')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 
   const reqMissingTable = {
     log: {error: sinon.spy()},
@@ -70,7 +71,8 @@ test('Get all with pagination', async t => {
   t.true(res.send.calledWithMatch(sinon.match(response =>
                                               response.results.length >= 2)),
     'responds with the right number of items')
-  t.false(next.called, 'no errors')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 })
 
 test('Get', async t => {
@@ -93,7 +95,8 @@ test('Get', async t => {
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
     'route responds with an object')
-  t.false(next.called, 'no errors')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 
   const reqMissing = {
     log: {error: sinon.spy()},
@@ -120,7 +123,8 @@ test('Create', async t => {
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
     'route responds with an object')
-  t.false(next.called, 'no errors')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 
   const reqMissingFields = {
     body: fixt.rowToCreateNoName,
@@ -148,7 +152,8 @@ test('Create', async t => {
   t.true(res.send.calledOnce, 'route sends a response when body has no org ID')
   t.true(res.send.calledWithMatch(sinon.match.object),
     'route responds with an object when body has no org ID')
-  t.false(next.called, 'no errors when body has no org ID')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors when body has no org ID')
 })
 
 test('Update', async t => {
@@ -172,7 +177,8 @@ test('Update', async t => {
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
     'route responds with an object')
-  t.false(next.called, 'no errors')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 
   const reqMissing = {
     log: {error: sinon.spy()},
@@ -225,7 +231,8 @@ test('Default', async t => {
   const res = {
     send: sinon.spy()
   }
-  await endpoint.default()(null, res, null)
+  const next = sinon.spy()
+  await endpoint.default()(null, res, next)
   t.true(res.send.calledOnce, 'route sends a response')
   t.true(res.send.calledWithMatch(sinon.match.object),
     'route responds with an object')

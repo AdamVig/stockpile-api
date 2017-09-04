@@ -12,11 +12,16 @@ const config = require('../package')
 
 const streams = [
   {
-    path: `${config.name}.log`,
-    level: 'trace'
+    level: 'debug',
+    path: `logs/${config.name}.log`,
+    type: 'rotating-file',
+    // Make a new file every five days
+    period: '5d',
+    // Keep the three previous log files
+    count: 3
   },
   {
-    level: 'trace',
+    level: 'debug',
     stream: bunyanFormat({outputMode: 'long'}, process.stdout)
   }
 ]
@@ -38,9 +43,41 @@ module.exports = log
  * @param {function} next Next handler
  * @return {any} Result of next handler
  */
-module.exports.onRequest = (req, res, next) => {
-  req.log.info({req}, 'start')
+module.exports.onRequest = function onRequest (req, res, next) {
+  req.log.info({req}, 'request')
+  if (req.body) {
+    req.log.debug({body: req.body}, 'request body')
+  } else if (req.params) {
+    req.log.debug({params: req.params}, 'request parameters')
+  }
   return next()
+}
+
+/**
+ * Log an error
+ * @param {object} req Request
+ * @param {object} res Response
+ * @param {object} err The error passed to `next()`
+ * @param {function} callback Next handler
+ * @return {any} Result of next handler
+ */
+module.exports.onError = (req, res, err, callback) => {
+  req.log.error(err)
+  return callback()
+}
+
+/**
+ * Log a response
+ * @param {object} req Request
+ * @param {object} res Response
+ * @param {object} route The route that serviced the request
+ * @param {object} err The error passed to `next()`, if there is one
+ */
+module.exports.onResponse = (req, res, route, err) => {
+  // Only log response if not an error
+  if (!err) {
+    req.log.info({res}, 'response')
+  }
 }
 
 /**

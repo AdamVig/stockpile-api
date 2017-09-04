@@ -107,6 +107,11 @@ test('Builds a where clause with only organization ID', t => {
   t.deepEqual(whereClause, fixt.expectedWhereClauseOrg)
 })
 
+test('Disambiguates keys', t => {
+  const result = db.disambiguateKeys(fixt.disambiguatesKeys.data, fixt.disambiguatesKeys.table)
+  t.deepEqual(result, fixt.disambiguatesKeys.expected)
+})
+
 test('Count rows', async t => {
   const table = knex.randomizeName(fixt.countRowsTable)
   await knex.schema.createTable(table, table => {

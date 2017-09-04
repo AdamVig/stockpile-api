@@ -147,12 +147,13 @@ auth.authenticate = (req, res, next) => {
               }
             })
             .then(() => {
-              return res.send({
+              res.send({
                 id: user.userID,
                 refreshToken,
                 token,
                 message: 'Authentication successful'
               })
+              return next()
             })
         } else {
           return next(new restify.UnauthorizedError(
@@ -184,7 +185,8 @@ auth.refresh = (req, res, next) => {
             .then(user => {
               const token = makeToken(user.userID, user.organizationID,
                 user.roleID)
-              return res.send({token, message: 'Token refreshed successfully'})
+              res.send({token, message: 'Token refreshed successfully'})
+              return next()
             })
         } else {
           return next(new restify.UnauthorizedError('Refresh token is invalid'))
@@ -212,6 +214,7 @@ auth.register = (req, res, next) => {
         })
       })
       .then(user => { res.send(201, user) })
+      .then(next)
       .catch(console.error)
   } else {
     return next(new restify.BadRequestError())
@@ -234,6 +237,7 @@ auth.verify = passport.authenticate('jwt', { session: false })
 auth.checkUserExists = function checkUserExists (req, res, next) {
   if (req.user) {
     res.send(200)
+    return next()
   } else {
     return next(new restify.NotFoundError())
   }

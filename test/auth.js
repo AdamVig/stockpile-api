@@ -47,7 +47,8 @@ test('Registers a user', async t => {
   t.true(res.send.calledOnce, 'response sent')
   t.true(res.send.calledWithMatch(201, sinon.match.object),
     'sent 201 response with object')
-  t.false(next.called, 'no error')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 })
 
 test('Returns error when registering user with missing data', async t => {
@@ -87,7 +88,8 @@ test('Authenticates a user', async t => {
   await auth.authenticate(req, res, next)
 
   t.true(res.send.calledWithMatch(sinon.match.object), 'responds with an object')
-  t.false(next.called, 'no errors')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 
   const resRefreshTokenUpdate = {
     send: sinon.spy()
@@ -97,7 +99,8 @@ test('Authenticates a user', async t => {
 
   t.true(resRefreshTokenUpdate.send.calledWithMatch(sinon.match.object),
     'responds with an object when refresh token already exists')
-  t.false(next.called, 'no errors when refresh token already exists')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors when refresh token already exists')
 
   const reqNoPassword = {
     body: fixt.authUserNoPassword
@@ -151,7 +154,8 @@ test('Refresh token', async t => {
   await auth.refresh(fixt.refreshTokenReq, res, next)
 
   t.true(res.send.calledOnce, 'response sent')
-  t.false(next.called, 'no errors thrown')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 
   // Clean up database
   await knex('refreshToken').where(fixt.refreshTokenRow).del()

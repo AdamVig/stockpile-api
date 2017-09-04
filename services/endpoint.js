@@ -30,8 +30,10 @@ module.exports.getAll =
           if (req.params && (req.params.limit || req.params.offset)) {
             return paginate.addLinks(req, res, tableName)
               .then(() => res.send({results}))
+              .then(next)
           } else {
-            return res.send({results})
+            res.send({results})
+            return next()
           }
         })
         .catch(err => module.exports.handleError(err, messages, next, req))
@@ -55,6 +57,7 @@ module.exports.get =
         hasOrganizationID && req.user.organizationID,
         module.exports.bindModify(modify, req))
         .then(row => res.send(row))
+        .then(next)
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
   }
@@ -83,6 +86,7 @@ module.exports.create =
         resModify: module.exports.bindModify(resModify, req)
       })
         .then(row => { return res.send(row) })
+        .then(next)
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
   }
@@ -107,6 +111,7 @@ module.exports.update =
           resModify: module.exports.bindModify(resModify, req)
         })
         .then(updatedRow => { return res.send(updatedRow) })
+        .then(next)
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
   }
@@ -143,6 +148,7 @@ module.exports.delete =
           } else {
             res.send(204)
           }
+          return next()
         })
         .catch(err => module.exports.handleError(err, messages, next, req))
     }
@@ -155,6 +161,7 @@ module.exports.delete =
 module.exports.default = () => {
   return (req, res, next) => {
     res.send({})
+    return next()
   }
 }
 

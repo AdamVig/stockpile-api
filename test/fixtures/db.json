@@ -49,5 +49,24 @@
       "name": "Count Rows Test 4"
     }
   ],
-  "expectedRowsCount": 4
+  "expectedRowsCount": 4,
+  "disambiguatesKeys": {
+    "data": {
+      "name": "test name",
+      "number": 5,
+      "array": [
+        0,
+        1
+      ]
+    },
+    "table": "testTable",
+    "expected": {
+      "testTable.name": "test name",
+      "testTable.number": 5,
+      "testTable.array": [
+        0,
+        1
+      ]
+    }
+  }
 }
