@@ -9,6 +9,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
 const auth = require('./auth')
 const db = require('../services/db')
+const endpoint = require('../services/endpoint')
 
 const subscription = module.exports
 
@@ -19,6 +20,13 @@ subscription.subscriptionStatus = {
   VALID: 3,
   EXPIRED: 4,
   CANCELED: 5
+}
+
+// Add name of current subscription status
+subscription.withStatus = (req, queryBuilder) => {
+  return queryBuilder
+    .join('subscriptionStatus', 'subscription.subscriptionStatusID', 'subscriptionStatus.subscriptionStatusID')
+    .select('subscription.*', 'subscriptionStatus.name as status')
 }
 
 subscription.mount = app => {
@@ -65,7 +73,29 @@ subscription.mount = app => {
    * @apiSuccess (200) empty Empty response body to acknowledge receipt
    */
   app.post({ name: 'subscription hook', path: 'subscription/hook' }, subscription.subscriptionHook)
+
+  /**
+   * @api {get} /subscription/:organizationID Get the subscription for an organization
+   * @apiName GetSubscription
+   * @apiGroup Subscription
+   * @apiPermission Admin
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "organizationID": 0,
+   *   "status": "VALID",
+   *   "statusUntil": null,
+   *   "stripeCustomer": "",
+   *   "subscriptionID": 0,
+   *   "subscriptionStatusID": 3,
+   *   "valid": 1
+   * }
+   */
+  app.get({ name: 'get subscription', path: 'subscription/:organizationID' }, auth.verify, auth.checkAdmin,
+    subscription.get)
 }
+
+subscription.get = endpoint.get('subscription', 'organizationID', {modify: subscription.withStatus})
 
 subscription.subscription = (req, res, next) => {
   if (req.body.organization && req.body.user) {
