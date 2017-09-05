@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
@@ -100,8 +101,7 @@ rental.mount = app => {
    *
    * @apiUse RentalResponse
    */
-  app.get({name: 'get rental', path: 'rental/:rentalID'},
-    auth.verify, rental.get)
+  app.get({name: 'get rental', path: 'rental/:rentalID'}, auth.verify, rental.get)
   /**
    * @api {put} /rental Create a rental
    * @apiName CreateRental
@@ -125,9 +125,9 @@ rental.mount = app => {
    * @apiParam {String{0..1000}} [notes] Notes about rental
    *
    * @apiUse RentalResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create rental', path: 'rental'}, auth.verify,
-    rental.addUserID, rental.create)
+  app.put({name: 'create rental', path: 'rental'}, auth.verify, rental.addUserID, checkSubscription, rental.create)
   /**
    * @api {put} /rental/:rentalID Update a rental
    * @apiName UpdateRental
@@ -145,9 +145,9 @@ rental.mount = app => {
    *   from token, but can be overridden)
    *
    * @apiUse RentalResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update rental', path: 'rental/:rentalID'},
-    auth.verify, rental.update)
+  app.put({name: 'update rental', path: 'rental/:rentalID'}, auth.verify, checkSubscription, rental.update)
   /**
    * @api {delete} /rental/:rentalID Delete a rental
    * @apiName DeleteRental
@@ -155,7 +155,8 @@ rental.mount = app => {
    * @apiPermission Administrator
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete rental', path: 'rental/:rentalID'},
-    auth.verify, auth.checkAdmin, rental.delete)
+  app.del({name: 'delete rental', path: 'rental/:rentalID'}, auth.verify, auth.checkAdmin, checkSubscription,
+    rental.delete)
 }

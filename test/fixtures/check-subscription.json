@@ -1,0 +1,48 @@
+{
+  "organizationsToDelete": [],
+  "trial": {
+    "req": {
+      "log": {},
+      "user": {
+        "organizationID": 0
+      }
+    }
+  },
+  "valid": {
+    "req": {
+      "log": {},
+      "user": {
+        "organizationID": 0
+      }
+    }
+  },
+  "expired": {
+    "req": {
+      "log": {},
+      "user": {
+        "organizationID": 0
+      }
+    }
+  },
+  "canceled": {
+    "req": {
+      "log": {},
+      "user": {
+        "organizationID": 0
+      }
+    }
+  },
+  "missing": {
+    "req": {
+      "log": {},
+      "user": {
+        "organizationID": 0
+      }
+    }
+  },
+  "noBody": {
+    "req": {
+      "log": {}
+    }
+  }
+}

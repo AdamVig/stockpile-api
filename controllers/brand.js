@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
@@ -79,8 +80,9 @@ brand.mount = app => {
    * @apiParam {String{0...255}} name Name of brand
    *
    * @apiUse BrandResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create brand', path: 'brand'}, auth.verify, brand.create)
+  app.put({name: 'create brand', path: 'brand'}, auth.verify, checkSubscription, brand.create)
   /**
    * @api {put} /brand/:brandID Update a brand
    * @apiName UpdateBrand
@@ -90,9 +92,9 @@ brand.mount = app => {
    * @apiParam {String{0...255}} [name] Name of brand
    *
    * @apiUse BrandResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update brand', path: 'brand/:brandID'},
-    auth.verify, brand.update)
+  app.put({name: 'update brand', path: 'brand/:brandID'}, auth.verify, checkSubscription, brand.update)
   /**
    * @api {delete} /brand/:brandID Delete a brand
    * @apiName DeleteBrand
@@ -100,7 +102,7 @@ brand.mount = app => {
    * @apiPermission User
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete brand', path: 'brand/:brandID'},
-    auth.verify, brand.delete)
+  app.del({name: 'delete brand', path: 'brand/:brandID'}, auth.verify, checkSubscription, brand.delete)
 }

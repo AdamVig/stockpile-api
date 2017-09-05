@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const restify = require('restify')
 
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const db = require('../services/db')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
@@ -106,8 +107,7 @@ user.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get all users', path: 'user'},
-    auth.verify, auth.checkAdmin, user.getAll)
+  app.get({name: 'get all users', path: 'user'}, auth.verify, auth.checkAdmin, user.getAll)
   /**
    * @api {get} /user/:userID Get a user
    * @apiName GetUser
@@ -116,8 +116,7 @@ user.mount = app => {
    *
    * @apiUse UserResponse
    */
-  app.get({name: 'get user', path: 'user/:userID'},
-    auth.verify, auth.checkUserMatches, user.get)
+  app.get({name: 'get user', path: 'user/:userID'}, auth.verify, auth.checkUserMatches, user.get)
   /**
    * @api {put} /user/:userID Update a user
    * @apiName UpdateUser
@@ -130,9 +129,10 @@ user.mount = app => {
    * @apiParam {String} [archived] Date user was archived (YYYY-MM-DD)
    *
    * @apiUse UserResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update user', path: 'user/:userID'},
-    auth.verify, auth.checkUserMatches, user.update)
+  app.put({name: 'update user', path: 'user/:userID'}, auth.verify, auth.checkUserMatches, checkSubscription,
+    user.update)
   /**
    * @api {delete} /user/:userID Delete a user
    * @apiName DeleteUser
@@ -145,9 +145,9 @@ user.mount = app => {
    *   and `password` fields of the user to `NULL`.
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete user', path: 'user/:userID'},
-    auth.verify, auth.checkAdmin, user.delete)
+  app.del({name: 'delete user', path: 'user/:userID'}, auth.verify, auth.checkAdmin, checkSubscription, user.delete)
   /**
    * @api {put} /user/:userID/password Change a user's password
    * @apiName ChangeUserPassword
@@ -159,8 +159,8 @@ user.mount = app => {
    *
    * @apiSuccess (200) {String} message Descriptive message
    */
-  app.put({name: 'change user password', path: 'user/:userID/password'},
-    auth.verify, auth.checkUserMatches, user.changeUserPassword)
+  app.put({name: 'change user password', path: 'user/:userID/password'}, auth.verify, auth.checkUserMatches,
+    user.changeUserPassword)
   /**
    * @api {get} /user/:userID/rentals Get all rentals made by a user
    * @apiName GetUserRentals
@@ -182,6 +182,5 @@ user.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get user rentals', path: 'user/:userID/rentals'}, auth.verify,
-    user.getRentals)
+  app.get({name: 'get user rentals', path: 'user/:userID/rentals'}, auth.verify, user.getRentals)
 }
