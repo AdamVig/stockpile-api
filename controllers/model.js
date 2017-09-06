@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
@@ -101,8 +102,9 @@ model.mount = app => {
    * @apiParam {Number} brandID ID of a brand
    *
    * @apiUse ModelResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create model', path: 'model'}, auth.verify, model.create)
+  app.put({name: 'create model', path: 'model'}, auth.verify, checkSubscription, model.create)
   /**
    * @api {put} /model/:modelID Update a model
    * @apiName UpdateModel
@@ -113,9 +115,9 @@ model.mount = app => {
    * @apiParam {Number} [brandID] ID of a brand
    *
    * @apiUse ModelResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update model', path: 'model/:modelID'},
-    auth.verify, model.update)
+  app.put({name: 'update model', path: 'model/:modelID'}, auth.verify, checkSubscription, model.update)
   /**
    * @api {delete} /model/:modelID Delete a model
    * @apiName DeleteModel
@@ -123,9 +125,9 @@ model.mount = app => {
    * @apiPermission User
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete model', path: 'model/:modelID'},
-    auth.verify, model.delete)
+  app.del({name: 'delete model', path: 'model/:modelID'}, auth.verify, checkSubscription, model.delete)
   /**
    * @api {get} /model/:modelID/kits Get model kits
    * @apiName GetModelKits
@@ -143,6 +145,5 @@ model.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get model kits', path: 'model/:modelID/kits'}, auth.verify,
-    model.getKits)
+  app.get({name: 'get model kits', path: 'model/:modelID/kits'}, auth.verify, model.getKits)
 }

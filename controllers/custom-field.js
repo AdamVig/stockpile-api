@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 
 const customField = module.exports
@@ -43,8 +44,7 @@ customField.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get all custom fields', path: 'custom-field'}, auth.verify,
-    customField.getAll)
+  app.get({name: 'get all custom fields', path: 'custom-field'}, auth.verify, customField.getAll)
   /**
    * @api {get} /custom-field/:customFieldID Get custom field
    * @apiName GetCustomField
@@ -53,8 +53,7 @@ customField.mount = app => {
    *
    * @apiUse CustomFieldResponse
    */
-  app.get({name: 'get custom field', path: 'custom-field/:customFieldID'},
-    auth.verify, customField.get)
+  app.get({name: 'get custom field', path: 'custom-field/:customFieldID'}, auth.verify, customField.get)
   /**
    * @api {put} /custom-field Create a custom field
    * @apiName CreateCustomField
@@ -77,8 +76,7 @@ customField.mount = app => {
    *
    * @apiUse CustomFieldResponse
    */
-  app.put({name: 'create custom field', path: 'custom-field'}, auth.verify,
-    customField.create)
+  app.put({name: 'create custom field', path: 'custom-field'}, auth.verify, checkSubscription, customField.create)
   /**
    * @api {put} /custom-field/:customFieldID Update a custom field
    * @apiName UpdateCustomField
@@ -93,8 +91,8 @@ customField.mount = app => {
    *
    * @apiUse CustomFieldResponse
    */
-  app.put({name: 'update custom field', path: 'custom-field/:customFieldID'},
-    auth.verify, customField.update)
+  app.put({name: 'update custom field', path: 'custom-field/:customFieldID'}, auth.verify, checkSubscription,
+    customField.update)
   /**
    * @api {delete} /custom-field/:customFieldID Delete a custom field
    * @apiName DeleteCustomField
@@ -106,6 +104,6 @@ customField.mount = app => {
    *
    * @apiUse EndpointDelete
    */
-  app.del({name: 'delete custom field', path: 'custom-field/:customFieldID'},
-    auth.verify, customField.delete)
+  app.del({name: 'delete custom field', path: 'custom-field/:customFieldID'}, auth.verify, checkSubscription,
+    customField.delete)
 }

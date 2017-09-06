@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 const filterQuery = require('../services/filter-query')
 const paginate = require('../services/paginate')
@@ -171,8 +172,9 @@ item.mount = app => {
    * @apiParam {String{0..1000}} [notes] Notes about item
    *
    * @apiUse ItemResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create item', path: 'item'}, auth.verify, item.create)
+  app.put({name: 'create item', path: 'item'}, auth.verify, checkSubscription, item.create)
   /**
    * @api {put} /item/:barcode Update item
    * @apiName UpdateItem
@@ -185,8 +187,9 @@ item.mount = app => {
    * @apiParam {String{0..1000}} [notes] Notes about item
    *
    * @apiUse ItemResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update item', path: 'item/:barcode'}, auth.verify, item.update)
+  app.put({name: 'update item', path: 'item/:barcode'}, auth.verify, checkSubscription, item.update)
   /**
    * @api {delete} /item/:barcode Delete item
    * @apiName DeleteItem
@@ -194,8 +197,9 @@ item.mount = app => {
    * @apiPermission User
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete item', path: 'item/:barcode'}, auth.verify, item.delete)
+  app.del({name: 'delete item', path: 'item/:barcode'}, auth.verify, checkSubscription, item.delete)
   /**
    * @api {get} /item/:barcode/rentals Get rentals of an item
    * @apiName GetItemRentals
@@ -219,8 +223,7 @@ item.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get item rentals', path: 'item/:barcode/rentals'},
-    auth.verify, item.getRentals)
+  app.get({name: 'get item rentals', path: 'item/:barcode/rentals'}, auth.verify, item.getRentals)
     /**
    * @api {get} /item/:barcode/rental/active Get active rental of an item
    * @apiName GetItemActiveRental
@@ -242,8 +245,7 @@ item.mount = app => {
    *
    * @apiError 404 No active rental
    */
-  app.get({name: 'get item active rental', path: 'item/:barcode/rental/active'},
-    auth.verify, item.getActiveRental)
+  app.get({name: 'get item active rental', path: 'item/:barcode/rental/active'}, auth.verify, item.getActiveRental)
   /**
    * @api {get} /item/:barcode/status Get status of an item
    * @apiName GetItemStatus
@@ -265,8 +267,7 @@ item.mount = app => {
    *   "organizationID": 0
    * }
    */
-  app.get({name: 'get item status', path: 'item/:barcode/status'},
-    auth.verify, item.getStatus)
+  app.get({name: 'get item status', path: 'item/:barcode/status'}, auth.verify, item.getStatus)
   /**
    * @api {get} /item/:barcode/custom-field Get item custom field values
    * @apiName GetItemCustomFieldValues
@@ -289,10 +290,8 @@ item.mount = app => {
    *   ]
    * }
    */
-  app.get({
-    name: 'get item custom field values',
-    path: 'item/:barcode/custom-field'
-  }, auth.verify, item.getCustomFieldValues)
+  app.get({name: 'get item custom field values', path: 'item/:barcode/custom-field'}, auth.verify,
+    item.getCustomFieldValues)
   /**
    * @api {get} /item/:barcode/custom-field/:customFieldID
    *   Get item custom field value
@@ -308,10 +307,8 @@ item.mount = app => {
    *   "value": ""
    * }
    */
-  app.get({
-    name: 'get item custom field value',
-    path: 'item/:barcode/custom-field/:customFieldID'
-  }, auth.verify, item.getCustomFieldValue)
+  app.get({name: 'get item custom field value', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
+    item.getCustomFieldValue)
   /**
    * @api {put} /item/:barcode/custom-field/:customFieldID
    *   Update item custom field value
@@ -323,9 +320,9 @@ item.mount = app => {
    *   "delete" a custom field value, set the value to an empty string.
    *
    * @apiParam {String{0..1000}} value A value for the custom field
+   *
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({
-    name: 'update item custom field value',
-    path: 'item/:barcode/custom-field/:customFieldID'
-  }, auth.verify, item.updateCustomFieldValue)
+  app.put({name: 'update item custom field value', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
+    checkSubscription, item.updateCustomFieldValue)
 }

@@ -6,7 +6,7 @@ const knex = require('./fixtures/knex-instance')
 const db = require('../services/db')
 
 test.before('Set up test table', async t => {
-  fixt.testTableName = knex.randomizeTableName(fixt.testTableName)
+  fixt.testTableName = knex.randomizeName(fixt.testTableName)
   await knex.schema.dropTableIfExists(fixt.testTableName)
   await knex.schema.createTable(fixt.testTableName, (table) => {
     table.string('name').primary()
@@ -113,7 +113,7 @@ test('Disambiguates keys', t => {
 })
 
 test('Count rows', async t => {
-  const table = knex.randomizeTableName(fixt.countRowsTable)
+  const table = knex.randomizeName(fixt.countRowsTable)
   await knex.schema.createTable(table, table => {
     table.string('name')
   })

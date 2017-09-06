@@ -1,9 +1,24 @@
 {
+  "organizationsToDelete": [],
+  "base": {
+    "req": {
+      "body": {
+        "token": "tok_visa",
+        "organization": {
+          "name": "subscription-test-organization",
+          "email": ""
+        },
+        "user": {
+          "firstName": "Test",
+          "lastName": "User",
+          "email": "",
+          "password": "test-password"
+        }
+      }
+    }
+  },
   "successful": {
     "req": {
-      "userID": "",
-      "organizationID": "",
-      "stripeCustomerID": "",
       "body": {
         "token": "tok_visa",
         "organization": {
@@ -21,9 +36,7 @@
   },
   "missing": {
     "req": {
-      "userID": "",
       "organizationID": "",
-      "stripeCustomerID": "",
       "body": {
         "token": "tok_visa",
         "organization": {
@@ -50,6 +63,42 @@
           "lastName": "User",
           "email": "test-subscription-user-declined@stockpileapp.co",
           "password": "test-password"
+        }
+      }
+    }
+  },
+  "hookMissingCustomerReq": {
+    "body": {
+      "data": {
+        "object": {
+          "customer": ""
+        }
+      }
+    }
+  },
+  "hookCanceledReq": {
+    "body": {
+      "data": {
+        "object": {
+          "customer": ""
+        }
+      }
+    }
+  },
+  "hookTrialingReq": {
+    "body": {
+      "data": {
+        "object": {
+          "customer": ""
+        }
+      }
+    }
+  },
+  "hookTrialToActiveReq": {
+    "body": {
+      "data": {
+        "object": {
+          "customer": ""
         }
       }
     }

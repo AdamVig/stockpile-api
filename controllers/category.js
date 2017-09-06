@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
@@ -56,8 +57,7 @@ category.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get all categories', path: 'category'},
-    auth.verify, category.getAll)
+  app.get({name: 'get all categories', path: 'category'}, auth.verify, category.getAll)
   /**
    * @api {get} /category/:categoryID Get category
    * @apiName GetCategory
@@ -65,8 +65,7 @@ category.mount = app => {
    *
    * @apiUse CategoryResponse
    */
-  app.get({name: 'get category', path: 'category/:categoryID'},
-    auth.verify, category.get)
+  app.get({name: 'get category', path: 'category/:categoryID'}, auth.verify, category.get)
   /**
    * @api {put} /category Create a category
    * @apiName CreateCategory
@@ -79,9 +78,9 @@ category.mount = app => {
    * @apiParam {String{0...255}} name Name of category
    *
    * @apiUse CategoryResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create category', path: 'category'},
-    auth.verify, category.create)
+  app.put({name: 'create category', path: 'category'}, auth.verify, checkSubscription, category.create)
   /**
    * @api {put} /category/:categoryID Update a category
    * @apiName UpdateCategory
@@ -90,16 +89,16 @@ category.mount = app => {
    * @apiParam {String{0...255}} [name] Name of category
    *
    * @apiUse CategoryResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update category', path: 'category/:categoryID'},
-    auth.verify, category.update)
+  app.put({name: 'update category', path: 'category/:categoryID'}, auth.verify, checkSubscription, category.update)
   /**
    * @api {delete} /category/:categoryID Delete a category
    * @apiName DeleteCategory
    * @apiGroup Category
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete category', path: 'category/:categoryID'},
-    auth.verify, category.delete)
+  app.del({name: 'delete category', path: 'category/:categoryID'}, auth.verify, checkSubscription, category.delete)
 }

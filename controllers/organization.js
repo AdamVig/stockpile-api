@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 
 const messages = {
@@ -31,8 +32,7 @@ organization.mount = app => {
    *
    * @apiUse OrganizationResponse
    */
-  app.get({name: 'get organization', path: 'organization/:organizationID'},
-    auth.verify, organization.get)
+  app.get({name: 'get organization', path: 'organization/:organizationID'}, auth.verify, organization.get)
   /**
    * @api {put} /organization/:organizationID Update an organization
    * @apiName UpdateOrganization
@@ -42,9 +42,10 @@ organization.mount = app => {
    * @apiParam {String} name Name of organization
    *
    * @apiUse OrganizationResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update organization', path: 'organization/:organizationID'},
-    auth.verify, auth.checkAdmin, organization.update)
+  app.put({name: 'update organization', path: 'organization/:organizationID'}, auth.verify, auth.checkAdmin,
+    checkSubscription, organization.update)
   /**
    * @api {delete} /organization/:organizationID Delete an organization
    * @apiName DeleteOrganization
@@ -52,7 +53,8 @@ organization.mount = app => {
    * @apiPermission Administrator
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete organization', path: 'organization/:organizationID'},
-    auth.verify, auth.checkAdmin, organization.delete)
+  app.del({name: 'delete organization', path: 'organization/:organizationID'}, auth.verify, auth.checkAdmin,
+    checkSubscription, organization.delete)
 }

@@ -1,6 +1,7 @@
 const restify = require('restify')
 
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 
 const kit = module.exports
@@ -119,8 +120,9 @@ kit.mount = app => {
    * @apiParam {String{0..255}} name Name of kit
    *
    * @apiUse KitResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create kit', path: 'kit'}, auth.verify, kit.create)
+  app.put({name: 'create kit', path: 'kit'}, auth.verify, checkSubscription, kit.create)
   /**
    * @api {put} /kit/:kitID Update kit
    * @apiName UpdateKit
@@ -130,8 +132,9 @@ kit.mount = app => {
    * @apiParam {String{0..255}} [name] Name of kit
    *
    * @apiUse KitResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update kit', path: 'kit/:kitID'}, auth.verify, kit.update)
+  app.put({name: 'update kit', path: 'kit/:kitID'}, auth.verify, checkSubscription, kit.update)
   /**
    * @api {delete} /kit/:kitID Delete a kit
    * @apiName DeleteKit
@@ -139,8 +142,9 @@ kit.mount = app => {
    * @apiPermission User
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete kit', path: 'kit/:kitID'}, auth.verify, kit.delete)
+  app.del({name: 'delete kit', path: 'kit/:kitID'}, auth.verify, checkSubscription, kit.delete)
   /**
    * @api {get} /kit/:kitID/model Get all kit models
    * @apiName GetAllKitModels
@@ -161,8 +165,7 @@ kit.mount = app => {
    *  ]
    * }
    */
-  app.get({name: 'get all kit models', path: 'kit/:kitID/model'},
-    auth.verify, kit.getAllKitModels)
+  app.get({name: 'get all kit models', path: 'kit/:kitID/model'}, auth.verify, kit.getAllKitModels)
    /**
    * @api {put} /kit/:kitID/model Create kit model
    * @apiName CreateKitModel
@@ -173,9 +176,9 @@ kit.mount = app => {
    * @apiParam {Number} [quantity=1] How many of the model belong in the kit
    *
    * @apiUse KitModelResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create kit model', path: 'kit/:kitID/model'},
-    auth.verify, kit.createKitModel)
+  app.put({name: 'create kit model', path: 'kit/:kitID/model'}, auth.verify, checkSubscription, kit.createKitModel)
   /**
    * @api {put} /kit/:kitID/model/:modelID Update kit model
    * @apiName UpdateKitModel
@@ -185,9 +188,10 @@ kit.mount = app => {
    * @apiParam {Number} quantity How many of the model belong in the kit
    *
    * @apiUse KitModelResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update kit model', path: 'kit/:kitID/model/:modelID'},
-    auth.verify, kit.updateKitModel)
+  app.put({name: 'update kit model', path: 'kit/:kitID/model/:modelID'}, auth.verify, checkSubscription,
+    kit.updateKitModel)
   /**
    * @api {delete} /kit/:kitID/model/:modelID Delete a kit model
    * @apiName DeleteKitModel
@@ -195,7 +199,8 @@ kit.mount = app => {
    * @apiPermission User
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete kit model', path: 'kit/:kitID/model/:modelID'},
-    auth.verify, kit.deleteKitModel)
+  app.del({name: 'delete kit model', path: 'kit/:kitID/model/:modelID'}, auth.verify, checkSubscription,
+    kit.deleteKitModel)
 }

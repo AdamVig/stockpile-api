@@ -6,7 +6,7 @@ const endpoint = require('../services/endpoint')
 const knex = require('./fixtures/knex-instance')
 
 test.before('Set up test table', async t => {
-  fixt.table = knex.randomizeTableName(fixt.table)
+  fixt.table = knex.randomizeName(fixt.table)
   await knex.schema.dropTableIfExists(fixt.table)
   await knex.schema.createTable(fixt.table, table => {
     table.string('name').primary()

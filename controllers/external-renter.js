@@ -1,4 +1,5 @@
 const auth = require('./auth')
+const checkSubscription = require('../services/check-subscription')
 const endpoint = require('../services/endpoint')
 
 const messages = {
@@ -43,8 +44,7 @@ externalRenter.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get all external renters', path: 'external-renter'},
-    auth.verify, externalRenter.getAll)
+  app.get({name: 'get all external renters', path: 'external-renter'}, auth.verify, externalRenter.getAll)
   /**
    * @api {get} /external-renter/:externalRenterID Get external renter
    * @apiName GetExternalRenter
@@ -52,9 +52,7 @@ externalRenter.mount = app => {
    *
    * @apiUse ExternalRenterResponse
    */
-  app.get(
-    {name: 'get external renter', path: 'external-renter/:externalRenterID'},
-    auth.verify, externalRenter.get)
+  app.get({name: 'get external renter', path: 'external-renter/:externalRenterID'}, auth.verify, externalRenter.get)
   /**
    * @api {put} /external-renter Create an external renter
    * @apiName CreateExternalRenter
@@ -74,9 +72,10 @@ externalRenter.mount = app => {
    * @apiSuccess (200) {Number} id ID of created row
    *
    * @apiUse ExternalRenterResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create external renter', path: 'externalRenter'},
-    auth.verify, externalRenter.create)
+  app.put({name: 'create external renter', path: 'externalRenter'}, auth.verify, checkSubscription,
+    externalRenter.create)
   /**
    * @api {put} /external-renter/:externalRenterID Update an external renter
    * @apiName UpdateExternalRenter
@@ -89,18 +88,18 @@ externalRenter.mount = app => {
    *   from token, but can be overridden)
    *
    * @apiUse ExternalRenterResponse
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.put(
-    {name: 'update external renter', path: 'external-renter/:externalRenterID'},
-    auth.verify, externalRenter.update)
+  app.put({name: 'update external renter', path: 'external-renter/:externalRenterID'}, auth.verify, checkSubscription,
+    externalRenter.update)
   /**
    * @api {delete} /external-renter/:externalRenterID Delete an external renter
    * @apiName DeleteExternalRenter
    * @apiGroup ExternalRenter
    *
    * @apiUse EndpointDelete
+   * @apiUse InvalidSubscriptionResponse
    */
-  app.del(
-    {name: 'delete external renter', path: 'external-renter/:externalRenterID'},
-    auth.verify, externalRenter.delete)
+  app.del({name: 'delete external renter', path: 'external-renter/:externalRenterID'}, auth.verify, checkSubscription,
+    externalRenter.delete)
 }

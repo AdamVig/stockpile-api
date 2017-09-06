@@ -6,7 +6,7 @@ const knex = require('./fixtures/knex-instance')
 const paginate = require('../services/paginate')
 
 test.before('Prepare database', async t => {
-  fixt.table = knex.randomizeTableName(fixt.table)
+  fixt.table = knex.randomizeName(fixt.table)
   await knex.schema.createTable(fixt.table, table => {
     table.string('name')
     table.integer('organizationID')
