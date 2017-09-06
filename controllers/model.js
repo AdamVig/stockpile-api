@@ -23,9 +23,6 @@ model.withBrand = (req, queryBuilder) => {
     .select('brand.name as brand')
 }
 
-endpoint.addAllMethods(model, 'model', 'modelID')
-model.getKits = endpoint.getAll('model', {modify: model.withKits})
-
 // Add pagination to query
 model.withPaginationAndBrand = (req, queryBuilder) => {
   return queryBuilder
@@ -33,8 +30,11 @@ model.withPaginationAndBrand = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'model')
 }
 
+endpoint.addAllMethods(model, 'model', 'modelID')
+model.getKits = endpoint.getAll('model', {modify: model.withKits})
 model.getAll = endpoint.getAll('model', {modify: model.withPaginationAndBrand})
 model.get = endpoint.get('model', 'modelID', {messages, modify: model.withBrand})
+model.create = endpoint.create('model', 'modelID', {messages, resModify: model.withBrand})
 
 model.mount = app => {
   /**
