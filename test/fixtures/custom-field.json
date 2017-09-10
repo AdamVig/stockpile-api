@@ -1,0 +1,66 @@
+{
+  "organization": {
+    "name": "test-org-custom-fields",
+    "email": "test-org-custom-fields@stockpileapp.co"
+  },
+  "customFields": [
+    {
+      "organizationID": 0,
+      "name": "Test Custom Field 1"
+    },
+    {
+      "organizationID": 0,
+      "name": "Test Custom Field 2"
+    }
+  ],
+  "categories": [
+    {
+      "name": "Test Category 1"
+    },
+    {
+      "name": "Test Category 2"
+    },
+    {
+      "name": "Test Category 3"
+    }
+  ],
+  "updateCategoriesNoBody": {
+    "req": {
+
+    }
+  },
+  "updateCategoriesMissingField": {
+    "req": {
+      "params": {
+        "customFieldID": 0
+      },
+      "body": {
+        "categories": []
+      }
+    }
+  },
+  "addMissingCategory": {
+    "req": {
+      "params": {
+        "customFieldID": 0
+      },
+      "body": {
+        "categories": [
+          {
+            "categoryID": 0
+          }
+        ]
+      }
+    }
+  },
+  "updateCategories": {
+    "req": {
+      "params": {
+        "customFieldID": 0
+      },
+      "body": {
+        "categories": []
+      }
+    }
+  }
+}

@@ -1,5 +1,8 @@
+const restify = require('restify')
+
 const auth = require('./auth')
 const checkSubscription = require('../services/check-subscription')
+const db = require('../services/db')
 const endpoint = require('../services/endpoint')
 
 const customField = module.exports
@@ -11,6 +14,67 @@ const messages = {
 
 endpoint.addAllMethods(customField, 'customField', 'customFieldID', messages)
 
+// Add category name
+customField.withCategoryName = (req, queryBuilder) => {
+  return queryBuilder
+    .join('category', 'customFieldCategory.categoryID', 'category.categoryID')
+}
+const categoryMessages = {
+  create: 'Added category to custom field',
+  createPlural: 'Added categories to custom field',
+  missing: 'Custom field has no categories'
+}
+customField.getCategories = endpoint.get('customFieldCategory', 'customFieldID', {
+  modify: customField.withCategoryName,
+  messages: categoryMessages,
+  hasOrganizationID: false
+})
+
+customField.updateCategories = (req, res, next) => {
+  if (req.body && req.body.categories) {
+    // Convert incoming categories to table schema
+    const customFieldCategories = req.body.categories.map(category => {
+      return {
+        customFieldID: req.params.customFieldID,
+        categoryID: category.categoryID
+      }
+    })
+
+    return db.transaction(trx => {
+      // Remove all existing categories for this custom field
+      return trx('customFieldCategory').where('customFieldID', req.params.customFieldID).del()
+        .then(() => {
+          // Add all new categories
+          return trx('customFieldCategory').insert(customFieldCategories)
+        }).then(() => {
+          // Get all categories for this field
+          return trx('customFieldCategory')
+            .where('customFieldID', req.params.customFieldID)
+            .modify(customField.withCategoryName.bind(null, req))
+        })
+    }).then((rows) => {
+      let message = categoryMessages.create
+      if (req.body.categories.length > 1) {
+        message = categoryMessages.createPlural
+      }
+      res.send({
+        message,
+        categories: rows
+      })
+      return next()
+    }).catch(err => {
+      // Return useful error when custom field does not exist
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        return next(new restify.BadRequestError('Custom field does not exist'))
+      } else {
+        return next(err)
+      }
+    })
+  } else {
+    return next(new restify.BadRequestError('Missing list of categories'))
+  }
+}
+
 customField.mount = app => {
   /**
    * @apiDefine CustomFieldResponse
@@ -19,8 +83,7 @@ customField.mount = app => {
    * {
    *   "customFieldID": 0,
    *   "organizationID": 0,
-   *   "name": "",
-   *   "categoryID": 0
+   *   "name": ""
    * }
    */
 
@@ -69,8 +132,6 @@ customField.mount = app => {
    *   `categoryID` value).
    *
    * @apiParam {String{0...255}} name Name of custom field, **must be unique**
-   * @apiParam {Number} [categoryID] ID of a category to associate this field
-   *   with, meaning that the field will only apply to items in this category
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *
@@ -84,8 +145,6 @@ customField.mount = app => {
    * @apiPermission User
    *
    * @apiParam {String{0...255}} [name] Name of custom field
-   * @apiParam {Number} [categoryID] ID of a category to associate this field
-   *   with, meaning that the field will only apply to items in this category
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *
@@ -106,4 +165,49 @@ customField.mount = app => {
    */
   app.del({name: 'delete custom field', path: 'custom-field/:customFieldID'}, auth.verify, checkSubscription,
     customField.delete)
+  /**
+   * @api {get} /custom-field/:customFieldID/categories Get all categories of a custom field
+   * @apiName GetCustomFieldCategories
+   * @apiGroup CustomField
+   * @apiPermission User
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   results: [
+   *     {
+   *       "categoryID": 0,
+   *       "customFieldID": 0,
+   *       "name": "",
+   *       "organizationID": 0
+   *     }
+   *   ]
+   * }
+   */
+  app.get({name: 'get custom field categories', path: 'custom-field/:customFieldID/categories'}, auth.verify,
+    customField.getCategories)
+  /**
+   * @api {put} /custom-field/:customFieldID/:customFieldID/categories Update categories of a custom field
+   * @apiName UpdateCustomFieldCategories
+   * @apiGroup CustomField
+   * @apiPermission User
+   *
+   * @apiParam {Object[]} [categories] List of category entities that this field belongs in. The field will only apply
+   *   to items in this category
+   * @apiParam {Number} categories.categoryID ID of category
+   * @apiParam {String} categories.name Name of category
+   * @apiParam {Number} categories.organizationID Organization that category belongs to
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "categories": [
+   *     "categoryID": 0,
+   *     "customFieldID": 0,
+   *     "name": "",
+   *     "organizationID": 0
+   *   ],
+   *   "message": ""
+   * }
+   */
+  app.put({name: 'update custom field categories', path: 'custom-field/:customFieldID/categories'}, auth.verify,
+    checkSubscription, customField.updateCategories)
 }
