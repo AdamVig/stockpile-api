@@ -30,6 +30,7 @@ externalRenter.mount = app => {
    * @api {get} /external-renter Get all external renters
    * @apiName GetCategories
    * @apiGroup ExternalRenter
+   * @apiVersion 2.0.0
    *
    * @apiExample {json} Response Format
    * {
@@ -49,6 +50,7 @@ externalRenter.mount = app => {
    * @api {get} /external-renter/:externalRenterID Get external renter
    * @apiName GetExternalRenter
    * @apiGroup ExternalRenter
+   * @apiVersion 2.0.0
    *
    * @apiUse ExternalRenterResponse
    */
@@ -57,6 +59,7 @@ externalRenter.mount = app => {
    * @api {put} /external-renter Create an external renter
    * @apiName CreateExternalRenter
    * @apiGroup ExternalRenter
+   * @apiVersion 2.0.0
    *
    * @apiDescription An external renter is a person or organization from outside
    *   the organization using Stockpile that rents items. These renters are
@@ -80,6 +83,7 @@ externalRenter.mount = app => {
    * @api {put} /external-renter/:externalRenterID Update an external renter
    * @apiName UpdateExternalRenter
    * @apiGroup ExternalRenter
+   * @apiVersion 2.0.0
    *
    * @apiParam {String{0..255}} [name] Name of company or individual
    * @apiParam {String{0..255}} [email] Email address
@@ -96,6 +100,7 @@ externalRenter.mount = app => {
    * @api {delete} /external-renter/:externalRenterID Delete an external renter
    * @apiName DeleteExternalRenter
    * @apiGroup ExternalRenter
+   * @apiVersion 2.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse

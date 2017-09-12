@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken')
+const restify = require('restify')
 
 const auth = require('./auth')
 const checkSubscription = require('../services/check-subscription')
+const db = require('../services/db')
 const endpoint = require('../services/endpoint')
 const paginate = require('../services/paginate')
 
@@ -30,14 +32,42 @@ rental.addUserID = function addUserID (req, res, next) {
 
 const messages = {
   conflict: 'Cannot rent item, item is already rented',
+  create: 'Rental created',
+  createPlural: 'Rentals created',
+  delete: 'Rental deleted',
   missing: 'Rental does not exist'
 }
 
 rental.getAll = endpoint.getAll('rental', {modify: rental.paginate})
 rental.get = endpoint.get('rental', 'rentalID', {messages})
-rental.create = endpoint.create('rental', 'rentalID', {messages})
 rental.update = endpoint.update('rental', 'rentalID', {messages})
-rental.delete = endpoint.delete('rental')
+rental.delete = endpoint.delete('rental', 'rentalID', {messages})
+rental.create = (req, res, next) => {
+  if (req.body && req.body.items) {
+    const rentals = req.body.items.map(item => {
+      // Copy rental properties from request body to new object without list of items
+      const rental = Object.assign({}, req.body)
+      delete rental.items
+      rental.barcode = item.barcode
+      return rental
+    })
+    return Promise.all(rentals.map(rental => db.create('rental', 'rentalID', rental)))
+      .then(results => {
+        const message = results.length > 1 ? messages.createPlural : messages.create
+        res.send({
+          message,
+          results
+        })
+        return next()
+      }).catch(next)
+  } else {
+    return next(new restify.BadRequestError('Missing list of items'))
+  }
+}
+// Legacy versions of the 'create rental' endpoint
+rental.create.versions = [
+  endpoint.create('rental', 'rentalID', {messages})
+]
 
 rental.mount = app => {
   /**
@@ -69,6 +99,7 @@ rental.mount = app => {
    * @apiName GetRentals
    * @apiGroup Rental
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiUse Pagination
    *
@@ -93,6 +124,7 @@ rental.mount = app => {
    * @apiName GetRental
    * @apiGroup Rental
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiDescription To find the `rentalID` of an item's current active rental
    *   by the item's barcode, use `GET /item/:barcode/rental/active`. To find
@@ -107,6 +139,7 @@ rental.mount = app => {
    * @apiName CreateRental
    * @apiGroup Rental
    * @apiPermission User
+   * @apiVersion 1.0.0
    *
    * @apiDescription Rentals track the availability of items. To mark a rental
    *   as returned, *do not delete the rental*, but instead set `returnDate` to
@@ -127,12 +160,43 @@ rental.mount = app => {
    * @apiUse RentalResponse
    * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create rental', path: 'rental'}, auth.verify, rental.addUserID, checkSubscription, rental.create)
+  app.put({name: 'create rental v1', path: 'rental', version: '1.0.0'}, auth.verify, rental.addUserID, checkSubscription,
+    rental.create.versions[0])
+  /**
+   * @api {put} /rental Create a rental
+   * @apiName CreateRental
+   * @apiGroup Rental
+   * @apiPermission User
+   * @apiVersion 2.0.0
+   *
+   * @apiDescription Rentals track the availability of items. To mark a rental
+   *   as returned, *do not delete the rental*, but instead set `returnDate` to
+   *   the date the item was returned. Rentals are associated with users and
+   *   optionally with external renters.
+   *
+   * @apiParam {String} startDate Date rental taken out (YYYY-MM-DD)
+   * @apiParam {String} endDate Date rental is due (YYYY-MM-DD)
+   * @apiParam {String} [returnDate] Date item is returned (YYYY-MM-DD)
+   * @apiParam {Number} [userID] ID of renting user (automatically taken from
+   *   token, but can be overridden)
+   * @apiParam {Number} [externalRenterID] ID of external renter
+   * @apiParam {Number} [organizationID] ID of organization (automatically taken
+   *   from token, but can be overridden)
+   * @apiParam {String{0..1000}} [notes] Notes about rental
+   * @apiParam {Object[]} items List of items to rent
+   * @apiParam {String} items.barcode Barcode of an item
+   *
+   * @apiUse RentalResponse
+   * @apiUse InvalidSubscriptionResponse
+   */
+  app.put({name: 'create rental', path: 'rental', version: '2.0.0'}, auth.verify, rental.addUserID, checkSubscription,
+    rental.create)
   /**
    * @api {put} /rental/:rentalID Update a rental
    * @apiName UpdateRental
    * @apiGroup Rental
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiParam {Number} [userID] ID of renting user
    * @apiParam {Barcode} [barcode] Barcode of rented item
@@ -153,6 +217,7 @@ rental.mount = app => {
    * @apiName DeleteRental
    * @apiGroup Rental
    * @apiPermission Administrator
+   * @apiVersion 2.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse

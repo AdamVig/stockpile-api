@@ -34,6 +34,7 @@ subscription.mount = app => {
    * @api {post} /subscription Create a subscription for an organization
    * @apiName Subscription
    * @apiGroup Subscription
+   * @apiVersion 2.0.0
    *
    * @apiDescription Create a new Stockpile subscription for an organization. First, using a Stripe token, creates a
    * Stripe customer with a subscription to Stockpile. Second, creates an organization using the request body and the
@@ -54,6 +55,7 @@ subscription.mount = app => {
    * @api {post} /subscription/hook Receive subscription updates from Stripe
    * @apiName SubscriptionHook
    * @apiGroup Subscription
+   * @apiVersion 2.0.0
    *
    * @apiDescription Stripe is configured to send requests to this endpoint when events occur with customer accounts.
    * See the [Stripe webhook documentation](https://stripe.com/docs/webhooks). **This endpoint should not be used by
@@ -79,6 +81,7 @@ subscription.mount = app => {
    * @apiName GetSubscription
    * @apiGroup Subscription
    * @apiPermission Admin
+   * @apiVersion 2.0.0
    *
    * @apiExample {json} Response Format
    * {

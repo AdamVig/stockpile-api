@@ -92,6 +92,7 @@ customField.mount = app => {
    * @apiName GetCustomFields
    * @apiGroup CustomField
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiUse Pagination
    *
@@ -113,6 +114,7 @@ customField.mount = app => {
    * @apiName GetCustomField
    * @apiGroup CustomField
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiUse CustomFieldResponse
    */
@@ -122,6 +124,7 @@ customField.mount = app => {
    * @apiName CreateCustomField
    * @apiGroup CustomField
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiDescription A custom field can be used to add custom data to all items
    *   (or specific categories of items) beyond the data that the application
@@ -143,6 +146,7 @@ customField.mount = app => {
    * @apiName UpdateCustomField
    * @apiGroup CustomField
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiParam {String{0...255}} [name] Name of custom field
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
@@ -157,6 +161,7 @@ customField.mount = app => {
    * @apiName DeleteCustomField
    * @apiGroup CustomField
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiDescription Deleting a custom field will also delete all values
    *   associated with this field across all items in the organization.
@@ -170,6 +175,7 @@ customField.mount = app => {
    * @apiName GetCustomFieldCategories
    * @apiGroup CustomField
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiExample {json} Response Format
    * {
@@ -190,6 +196,7 @@ customField.mount = app => {
    * @apiName UpdateCustomFieldCategories
    * @apiGroup CustomField
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiParam {Object[]} [categories] List of category entities that this field belongs in. The field will only apply
    *   to items in this category
