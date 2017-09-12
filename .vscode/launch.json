@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach",
+      "port": 9229,
+      "skipFiles": [
+        "<node_internals>/**/*.js", // Skip Node internals
+        "${workspaceRoot}/node_modules/**/*.js" // Skip module files
+      ]
+    }
+  ]
+}
