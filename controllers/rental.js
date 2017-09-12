@@ -161,7 +161,7 @@ rental.mount = app => {
    * @apiUse InvalidSubscriptionResponse
    */
   app.put({name: 'create rental v1', path: 'rental', version: '1.0.0'}, auth.verify, rental.addUserID, checkSubscription,
-  rental.create.versions[0])
+    rental.create.versions[0])
   /**
    * @api {put} /rental Create a rental
    * @apiName CreateRental
