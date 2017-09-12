@@ -11,5 +11,70 @@
     "headersBad": {
       "authorization": "Bearer "
     }
+  },
+  "organization": {
+    "organizationID": 0,
+    "name": "test-org-rental",
+    "email": "test-org-rental@stockpileapp.co"
+  },
+  "user": {
+    "userID": 0,
+    "email": "test-user-rental@stockpileapp.co",
+    "firstName": "Test",
+    "lastName": "User",
+    "password": "$2a$10$/gP.TO3xwe1f9Zh4PF1bv.7CL5mzwbrJOrlRqNCBEXQAdk6e1/vZ2",
+    "organizationID": 0
+  },
+  "category": {
+    "organizationID": 0,
+    "categoryID": 0,
+    "name": "Test Category (Rental)"
+  },
+  "brand": {
+    "organizationID": 0,
+    "brandID": 0,
+    "name": "Test Brand (Rental)"
+  },
+  "model": {
+    "organizationID": 0,
+    "modelID": 0,
+    "brandID": 0,
+    "name": "Test Model (Rental)"
+  },
+  "items": [
+    {
+      "barcode": "0000",
+      "organizationID": 0,
+      "modelID": 0,
+      "categoryID": 0
+    },
+    {
+      "barcode": "1111",
+      "organizationID": 0,
+      "modelID": 0,
+      "categoryID": 0
+    }
+  ],
+  "create": {
+    "req": {
+      "body": {
+        "organizationID": 0,
+        "userID": 0,
+        "endDate": "",
+        "startDate": "",
+        "items": []
+      }
+    }
+  },
+  "createMissingList": {
+    "req": {
+      "body": {
+        "organizationID": 0,
+        "userID": 0,
+        "endDate": "",
+        "startDate": "",
+        "barcode": ""
+      }
+    }
   }
 }

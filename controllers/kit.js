@@ -81,6 +81,7 @@ kit.mount = app => {
    * @apiName GetAllKits
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiExample {json} Response Format
    * {
@@ -99,6 +100,7 @@ kit.mount = app => {
    * @apiName GetKit
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiUse KitResponse
    */
@@ -108,6 +110,7 @@ kit.mount = app => {
    * @apiName CreateKit
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiDescription Kits are collections of models that a user would like to
    *   rent together. Kits consist of models, not items, to retain flexibility
@@ -128,6 +131,7 @@ kit.mount = app => {
    * @apiName UpdateKit
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiParam {String{0..255}} [name] Name of kit
    *
@@ -140,6 +144,7 @@ kit.mount = app => {
    * @apiName DeleteKit
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse
@@ -150,6 +155,7 @@ kit.mount = app => {
    * @apiName GetAllKitModels
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiExample {json} Response Format
    * {
@@ -171,6 +177,7 @@ kit.mount = app => {
    * @apiName CreateKitModel
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiParam {Number} modelID ID of model
    * @apiParam {Number} [quantity=1] How many of the model belong in the kit
@@ -184,6 +191,7 @@ kit.mount = app => {
    * @apiName UpdateKitModel
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiParam {Number} quantity How many of the model belong in the kit
    *
@@ -197,6 +205,7 @@ kit.mount = app => {
    * @apiName DeleteKitModel
    * @apiGroup Kit
    * @apiPermission User
+   * @apiVersion 2.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse

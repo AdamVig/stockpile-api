@@ -8,6 +8,7 @@ main.mount = app => {
    * @apiName GetMain
    * @apiGroup Main
    * @apiPermission Public
+   * @apiVersion 2.0.0
    *
    * @apiDescription This is the entry point for the API. Using HAL relations,
    * the client can navigate the whole API based on the response from this
