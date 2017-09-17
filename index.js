@@ -3,6 +3,7 @@ const restifyLinks = require('restify-links')
 
 const auth = require('./controllers/auth')
 const config = require('./package')
+const cors = require('./controllers/cors')
 const filterRequestBody = require('./services/filter-request-body')
 const options = require('./controllers/options')
 const log = require('./services/log')
@@ -38,6 +39,9 @@ app.use(log.onRequest)
 
 // Parse auth header
 app.use(auth.initialize)
+
+// Handle CORS
+app.use(cors.handle)
 
 // Log errors
 app.on('restifyError', log.onError)
