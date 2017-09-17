@@ -6,6 +6,9 @@ const prepareResponse = cors.prepareResponse = (req, res) => {
 
   // Allow all headers specified in the preflight request
   res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers') || '')
+
+  // Allow method specified in the preflight request
+  res.header('Access-Control-Allow-Methods', req.header('Access-Control-Request-Method') || '')
 }
 
 cors.handle = function cors (req, res, next) {
