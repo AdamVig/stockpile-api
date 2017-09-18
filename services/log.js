@@ -10,9 +10,15 @@ const restify = require('restify')
 
 const config = require('../package')
 
+// Determine log level from node environment setting
+let level = 'info'
+if (process.env.NODE_ENV === 'DEVELOPMENT') {
+  level = 'debug'
+}
+
 const streams = [
   {
-    level: 'debug',
+    level,
     path: `logs/${config.name}.log`,
     type: 'rotating-file',
     // Make a new file every five days
@@ -21,7 +27,7 @@ const streams = [
     count: 3
   },
   {
-    level: 'debug',
+    level,
     stream: bunyanFormat({outputMode: 'long'}, process.stdout)
   }
 ]
@@ -46,6 +52,11 @@ module.exports = log
 module.exports.onRequest = function onRequest (req, res, next) {
   req.log.info({req}, 'request')
   if (req.body) {
+    // Hide password from logs
+    if (req.body.password) {
+      req.body.password = '[redacted]'
+    }
+
     req.log.debug({body: req.body}, 'request body')
   } else if (req.params) {
     req.log.debug({params: req.params}, 'request parameters')
