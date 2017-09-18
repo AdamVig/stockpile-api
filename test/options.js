@@ -6,7 +6,9 @@ const fixt = require('./fixtures/options')
 const options = require('../controllers/options')
 
 test('Responds with 204 NO CONTENT when method is OPTIONS', t => {
+  fixt.reqOptions.header = sinon.spy()
   const res = {
+    header: sinon.spy(),
     send: sinon.spy()
   }
   const next = sinon.spy()
@@ -17,7 +19,9 @@ test('Responds with 204 NO CONTENT when method is OPTIONS', t => {
 })
 
 test('Responds with 405 METHOD NOT ALLOWED when method is not OPTIONS', t => {
+  fixt.req.header = sinon.spy()
   const res = {
+    header: sinon.spy(),
     send: sinon.spy()
   }
   const next = sinon.spy()
