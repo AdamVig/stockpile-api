@@ -171,7 +171,7 @@ customField.mount = app => {
   app.del({name: 'delete custom field', path: 'custom-field/:customFieldID'}, auth.verify, checkSubscription,
     customField.delete)
   /**
-   * @api {get} /custom-field/:customFieldID/categories Get all categories of a custom field
+   * @api {get} /custom-field/:customFieldID/category Get all categories of a custom field
    * @apiName GetCustomFieldCategories
    * @apiGroup CustomField
    * @apiPermission User
@@ -189,10 +189,10 @@ customField.mount = app => {
    *   ]
    * }
    */
-  app.get({name: 'get custom field categories', path: 'custom-field/:customFieldID/categories'}, auth.verify,
+  app.get({name: 'get custom field categories', path: 'custom-field/:customFieldID/category'}, auth.verify,
     customField.getCategories)
   /**
-   * @api {put} /custom-field/:customFieldID/:customFieldID/categories Update categories of a custom field
+   * @api {put} /custom-field/:customFieldID/category Update categories of a custom field
    * @apiName UpdateCustomFieldCategories
    * @apiGroup CustomField
    * @apiPermission User
@@ -215,6 +215,6 @@ customField.mount = app => {
    *   "message": ""
    * }
    */
-  app.put({name: 'update custom field categories', path: 'custom-field/:customFieldID/categories'}, auth.verify,
+  app.put({name: 'update custom field categories', path: 'custom-field/:customFieldID/category'}, auth.verify,
     checkSubscription, customField.updateCategories)
 }
