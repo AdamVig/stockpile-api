@@ -10,7 +10,7 @@
     "start": "pm2 start index.js --name stockpile --env production",
     "stop": "pm2 stop stockpile || true",
     "dev": "NODE_ENV=development nodemon --inspect index.js",
-    "test": "nyc ava",
+    "test": "PORT=7863 nyc ava",
     "lint": "eslint . --ignore-path .gitignore",
     "docs": "npm run apidoc && npm run jsdoc",
     "apidoc": "apidoc --input controllers/ --input services/ --output docs/apidoc",
