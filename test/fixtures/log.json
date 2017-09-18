@@ -2,5 +2,13 @@
   "app": {
     "name": "testApp",
     "url": "localhost:9999"
+  },
+  "redactsPassword": {
+    "body": {
+      "password": "test-password"
+    },
+    "expectedLoggedBody": {
+      "password": "[redacted]"
+    }
   }
 }

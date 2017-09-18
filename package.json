@@ -7,9 +7,9 @@
   "author": "Adam Vigneaux <adamvigneaux@gmail.com>",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "pm2 start index.js --name stockpile",
+    "start": "pm2 start index.js --name stockpile --env production",
     "stop": "pm2 stop stockpile || true",
-    "dev": "nodemon --inspect index.js",
+    "dev": "NODE_ENV=development nodemon --inspect index.js",
     "test": "nyc ava",
     "lint": "eslint . --ignore-path .gitignore",
     "docs": "npm run apidoc && npm run jsdoc",
