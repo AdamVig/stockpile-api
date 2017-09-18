@@ -35,7 +35,7 @@
     "stripe": "^4.24.0"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
+    "ava": "0.22.0",
     "chai": "^3.5.0",
     "codacy-coverage": "^2.0.2",
     "docco": "^0.7.0",
@@ -48,7 +48,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "jsdoc": "^3.5.4",
     "nodemon": "^1.11.0",
-    "nyc": "^10.1.2",
+    "nyc": "11.2.1",
     "sinon": "^1.17.7"
   },
   "apidoc": {

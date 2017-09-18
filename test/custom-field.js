@@ -50,19 +50,21 @@ test('Update categories with no body', async t => {
   t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
 })
 
-test('Update categories on nonexistent custom field', async t => {
+// Tests that update categories must be run serially because they create deadlock when run asynchronously
+
+test.serial('Update categories on nonexistent custom field', async t => {
   const next = sinon.spy()
   await customFieldController.updateCategories(fixt.updateCategoriesMissingField.req, null, next)
   t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
 })
 
-test('Add nonexistent category to custom field', async t => {
+test.serial('Add nonexistent category to custom field', async t => {
   const next = sinon.spy()
   await customFieldController.updateCategories(fixt.addMissingCategory.req, null, next)
   t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
 })
 
-test('Update categories on custom field', async t => {
+test.serial('Update categories on custom field', async t => {
   const res = {
     send: sinon.spy()
   }

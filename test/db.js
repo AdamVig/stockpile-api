@@ -20,9 +20,8 @@ test.serial('Creates a row', async t => {
   const rows = await knex(fixt.testTableName)
   t.is(rows.length, 1)
 
-  t.throws(() => {
-    db.create(fixt.testTableName, fixt.testRowPrimaryKey, null)
-  }, Error, 'throws error when data is missing')
+  t.throws(() => { db.create(fixt.testTableName, fixt.testRowPrimaryKey, null) }, Error,
+    'throws error when data is missing')
 })
 
 test.serial('Gets a row', async t => {
@@ -62,8 +61,8 @@ test.serial('Gets all rows', async t => {
   t.deepEqual(testRows, actualRows)
 })
 
-test('Throws error when getting nonexistent row', t => {
-  t.throws(db.get(fixt.testTableName, fixt.testRowPrimaryKey,
+test('Throws error when getting nonexistent row', async t => {
+  await t.throws(db.get(fixt.testTableName, fixt.testRowPrimaryKey,
     fixt.nonexistentRowName), Error)
 })
 
@@ -73,18 +72,18 @@ test('Throws error when creating duplicate row', async t => {
 })
 
 test('Throws error when creating row with the wrong columns', async t => {
-  t.throws(db.create(fixt.testTableName, fixt.testRowPrimaryKey,
+  await t.throws(db.create(fixt.testTableName, fixt.testRowPrimaryKey,
     fixt.wrongColumnsTestRow), Error)
 })
 
-test('Throws error when updating nonexistent row', t => {
-  t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
+test('Throws error when updating nonexistent row', async t => {
+  await t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
     fixt.nonexistentRowName,
     fixt.testRow), Error)
 })
 
-test('Throws error when updating row with the wrong columns', t => {
-  t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
+test('Throws error when updating row with the wrong columns', async t => {
+  await t.throws(db.update(fixt.testTableName, fixt.testRowPrimaryKey,
     fixt.testRow[fixt.testRowPrimaryKey],
     fixt.wrongColumnsTestRow), Error)
 })
