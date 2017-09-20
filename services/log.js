@@ -12,7 +12,7 @@ const config = require('../package')
 
 // Determine log level from node environment setting
 let level = 'info'
-if (process.env.NODE_ENV === 'DEVELOPMENT') {
+if (process.env.NODE_ENV === 'development') {
   level = 'debug'
 }
 
@@ -52,12 +52,13 @@ module.exports = log
 module.exports.onRequest = function onRequest (req, res, next) {
   req.log.info({req}, 'request')
   if (req.body) {
+    const body = Object.assign({}, req.body)
     // Hide password from logs
-    if (req.body.password) {
-      req.body.password = '[redacted]'
+    if (body.password) {
+      body.password = '[redacted]'
     }
 
-    req.log.debug({body: req.body}, 'request body')
+    req.log.debug({body}, 'request body')
   } else if (req.params) {
     req.log.debug({params: req.params}, 'request parameters')
   }
