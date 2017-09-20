@@ -12,7 +12,7 @@ const config = require('../package')
 
 // Determine log level from node environment setting
 let level = 'info'
-if (process.env.NODE_ENV === 'DEVELOPMENT') {
+if (process.env.NODE_ENV === 'development') {
   level = 'debug'
 }
 
