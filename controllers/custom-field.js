@@ -17,6 +17,8 @@ endpoint.addAllMethods(customField, 'customField', 'customFieldID', messages)
 // Add category name
 customField.withCategoryName = (req, queryBuilder) => {
   return queryBuilder
+    // Only get custom field categories for this custom field
+    .where('customFieldID', req.params.customFieldID)
     .join('category', 'customFieldCategory.categoryID', 'category.categoryID')
 }
 const categoryMessages = {
