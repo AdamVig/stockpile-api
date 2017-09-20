@@ -20,7 +20,7 @@ test('Sets default log level correctly', t => {
 test('Sets log level correctly in dev environment', t => {
   const previousNodeEnv = process.env.NODE_ENV
 
-  process.env.NODE_ENV = 'DEVELOPMENT'
+  process.env.NODE_ENV = 'development'
   // Remove cached module so it instantiates itself again
   delete require.cache[require.resolve('../services/log')]
   const logDev = require('../services/log')
@@ -77,7 +77,8 @@ test('Logs request with body', t => {
 
 test('Redacts password from request body', t => {
   const req = {
-    body: fixt.redactsPassword.body,
+    // Copy fixture body so it can be used for checking body later
+    body: Object.assign({}, fixt.redactsPassword.body),
     log: {
       debug: sinon.spy(),
       info: sinon.spy()
@@ -87,6 +88,7 @@ test('Redacts password from request body', t => {
   log.onRequest(req, null, next)
   t.true(req.log.debug.calledWith({body: fixt.redactsPassword.expectedLoggedBody}, 'request body'),
     'logs body with redacted password')
+  t.deepEqual(req.body, fixt.redactsPassword.body, 'does not modify actual request body')
   t.true(next.called, 'calls next handler')
 })
 
