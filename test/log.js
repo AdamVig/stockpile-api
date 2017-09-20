@@ -132,6 +132,22 @@ test('Logs response', t => {
   t.true(req.log.info.calledWith({res}, 'response'), 'logs response')
 })
 
+test('Logs response with user', t => {
+  const req = {
+    log: {
+      info: sinon.spy()
+    },
+    user: fixt.logsResponseWithUser.user
+  }
+  const res = {}
+  log.onResponse(req, res, null, null)
+  t.true(req.log.info.calledWith({
+    userID: fixt.logsResponseWithUser.user.userID,
+    organizationID: fixt.logsResponseWithUser.user.organizationID
+  }, 'user'), 'logs user and organization IDs')
+  t.true(req.log.info.calledWith({res}, 'response'), 'logs response')
+})
+
 test('Does not log response with error', t => {
   const req = {
     log: {

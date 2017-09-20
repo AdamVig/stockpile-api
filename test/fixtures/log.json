@@ -10,5 +10,11 @@
     "expectedLoggedBody": {
       "password": "[redacted]"
     }
+  },
+  "logsResponseWithUser": {
+    "user": {
+      "userID": 0,
+      "organizationID": 0
+    }
   }
 }
