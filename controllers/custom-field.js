@@ -24,7 +24,7 @@ const categoryMessages = {
   createPlural: 'Added categories to custom field',
   missing: 'Custom field has no categories'
 }
-customField.getCategories = endpoint.get('customFieldCategory', 'customFieldID', {
+customField.getCategories = endpoint.getAll('customFieldCategory', {
   modify: customField.withCategoryName,
   messages: categoryMessages,
   hasOrganizationID: false
