@@ -20,6 +20,9 @@ const app = module.exports = restify.createServer({
   version: config.version
 })
 
+// Assign a unique request ID to each request
+app.use(restify.requestLogger())
+
 // Parse incoming request body and query parameters
 app.use(restify.bodyParser({mapParams: false}))
 app.use(restify.queryParser())
