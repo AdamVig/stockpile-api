@@ -24,6 +24,7 @@ customField.withCategoryName = (req, queryBuilder) => {
 const categoryMessages = {
   create: 'Added category to custom field',
   createPlural: 'Added categories to custom field',
+  delete: 'Removed all categories from custom field',
   missing: 'Custom field has no categories'
 }
 customField.getCategories = endpoint.getAll('customFieldCategory', {
@@ -58,6 +59,8 @@ customField.updateCategories = (req, res, next) => {
       let message = categoryMessages.create
       if (req.body.categories.length > 1) {
         message = categoryMessages.createPlural
+      } else if (req.body.categories.length === 0) {
+        message = categoryMessages.delete
       }
       res.send({
         message,
