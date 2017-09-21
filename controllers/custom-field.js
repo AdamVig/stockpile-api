@@ -209,10 +209,12 @@ customField.mount = app => {
    * @apiExample {json} Response Format
    * {
    *   "categories": [
-   *     "categoryID": 0,
-   *     "customFieldID": 0,
-   *     "name": "",
-   *     "organizationID": 0
+   *     {
+   *       "categoryID": 0,
+   *       "customFieldID": 0,
+   *       "name": "",
+   *       "organizationID": 0
+   *     }
    *   ],
    *   "message": ""
    * }
