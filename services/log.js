@@ -86,6 +86,11 @@ module.exports.onError = (req, res, err, callback) => {
  * @param {object} err The error passed to `next()`, if there is one
  */
 module.exports.onResponse = (req, res, route, err) => {
+  // Log user and organization information if request was authenticated
+  if (req.user) {
+    req.log.info({userID: req.user.userID, organizationID: req.user.organizationID}, 'user')
+  }
+
   // Only log response if not an error
   if (!err) {
     req.log.info({res}, 'response')
