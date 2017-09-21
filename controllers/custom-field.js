@@ -17,11 +17,14 @@ endpoint.addAllMethods(customField, 'customField', 'customFieldID', messages)
 // Add category name
 customField.withCategoryName = (req, queryBuilder) => {
   return queryBuilder
+    // Only get custom field categories for this custom field
+    .where('customFieldID', req.params.customFieldID)
     .join('category', 'customFieldCategory.categoryID', 'category.categoryID')
 }
 const categoryMessages = {
   create: 'Added category to custom field',
   createPlural: 'Added categories to custom field',
+  delete: 'Removed all categories from custom field',
   missing: 'Custom field has no categories'
 }
 customField.getCategories = endpoint.getAll('customFieldCategory', {
@@ -56,6 +59,8 @@ customField.updateCategories = (req, res, next) => {
       let message = categoryMessages.create
       if (req.body.categories.length > 1) {
         message = categoryMessages.createPlural
+      } else if (req.body.categories.length === 0) {
+        message = categoryMessages.delete
       }
       res.send({
         message,
@@ -207,10 +212,12 @@ customField.mount = app => {
    * @apiExample {json} Response Format
    * {
    *   "categories": [
-   *     "categoryID": 0,
-   *     "customFieldID": 0,
-   *     "name": "",
-   *     "organizationID": 0
+   *     {
+   *       "categoryID": 0,
+   *       "customFieldID": 0,
+   *       "name": "",
+   *       "organizationID": 0
+   *     }
    *   ],
    *   "message": ""
    * }
