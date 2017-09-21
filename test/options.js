@@ -11,8 +11,8 @@ test('Responds with 204 NO CONTENT when method is OPTIONS', t => {
     header: sinon.spy(),
     send: sinon.spy()
   }
-  const next = sinon.spy()
-  options.handle(fixt.reqOptions, res, next)
+  const callback = sinon.spy()
+  options.handle(fixt.reqOptions, res, null, callback)
   t.true(res.send.called, 'response sent')
   t.true(res.send.calledWithMatch(sinon.match.same(204)),
     'responds with 204')
@@ -24,8 +24,8 @@ test('Responds with 405 METHOD NOT ALLOWED when method is not OPTIONS', t => {
     header: sinon.spy(),
     send: sinon.spy()
   }
-  const next = sinon.spy()
-  options.handle(fixt.req, res, next)
+  const callback = sinon.spy()
+  options.handle(fixt.req, res, null, callback)
   t.true(res.send.called, 'response sent')
   t.true(res.send.calledWithMatch(new restify.MethodNotAllowedError()),
     'responds with Restify 405 error')
