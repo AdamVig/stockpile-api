@@ -1,4 +1,11 @@
 {
+  "withCategoryName": {
+    "req": {
+      "params": {
+        "customFieldID": 0
+      }
+    }
+  },
   "organization": {
     "name": "test-org-custom-fields",
     "email": "test-org-custom-fields@stockpileapp.co"

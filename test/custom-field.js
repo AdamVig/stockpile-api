@@ -40,7 +40,7 @@ test('With category name', t => {
     select: sinon.stub().returnsThis(),
     where: sinon.stub().returnsThis()
   }
-  const result = customFieldController.withCategoryName(null, queryBuilder)
+  const result = customFieldController.withCategoryName(fixt.withCategoryName.req, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
 })
 
