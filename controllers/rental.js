@@ -51,7 +51,7 @@ rental.create = (req, res, next) => {
       rental.barcode = item.barcode
       return rental
     })
-    return Promise.all(rentals.map(rental => db.create('rental', 'rentalID', rental)))
+    return db.create('rental', 'rentalID', rentals)
       .then(results => {
         const message = results.length > 1 ? messages.createPlural : messages.create
         res.send({
