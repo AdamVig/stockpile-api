@@ -49,6 +49,8 @@ rental.create = (req, res, next) => {
       const rental = Object.assign({}, req.body)
       delete rental.items
       rental.barcode = item.barcode
+      rental.organizationID = req.user.organizationID
+      rental.userID = req.user.userID
       return rental
     })
     return db.create('rental', 'rentalID', rentals)
