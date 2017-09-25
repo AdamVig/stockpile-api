@@ -64,6 +64,8 @@ test('Add user ID', t => {
 })
 
 test('Create rental', async t => {
+  fixt.create.req.user.organizationID = fixt.organization.organizationID
+  fixt.create.req.user.userID = fixt.user.userID
   const res = {
     send: sinon.spy()
   }
