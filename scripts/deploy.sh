@@ -8,22 +8,18 @@ IFS=$'\n\t'
 [[ -n $TRAVIS ]] && printf "%s\n" "Must run on Travis; quitting" && exit
 
 # Declare Travis CI environment variables
-declare encrypted_f23ec77474f0_key
-declare encrypted_f23ec77474f0_iv
+declare DEPLOY_KEY
+declare REPO_URI
 
 # Disable strict host key checking for SSH
 printf "%s\n" "Host adamvig.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
-# Unencrypt deploy key
-openssl aes-256-cbc -K "$encrypted_f23ec77474f0_key" \
-        -iv "$encrypted_f23ec77474f0_iv" -in deploy_key.enc \
-        -out ~/.ssh/id_rsa -d
-
-# Set permissions on deploy key
-chmod 600 ~/.ssh/id_rsa
+# Set up SSH key for access to server
+eval "$(ssh-agent -s)" # Start the ssh agent
+ssh-add <(echo "$DEPLOY_KEY")
 
 # Add git remote for deployment
-git remote add prod ssh://git@adamvig.com/opt/stockpile-api.git
+git remote add prod $REPO_URI
 
 # Deploy
 git push prod master
