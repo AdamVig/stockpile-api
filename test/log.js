@@ -14,7 +14,16 @@ const logLevel = {
 }
 
 test('Sets default log level correctly', t => {
-  t.true(log.streams.every(stream => stream.level === logLevel.info), 'all streams have info level')
+  const previousNodeEnv = process.env.NODE_ENV
+
+  process.env.NODE_ENV = 'production'
+  // Remove cached module so it instantiates itself again
+  delete require.cache[require.resolve('../services/log')]
+  const logProd = require('../services/log')
+
+  t.true(logProd.streams.every(stream => stream.level === logLevel.info), 'all streams have info level')
+
+  process.env.NODE_ENV = previousNodeEnv
 })
 
 test('Sets log level correctly in dev environment', t => {
