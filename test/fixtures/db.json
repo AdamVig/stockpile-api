@@ -11,6 +11,38 @@
     "value": 10,
     "organizationID": 94
   },
+  "getAllSortedRows": {
+    "sortByAscending": [
+      {"column": "value", "ascending": true}
+    ],
+    "expectedAscending": [
+      {
+        "name": "test1",
+        "value": 5,
+        "organizationID": 94
+      },
+      {
+        "name": "test2",
+        "value": 10,
+        "organizationID": 94
+      }
+    ],
+    "sortByDescending": [
+      {"column": "name", "ascending": false}
+    ],
+    "expectedDescending": [
+      {
+        "name": "test2",
+        "value": 10,
+        "organizationID": 94
+      },
+      {
+        "name": "test1",
+        "value": 5,
+        "organizationID": 94
+      }
+    ]
+  },
   "nonexistentRowName": "test18",
   "duplicateRow": {
     "name": "test3",

@@ -18,14 +18,23 @@ const paginate = require('./paginate')
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @param {boolean} [hasOrganizationID=true] If the table has an
  *   `organizationID` column or not (used in building where clauses)
+ * @param {object[]} [sortBy] List of sorting criteria, ordered by priority (first is highest priority)
+ * @param {string} sortBy.column Column to sort by
+ * @param {boolean} sortBy.ascending Whether to sort in ascending or descending order
  * @return {function} Endpoint handler
  */
 module.exports.getAll =
-  (tableName, {modify, messages, hasOrganizationID = true} = {}) => {
+  (tableName, {modify, messages, hasOrganizationID = true, sortBy} = {}) => {
     return (req, res, next) => {
       return db.getAll(tableName, hasOrganizationID && req.user.organizationID,
-        module.exports.bindModify(modify, req))
+        module.exports.bindModify(modify, req), sortBy)
         .then(results => {
+          // Add a sort index to each result
+          results = results.map((result, i) => {
+            result.sortIndex = i
+            return result
+          })
+
           // If pagination parameters in request, add pagination links
           if (req.params && (req.params.limit || req.params.offset)) {
             return paginate.addLinks(req, res, tableName)

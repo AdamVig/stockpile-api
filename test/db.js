@@ -61,6 +61,18 @@ test.serial('Gets all rows', async t => {
   t.deepEqual(testRows, actualRows)
 })
 
+test.serial('Gets all rows in ascending sorted order', async t => {
+  const testRows = await db.getAll(fixt.testTableName, fixt.organizationID, undefined,
+    fixt.getAllSortedRows.sortByAscending)
+  t.deepEqual(testRows, fixt.getAllSortedRows.expectedAscending)
+})
+
+test.serial('Gets all rows in descending sorted order', async t => {
+  const testRows = await db.getAll(fixt.testTableName, fixt.organizationID, undefined,
+    fixt.getAllSortedRows.sortByDescending)
+  t.deepEqual(testRows, fixt.getAllSortedRows.expectedDescending)
+})
+
 test('Throws error when getting nonexistent row', async t => {
   await t.throws(db.get(fixt.testTableName, fixt.testRowPrimaryKey,
     fixt.nonexistentRowName), Error)
