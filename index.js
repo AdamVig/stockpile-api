@@ -17,7 +17,11 @@ require('dotenv-safe').load({
 const app = module.exports = restify.createServer({
   name: config.name,
   log,
-  version: config.version
+  // Default versions for routes without explicit version set; should contain all past major versions
+  version: [
+    '1.0.0',
+    config.version
+  ]
 })
 
 // Assign a unique request ID to each request

@@ -87,6 +87,17 @@ The services located in `./services` are documented with JSDoc. This documentati
 
 Configuration for the JSDoc generator is located in `.jsdoc.json`.  
 
+## Versioning
+Commits to master should be made only via merged pull requests.  
+
+Each merged pull request should increment the version number in `package.json` using [semantic versioning](http://semver.org/). This version number is used to version API endpoints, so it should be kept up to date.  
+
+When the version in `package.json` changes, the previous version must be added to the array of versions in `index.js`. This enables routes without an explicit version set to support `Accept-Version` headers for past versions as well as for the current version.  
+
+Each apiDoc documentation block must have an `@apiVersion` tag with the latest version that the route supports.  
+
+API consumers should always use an `Accept-Version` header with a semver string like `^1.0.0` (accept all `1.x.x` releases) for the version that they are targeting.  
+
 ## Deploying
 Deployments are made via Git push to a bare remote repository on the server. A post-receive hook runs every time a push is made to the repository, copying the new files to the web root, restarting the server, and generating documentation. This is the script:  
 ```bash
@@ -109,5 +120,3 @@ printf "Generating docs..."
 yarn run docs
 printf " %s\n" "Done."
 ```
-
-Commits to master should be made only via merged pull requests. Each merged pull request should increment the version number in `package.json` using [semantic versioning](http://semver.org/). This version number can be used to version API endpoints, so it should be kept up to date.  
