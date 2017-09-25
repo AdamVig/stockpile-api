@@ -17,7 +17,10 @@ brand.withPagination = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'brand')
 }
 
-brand.getAll = endpoint.getAll('brand', {modify: brand.withPagination})
+brand.getAll = endpoint.getAll('brand', {
+  modify: brand.withPagination,
+  sortBy: [{column: 'brand.name', ascending: true}]
+})
 brand.get = endpoint.get('brand', 'brandID', {messages})
 
 brand.mount = app => {
@@ -54,7 +57,8 @@ brand.mount = app => {
    *     {
    *       "brandID": 0,
    *       "organizationID": 0,
-   *       "name": ""
+   *       "name": "",
+   *       "sortIndex": 0
    *     }
    *   ]
    * }

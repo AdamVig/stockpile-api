@@ -26,10 +26,17 @@ kit.withKitID = (req, queryBuilder) => {
 }
 
 endpoint.addAllMethods(kit, 'kit', 'kitID')
+kit.getAll = endpoint.getAll('kit', {
+  sortBy: [{column: 'kit.name', ascending: true}]
+})
 
 kit.getAllKitModels = endpoint.getAll('kitModel', {
   modify: kit.withModelDetails,
-  hasOrganizationID: false
+  hasOrganizationID: false,
+  sortBy: [
+    {column: 'brand', ascending: true},
+    {column: 'model', ascending: true}
+  ]
 })
 
 kit.createKitModel = (req, res, next) => {
@@ -89,7 +96,8 @@ kit.mount = app => {
    *    {
    *      "kitID": 0,
    *      "name": "",
-   *      "organizationID": 0
+   *      "organizationID": 0,
+   *      "sortIndex": 0
    *    }
    *  ]
    * }
@@ -166,7 +174,8 @@ kit.mount = app => {
    *      "model": "",
    *      "brandID": 0,
    *      "brand": "",
-   *      "quantity": 0
+   *      "quantity": 0,
+   *      "sortIndex": 0
    *    }
    *  ]
    * }

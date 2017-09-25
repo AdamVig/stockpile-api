@@ -13,6 +13,7 @@ const messages = {
 }
 
 endpoint.addAllMethods(customField, 'customField', 'customFieldID', messages)
+customField.getAll = endpoint.getAll('customField', {sortBy: [{column: 'customField.name', ascending: true}]})
 
 // Add category name
 customField.withCategoryName = (req, queryBuilder) => {
@@ -30,7 +31,8 @@ const categoryMessages = {
 customField.getCategories = endpoint.getAll('customFieldCategory', {
   modify: customField.withCategoryName,
   messages: categoryMessages,
-  hasOrganizationID: false
+  hasOrganizationID: false,
+  sortBy: [{column: 'category.name', ascending: true}]
 })
 
 customField.updateCategories = (req, res, next) => {
@@ -108,7 +110,8 @@ customField.mount = app => {
    *       "customFieldID": 0,
    *       "organizationID": 0,
    *       "name": "",
-   *       "categoryID": 0
+   *       "categoryID": 0,
+   *       "sortIndex": 0
    *     }
    *   ]
    * }
@@ -189,7 +192,8 @@ customField.mount = app => {
    *       "categoryID": 0,
    *       "customFieldID": 0,
    *       "name": "",
-   *       "organizationID": 0
+   *       "organizationID": 0,
+   *       "sortIndex": 0
    *     }
    *   ]
    * }

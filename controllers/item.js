@@ -56,8 +56,11 @@ item.withActiveRental = (req, queryBuilder) => {
     .where('rental.returnDate', null)
     .orderBy('rental.startDate', 'ascending')
 }
-
-item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters})
+const sortBy = [
+  {column: 'brand', ascending: true},
+  {column: 'model', ascending: true}
+]
+item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters, sortBy})
 item.get = endpoint.get('item', 'barcode',
   {modify: item.withFieldsAndFilters, messages})
 item.create = endpoint.create('item', 'barcode',
@@ -142,7 +145,8 @@ item.mount = app => {
    *       "modelID": 0,
    *       "categoryID": 0,
    *       "barcode": "234234",
-   *       "notes": ""
+   *       "notes": "",
+   *       "sortIndex": 0
    *     }
    *   ]
    * }
