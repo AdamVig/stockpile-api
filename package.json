@@ -17,7 +17,6 @@
     "jsdoc": "jsdoc --configure .jsdoc.json"
   },
   "dependencies": {
-    "apidoc": "^0.17.5",
     "bcrypt": "^1.0.2",
     "bunyan": "^1.8.12",
     "bunyan-format": "^0.2.1",
@@ -35,6 +34,7 @@
     "stripe": "^4.24.0"
   },
   "devDependencies": {
+    "apidoc": "0.17.6",
     "ava": "0.22.0",
     "chai": "^3.5.0",
     "codacy-coverage": "^2.0.2",
