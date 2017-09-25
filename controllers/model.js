@@ -33,7 +33,13 @@ model.withPaginationAndBrand = (req, queryBuilder) => {
 
 endpoint.addAllMethods(model, 'model', 'modelID')
 model.getKits = endpoint.getAll('model', {modify: model.withKits})
-model.getAll = endpoint.getAll('model', {modify: model.withPaginationAndBrand})
+model.getAll = endpoint.getAll('model', {
+  modify: model.withPaginationAndBrand,
+  sortBy: [
+    {column: 'brand.name', ascending: true},
+    {column: 'model.name', ascending: true}
+  ]
+})
 model.get = endpoint.get('model', 'modelID', {messages, modify: model.withBrand})
 model.create = endpoint.create('model', 'modelID', {messages, resModify: model.withBrand})
 
@@ -74,7 +80,8 @@ model.mount = app => {
    *       "brandID": 0,
    *       "organizationID": 0,
    *       "name": "",
-   *       "brand": ""
+   *       "brand": "",
+   *       "sortIndex": 0
    *     }
    *   ]
    * }

@@ -17,7 +17,10 @@ category.withPagination = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'category')
 }
 
-category.getAll = endpoint.getAll('category', {modify: category.withPagination})
+category.getAll = endpoint.getAll('category', {
+  modify: category.withPagination,
+  sortBy: [{column: 'category.name', ascending: true}]
+})
 category.get = endpoint.get('category', 'categoryID', {messages})
 
 category.mount = app => {
@@ -53,7 +56,8 @@ category.mount = app => {
    *     {
    *       "categoryID": 0,
    *       "organizationID": 0,
-   *       "name": ""
+   *       "name": "",
+   *       "sortIndex": 0
    *     }
    *   ]
    * }

@@ -159,12 +159,22 @@ module.exports.get = (table, column, value, organizationID, modify = () => {}) =
  * @param {string} table Name of a database table
  * @param {any} [organizationID] ID of organization
  * @param {function} [modify=noop] Modify the query
+ * @param {object[]} [sortBy=[]] List of sorting criteria, ordered by priority (first is highest priority)
+ * @param {string} sortBy.column Column to sort by
+ * @param {boolean} sortBy.ascending Whether to sort in ascending or descending order
  * @return {Promise.<array>} Resolved by all rows from table
  */
-module.exports.getAll = (table, organizationID, modify = () => {}) => {
-  return knex(table)
+module.exports.getAll = (table, organizationID, modify = () => {}, sortBy = []) => {
+  const query = knex(table)
     .where(module.exports.buildWhere(table, null, null, organizationID))
     .modify(modify)
+
+  // Sort query by each dimension specified in list of sort criteria, in order
+  for (const sortCriterion of sortBy) {
+    query.orderBy(sortCriterion.column, sortCriterion.ascending ? 'asc' : 'desc')
+  }
+
+  return query
 }
 
 /**
