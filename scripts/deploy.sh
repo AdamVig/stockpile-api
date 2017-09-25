@@ -18,3 +18,11 @@ git remote add prod $REPO_URI
 
 # Deploy
 git push prod master
+
+# Build docs
+npm run docs
+
+# Deploy docs
+rsync -rvz dist "$HOST:/var/www/stockpile-api/docs"
+# Set owner of files so they can be served by Nginx
+ssh "$HOST" cd /var/www/stockpile-api && chown -R :www-data docs
