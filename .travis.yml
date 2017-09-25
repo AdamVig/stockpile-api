@@ -1,3 +1,5 @@
+# Allow Travis to run this project in container
+sudo: false
 language: node_js
 node_js:
   # Latest stable version
