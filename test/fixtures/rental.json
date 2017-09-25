@@ -63,6 +63,10 @@
         "endDate": "",
         "startDate": "",
         "items": []
+      },
+      "user": {
+        "organizationID": 0,
+        "userID": 0
       }
     }
   },
@@ -74,6 +78,10 @@
         "endDate": "",
         "startDate": "",
         "barcode": ""
+      },
+      "user": {
+        "organizationID": 0,
+        "userID": 0
       }
     }
   }

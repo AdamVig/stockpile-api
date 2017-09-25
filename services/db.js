@@ -93,22 +93,30 @@ module.exports.create = (table, column, data, {modify = () => {}, resModify = ()
     return knex(table)
       .insert(data)
       .then(([id]) => {
-        if (column) {
-          // Use ID from data when database does not return one
-          if (!id) {
-            id = data[column]
-          }
-
+        // Get single created row by primary key
+        if (column && id && !Array.isArray(data)) {
           return knex(table)
             .where(module.exports.buildWhere(table, column, id))
             .modify(resModify)
             .first()
+
+          // Get inserted row based on supplied data (may return wrong row)
         } else {
-          // Get inserted row based on supplied data, may return wrong row
-          return knex(table)
-            .where(module.exports.disambiguateKeys(data, table))
+          const responseQuery = knex(table)
             .modify(resModify)
-            .first()
+
+          // If array of data supplied, get all rows supplied
+          if (Array.isArray(data)) {
+            for (const row of data) {
+              responseQuery.orWhere(module.exports.disambiguateKeys(row, table))
+            }
+          // If only one row supplied, get only one row
+          } else {
+            responseQuery
+              .where(module.exports.disambiguateKeys(data, table))
+              .first()
+          }
+          return responseQuery
         }
       })
   } else {
