@@ -20,7 +20,7 @@ git remote add prod $REPO_URI
 git push prod master
 
 # Build docs
-npm install --only-dev
+npm install --only-dev --quiet
 npm run docs
 
 # Deploy docs
