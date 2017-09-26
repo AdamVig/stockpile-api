@@ -19,9 +19,5 @@ git remote add prod $REPO_URI
 # Deploy
 git push prod master
 
-# Build docs
-npm install --only-dev --quiet
-npm run docs
-
 # Deploy docs
 rsync -rvz docs "$HOST:/var/www/stockpile-api/docs"

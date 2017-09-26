@@ -24,12 +24,17 @@ notifications:
 before_install:
   # Copy environment variables file to prevent error
   - cp .env.example .env
+install: npm install
+script:
+  - npm test
+  - npm run docs
 after_success:
   # Send test coverage to Coveralls
   - "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
   # Send test coverage to Codacy
   - "./node_modules/.bin/nyc report --reporter=lcovonly && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
 deploy:
+  skip_cleanup: true
   provider: script
   script: scripts/deploy.sh
   on:
