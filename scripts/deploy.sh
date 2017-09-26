@@ -24,4 +24,4 @@ npm install --only-dev --quiet
 npm run docs
 
 # Deploy docs
-rsync -rvz dist "$HOST:/var/www/stockpile-api/docs"
+rsync -rvz docs "$HOST:/var/www/stockpile-api/docs"
