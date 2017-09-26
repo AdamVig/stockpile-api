@@ -20,4 +20,4 @@ git remote add prod $REPO_URI
 git push prod master
 
 # Deploy docs
-rsync -rvz docs "$HOST:/var/www/stockpile-api/docs"
+rsync -rvz docs "$HOST:/var/www/stockpile-api"
