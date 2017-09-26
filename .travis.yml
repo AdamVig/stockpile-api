@@ -1,3 +1,5 @@
+# Allow Travis to run this project in container
+sudo: false
 language: node_js
 node_js:
   # Latest stable version
@@ -10,7 +12,9 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-cache: yarn
+cache:
+  directories:
+    - "node_modules"
 notifications:
   slack:
     secure: Xtq6NAQ/5vG1V51qpWq9DAZku+l3YlxslU+vUXn98Vk01EZTi5eFewxIj+Cx+lrdHwP2ItslQTxl5cowGGhZussZquhXEQACuoy3p/tSck+wASkyDBmGuDC7IS8Tc0dh5VeS7fXEZFNotD+a8JYCMLs8uzBfZQSFJE40Y0KyS7MeG8i6c8tRzy5f1kw1B5RgwWIW33ySOKiVpiSe7toke6nDBUg7AU0YwOJFMs9Ej9CavjqLMnpl9v5h332326mGh2/NgqbesrwgLf6YQ6yJT1Uwo805GK8rPJ+3fG8nfVU6bJP6KYUitumrL4hdw91uC2IAHa7/WmFMDyLxh9ab3J1LtWbIsK5IIBvMLEkihsNbhl4PopbV3YSqdqcEYGWQDrFQYj3cN8Md3k+j97jvfQb6N5dEoeUBU3riUEfiTgAfVHEJOdHwafr8zLOdLQv/jmkWBX/R2FUjnK97jTUydNqwM0bKMjYwr8GiE/+HPtnET0WW3ZwAZYgWpR4mhpKASAvt/FoI7SL+sf88Yavp9EuJZNZeJ0jpgJrvJ/qQJ82FJj5yd1fkwSZZ0J9ltnLHM8f6QLvury0fKzd7KHT7BwYogaFQBQIZ/7wVM/WH+Ae9j2eA3x7+P8fzM+N5PO7ZnlTNKsMNYmKThO/cNkPOsHJtjgE31vP9F9zTeV9MbSE=
@@ -20,13 +24,18 @@ notifications:
 before_install:
   # Copy environment variables file to prevent error
   - cp .env.example .env
+install: npm install
+script:
+  - npm test
+  - npm run docs
 after_success:
   # Send test coverage to Coveralls
   - "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
   # Send test coverage to Codacy
   - "./node_modules/.bin/nyc report --reporter=lcovonly && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
 deploy:
+  skip_cleanup: true
   provider: script
-  script: chmod +x scripts/deploy && ./scripts/deploy
+  script: scripts/deploy.sh
   on:
     branch: master

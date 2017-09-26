@@ -12,23 +12,20 @@ The API for [Stockpile](https://stockpileapp.co), an app that manages stuff for 
 See [stockpile-app](https://github.com/emmanuelroussel/stockpile-app) for the web and mobile application that consumes this API.  
 
 ## Scripts
-Yarn presents the same API as npm for running scripts. The scripts below are defined in `package.json`.  
- * `yarn start` start the app in production
- * `yarn stop` stop the app in production
- * `yarn test` test code using [Ava](https://github.com/avajs/ava)
- * `yarn run dev` run the app in development
- * `yarn run lint` lint code using [ESLint](http://eslint.org/) + [StandardJS](http://standardjs.com/)
- * `yarn run docs` generate documentation using [Docco](https://jashkenas.github.io/docco/)
+The scripts below are defined in `package.json`.  
+ * `npm start` start the app in production
+ * `npm stop` stop the app in production
+ * `npm test` test code using [Ava](https://github.com/avajs/ava)
+ * `npm run dev` run the app in development
+ * `npm run lint` lint code using [ESLint](http://eslint.org/) + [StandardJS](http://standardjs.com/)
+ * `npm run docs` generate documentation using [Docco](https://jashkenas.github.io/docco/)
 
 ## File Structure
 - `.editorconfig` editor configuration to ensure consistent indentation and line-endings
 - `.env.example` template file for environment variables, should be copied and renamed to `.env`
 - `.jsdoc.json` JSDoc documentation configuration
 - `.travis.yml` Travis CI configuration
-- `contributing.json` GitMagic Git message quality-control configuration
-- `deploy_key.enc` encrypted SSH key for deploying to production via Travis CI
 - `index.js` main application bootstrap file
-- `yarn.lock` Yarn package manager lockfile
 
 ### `/controllers`
 This folder contains a file for each top-level route and `routes.js`, which mounts all of the routes by passing an instance of the Restify application to them.  
@@ -64,6 +61,8 @@ DB_PASSWORD=9234kjhsdfnmb234
 DB_NAME=my_db
 JWT_SECRET=392skdjlhfbjkmnb3425lkdfg
 API_URL=https://example.com/api/
+STRIPE_KEY=89uy345bfgnbgjbsdf
+STRIPE_SECRET=345dfgdgh456hlekwhrk223
 ```
 
 Note that the format of `DB_URL` is flexible because it is passed to the Knex constructor.  
