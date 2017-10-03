@@ -87,9 +87,10 @@ item.getCustomFieldValue = endpoint.get('itemCustomFieldValue', 'customFieldID',
   modify: item.forItem,
   hasOrganizationID: false
 })
-item.updateCustomFieldValue = endpoint.update('itemCustomFieldValue',
-  'customFieldID',
-  {modify: item.forItem})
+item.updateCustomFieldValue = endpoint.update('itemCustomFieldValue', 'customFieldID', {
+  modify: item.forItem,
+  hasOrganizationID: false
+})
 
 item.mount = app => {
   /**
