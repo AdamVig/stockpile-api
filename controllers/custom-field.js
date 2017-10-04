@@ -16,11 +16,18 @@ endpoint.addAllMethods(customField, 'customField', 'customFieldID', messages)
 customField.getAll = endpoint.getAll('customField', {sortBy: [{column: 'customField.name', ascending: true}]})
 
 // Add category name
-customField.withCategoryName = (req, queryBuilder) => {
+customField.withNames = (req, queryBuilder) => {
   return queryBuilder
     // Only get custom field categories for this custom field
-    .where('customFieldID', req.params.customFieldID)
+    .where('customFieldCategory.customFieldID', req.params.customFieldID)
+    .select('customFieldCategory.*')
+    // Add category
     .join('category', 'customFieldCategory.categoryID', 'category.categoryID')
+    .select('category.name as categoryName')
+
+    // Add custom field
+    .join('customField', 'customField.customFieldID', 'customFieldCategory.customFieldID')
+    .select('customField.name as customFieldName')
 }
 const categoryMessages = {
   create: 'Added category to custom field',
@@ -29,7 +36,7 @@ const categoryMessages = {
   missing: 'Custom field has no categories'
 }
 customField.getCategories = endpoint.getAll('customFieldCategory', {
-  modify: customField.withCategoryName,
+  modify: customField.withNames,
   messages: categoryMessages,
   hasOrganizationID: false,
   sortBy: [{column: 'category.name', ascending: true}]
@@ -47,15 +54,15 @@ customField.updateCategories = (req, res, next) => {
 
     return db.transaction(trx => {
       // Remove all existing categories for this custom field
-      return trx('customFieldCategory').where('customFieldID', req.params.customFieldID).del()
+      return trx('customFieldCategory').where('customFieldCategory.customFieldID', req.params.customFieldID).del()
         .then(() => {
           // Add all new categories
           return trx('customFieldCategory').insert(customFieldCategories)
         }).then(() => {
           // Get all categories for this field
           return trx('customFieldCategory')
-            .where('customFieldID', req.params.customFieldID)
-            .modify(customField.withCategoryName.bind(null, req))
+            .where('customFieldCategory.customFieldID', req.params.customFieldID)
+            .modify(customField.withNames.bind(null, req))
         })
     }).then((rows) => {
       let message = categoryMessages.create
@@ -105,7 +112,7 @@ customField.mount = app => {
    *
    * @apiExample {json} Response Format
    * {
-   *   results: [
+   *   "results": [
    *     {
    *       "customFieldID": 0,
    *       "organizationID": 0,
@@ -187,11 +194,12 @@ customField.mount = app => {
    *
    * @apiExample {json} Response Format
    * {
-   *   results: [
+   *   "results": [
    *     {
    *       "categoryID": 0,
    *       "customFieldID": 0,
-   *       "name": "",
+   *       "customFieldName": "",
+   *       "categoryName": "",
    *       "organizationID": 0,
    *       "sortIndex": 0
    *     }
@@ -207,11 +215,11 @@ customField.mount = app => {
    * @apiPermission User
    * @apiVersion 2.0.0
    *
-   * @apiParam {Object[]} [categories] List of category entities that this field belongs in. The field will only apply
-   *   to items in this category
+   * @apiParam {Object[]} [categories] List of category entities that this field belongs in. The custom field will only
+   *   apply to items in these categories.
    * @apiParam {Number} categories.categoryID ID of category
-   * @apiParam {String} categories.name Name of category
-   * @apiParam {Number} categories.organizationID Organization that category belongs to
+   * @apiParam {String} [categories.name] Name of category
+   * @apiParam {Number} [categories.organizationID] Organization that category belongs to
    *
    * @apiExample {json} Response Format
    * {
@@ -219,7 +227,8 @@ customField.mount = app => {
    *     {
    *       "categoryID": 0,
    *       "customFieldID": 0,
-   *       "name": "",
+   *       "categoryName": "",
+   *       "customFieldName": "",
    *       "organizationID": 0
    *     }
    *   ],
