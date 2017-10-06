@@ -24,10 +24,14 @@ notifications:
 before_install:
   # Copy environment variables file to prevent error
   - cp .env.example .env
+  # Install GreenKeeper lockfile tool
+  - npm install -g greenkeeper-lockfile@1
 install: npm install
+before_script: greenkeeper-lockfile-update
 script:
   - npm test
   - npm run docs
+after_script: greenkeeper-lockfile-upload
 after_success:
   # Send test coverage to Coveralls
   - "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
