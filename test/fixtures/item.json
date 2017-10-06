@@ -13,5 +13,54 @@
     "params": {
       "barcode": ""
     }
+  },
+  "updateCustomField": {
+    "organization": {
+      "name": "update item custom field test",
+      "email": "test.updateitemcustomfield@stockpileapp.co"
+    },
+    "category": {
+      "organizationID": 0,
+      "name": "Test Category (update item custom field)"
+    },
+    "brand": {
+      "organizationID": 0,
+      "name": "Test Brand (update item custom field)"
+    },
+    "model": {
+      "organizationID": 0,
+      "brandID": 0,
+      "name": "Test Model (update item custom field)"
+    },
+    "item": {
+      "organizationID": 0,
+      "modelID": 0,
+      "barcode": "test-123456789",
+      "categoryID": 0
+    },
+    "customField": {
+      "organizationID": 0,
+      "name": "Test Custom Field (update item custom field)"
+    },
+    "req": {
+      "body": {
+        "value": "test item custom field value"
+      },
+      "params": {
+        "barcode": "test-123456789",
+        "customFieldID": 0
+      }
+    }
+  },
+  "updateCustomFieldInvalid": {
+    "req": {
+      "params": {
+        "value": "test item custom field value invalid"
+      },
+      "body": {
+        "barcode": "test-invalid-barcode",
+        "customFieldID": 0
+      }
+    }
   }
 }

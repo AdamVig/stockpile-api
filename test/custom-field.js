@@ -34,13 +34,13 @@ test.before(async t => {
   fixt.updateCategories.req.body.categories = fixt.categories
 })
 
-test('With category name', t => {
+test('With names', t => {
   const queryBuilder = {
     join: sinon.stub().returnsThis(),
     select: sinon.stub().returnsThis(),
     where: sinon.stub().returnsThis()
   }
-  const result = customFieldController.withCategoryName(fixt.withCategoryName.req, queryBuilder)
+  const result = customFieldController.withNames(fixt.withCategoryName.req, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
 })
 
