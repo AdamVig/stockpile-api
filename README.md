@@ -65,6 +65,7 @@ JWT_SECRET=392skdjlhfbjkmnb3425lkdfg
 API_URL=https://example.com/api/
 STRIPE_KEY=89uy345bfgnbgjbsdf
 STRIPE_SECRET=345dfgdgh456hlekwhrk223
+MAILGUN_KEY=key-jkhdsfhb345jbsf32345
 ```
 
 Note that the format of `DB_URL` is flexible because it is passed to the Knex constructor.  
