@@ -20,23 +20,23 @@
     "bcrypt": "^1.0.2",
     "bunyan": "^1.8.12",
     "bunyan-format": "^0.2.1",
-    "coveralls": "^2.11.15",
+    "coveralls": "^3.0.0",
     "dotenv-safe": "^4.0.3",
-    "jsonwebtoken": "^7.4.2",
-    "knex": "^0.12.6",
+    "jsonwebtoken": "^8.0.1",
+    "knex": "^0.13.0",
     "moment": "2.18.1",
     "mysql": "^2.14.1",
-    "passport": "^0.3.2",
-    "passport-jwt": "^2.2.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.0",
     "pm2": "^2.6.1",
-    "restify": "^4.3.1",
+    "restify": "^6.0.1",
     "restify-links": "^1.1.0",
-    "stripe": "^4.24.0"
+    "stripe": "^5.1.1"
   },
   "devDependencies": {
     "apidoc": "0.17.6",
     "ava": "0.22.0",
-    "chai": "^3.5.0",
+    "chai": "^4.1.2",
     "codacy-coverage": "^2.0.2",
     "docco": "^0.7.0",
     "eslint": "4.8.0",
@@ -49,7 +49,7 @@
     "jsdoc": "3.5.5",
     "nodemon": "^1.11.0",
     "nyc": "11.2.1",
-    "sinon": "^1.17.7"
+    "sinon": "^4.0.1"
   },
   "apidoc": {
     "url": "https://stockpile.adamvig.com/api",
