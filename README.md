@@ -5,6 +5,8 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 # stockpile-co / api
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/stockpile-co/api.svg)](https://greenkeeper.io/)
 The API for [Stockpile](https://stockpileapp.co), an app that manages stuff for organizations.  
 
 [Read the docs.](https://stockpileapp.co/docs)
