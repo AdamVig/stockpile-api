@@ -10,7 +10,7 @@ const externalRenter = module.exports
 
 endpoint.addAllMethods(externalRenter, 'externalRenter', 'externalRenterID')
 externalRenter.get = endpoint.get('externalRenter', 'externalRenterID',
-                                  {messages})
+  {messages})
 
 externalRenter.mount = app => {
   /**

@@ -18,7 +18,7 @@ user.removePasswordAddRole = (req, queryBuilder) => {
   return queryBuilder
     .join('role', 'user.roleID', 'role.roleID')
     .select('userID', 'email', 'firstName', 'lastName', 'organizationID',
-    'role.name as role')
+      'role.name as role')
     .modify(paginate.paginateQuery, req, 'user')
 }
 
@@ -26,7 +26,7 @@ user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})
 user.get = endpoint.get('userInfo', 'userID', {messages})
 user.delete = endpoint.delete('userInfo', 'userID')
 user.update = endpoint.update('user', 'userID',
-                              {resModify: user.removePasswordAddRole})
+  {resModify: user.removePasswordAddRole})
 
 // Change a user's password
 user.changeUserPassword = function changeUserPassword (req, res, next) {
@@ -43,7 +43,7 @@ user.changeUserPassword = function changeUserPassword (req, res, next) {
     })
     .then(hashedPassword => {
       return db.update('user', 'userID', req.params.userID,
-                       {password: hashedPassword}, req.user.organizationID)
+        {password: hashedPassword}, req.user.organizationID)
     })
     .then((result) => {
       res.send({

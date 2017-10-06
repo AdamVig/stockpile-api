@@ -35,9 +35,9 @@ test.serial('Updates a row', async t => {
     fixt.testRow[fixt.testRowPrimaryKey], fixt.modifiedTestRow,
     fixt.organizationID)
   const updatedRow = await knex(fixt.testTableName)
-          .where(fixt.testRowPrimaryKey,
-    fixt.modifiedTestRow[fixt.testRowPrimaryKey])
-          .first()
+    .where(fixt.testRowPrimaryKey,
+      fixt.modifiedTestRow[fixt.testRowPrimaryKey])
+    .first()
   t.deepEqual(fixt.modifiedTestRow, updatedRow)
 })
 
@@ -50,7 +50,7 @@ test.serial('Deletes a row', async t => {
 
 test.serial('Creates multiple rows', async t => {
   await db.create(fixt.testTableName, fixt.testRowPrimaryKey,
-                  [fixt.testRow, fixt.modifiedTestRow])
+    [fixt.testRow, fixt.modifiedTestRow])
   const rows = await knex(fixt.testTableName)
   t.is(rows.length, 2)
 })
