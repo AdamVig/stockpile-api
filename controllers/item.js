@@ -1,5 +1,6 @@
 const auth = require('./auth')
 const checkSubscription = require('../services/check-subscription')
+const db = require('../services/db')
 const endpoint = require('../services/endpoint')
 const filterQuery = require('../services/filter-query')
 const paginate = require('../services/paginate')
@@ -77,17 +78,62 @@ item.getStatus = endpoint.get('itemStatus', 'barcode', {hasOrganizationID: false
 // Custom fields
 item.forItem = (req, queryBuilder) => {
   return queryBuilder
+    // Only get rows for this item
     .where('barcode', req.params.barcode)
 }
-item.getCustomFieldValues = endpoint.getAll('itemCustomFieldValue', {
+// Add custom fields to "get all items" query
+item.withCustomFields = (req, queryBuilder) => {
+  const selectColumns = ['customField.*', 'category.name as categoryName', 'itemCustomField.value']
+  return queryBuilder
+    .select(selectColumns)
+    // Get custom fields for the item's category
+    .join('customFieldCategory', 'item.categoryID', 'customFieldCategory.categoryID')
+    .join('customField', 'customFieldCategory.customFieldID', 'customField.customFieldID')
+    // Get category
+    .join('category', 'customFieldCategory.categoryID', 'category.categoryID')
+    // Get values
+    .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
+    // Only get rows for this item
+    .where('item.barcode', req.params.barcode)
+    // Get custom fields that apply to items in all categories
+    .union(function () {
+      this.select(selectColumns)
+        .from('customField')
+        // Join all custom fields with all categories (`categoryID = null` if no categories are specified)
+        .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
+        // Get category
+        .leftJoin('category', 'customFieldCategory.categoryID', 'category.categoryID')
+        // Get values
+        .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
+        .where('customFieldCategory.categoryID', null)
+        .andWhere('customField.organizationID', req.user.organizationID)
+    })
+}
+item.getCustomFields = endpoint.getAll('item', {
+  modify: item.withCustomFields
+})
+item.getCustomField = endpoint.get('itemCustomField', 'customFieldID', {
   modify: item.forItem,
   hasOrganizationID: false
 })
-item.getCustomFieldValue = endpoint.get('itemCustomFieldValue', 'customFieldID', {
-  modify: item.forItem,
-  hasOrganizationID: false
-})
-item.updateCustomFieldValue = endpoint.update('itemCustomFieldValue', 'customFieldID', {
+item.updateCustomField = (req, res, next) => {
+  const columns = ['barcode', 'customFieldID', 'value']
+  const values = [req.params.barcode, req.params.customFieldID, req.body.value]
+
+  // Insert or update item custom field value
+  return db.raw('replace into itemCustomField (??) values (?)', [columns, values])
+    .then(() => db('itemCustomField')
+      .where({barcode: req.params.barcode, customFieldID: req.params.customFieldID}).first()
+    ).then(({value}) => {
+      res.send({
+        message: 'Updated item custom field',
+        value
+      })
+    })
+    .then(next)
+    .catch(err => endpoint.handleError(err, {}, next, req))
+}
+item.deleteCustomField = endpoint.delete('itemCustomField', 'customFieldID', {
   modify: item.forItem,
   hasOrganizationID: false
 })
@@ -282,63 +328,81 @@ item.mount = app => {
    */
   app.get({name: 'get item status', path: 'item/:barcode/status'}, auth.verify, item.getStatus)
   /**
-   * @api {get} /item/:barcode/custom-field Get item custom field values
-   * @apiName GetItemCustomFieldValues
+   * @api {get} /item/:barcode/custom-field Get item custom fields
+   * @apiName GetItemCustomFields
    * @apiGroup ItemCustomField
    * @apiPermission User
    * @apiVersion 2.0.0
    *
-   * @apiDescription Custom field values are automatically initialized to empty
-   *   strings when a new custom field is created, so empty strings will be
-   *   returned until a value is set.
+   * @apiDescription The `categoryName` is the name of the item's category, and also the category that the custom field
+   *   applies to. When `categoryName` is `null`, the custom field applies to all categories. When `value` is `null`, no
+   *   value has been set for this custom field for this item.
    *
    * @apiExample {json} Response Format
    * {
    *   "results": [
    *     {
-   *       "barcode": 0,
+   *       "categoryName": "",
    *       "customFieldID": 0,
+   *       "name": "",
    *       "organizationID": 0,
-   *       "value": ""
+   *       "value": "",
+   *       "sortIndex": 0
    *     }
    *   ]
    * }
    */
-  app.get({name: 'get item custom field values', path: 'item/:barcode/custom-field'}, auth.verify,
-    item.getCustomFieldValues)
+  app.get({name: 'get item custom fields', path: 'item/:barcode/custom-field'}, auth.verify, item.getCustomFields)
   /**
-   * @api {get} /item/:barcode/custom-field/:customFieldID
-   *   Get item custom field value
-   * @apiName GetItemCustomFieldValue
+   * @api {get} /item/:barcode/custom-field/:customFieldID Get item custom field
+   * @apiName GetItemCustomField
    * @apiGroup ItemCustomField
    * @apiPermission User
    * @apiVersion 2.0.0
    *
    * @apiExample {json} Response Format
    * {
-   *   "barcode": 0,
+   *   "barcode": "",
    *   "customFieldID": 0,
-   *   "organizationID": 0,
    *   "value": ""
    * }
    */
-  app.get({name: 'get item custom field value', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
-    item.getCustomFieldValue)
+  app.get({name: 'get item custom field', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
+    item.getCustomField)
   /**
-   * @api {put} /item/:barcode/custom-field/:customFieldID
-   *   Update item custom field value
-   * @apiName UpdateItemCustomFieldValue
+   * @api {put} /item/:barcode/custom-field/:customFieldID Update item custom field
+   * @apiName UpdateItemCustomField
    * @apiGroup ItemCustomField
    * @apiPermission User
    * @apiVersion 2.0.0
    *
-   * @apiDescription Custom fields can be created with *create custom field*. To
-   *   "delete" a custom field value, set the value to an empty string.
+   * @apiDescription Sets the value for a custom field for an item.
    *
    * @apiParam {String{0..1000}} value A value for the custom field
    *
+   * @apiExample {json} Response Format
+   * {
+   *   "message": "Updated item custom field",
+   *   "value": ""
+   * }
+   *
    * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'update item custom field value', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
-    checkSubscription, item.updateCustomFieldValue)
+  app.put({name: 'update item custom field', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
+    checkSubscription, item.updateCustomField)
+  /**
+   * @api {delete} /item/:barcode/custom-field/:customFieldID Delete item custom field
+   * @apiName DeleteItemCustomField
+   * @apiGroup ItemCustomField
+   * @apiPermission User
+   * @apiVersion 2.0.0
+   *
+   * @apiDescription Unset the value of a custom field for an item.
+   *
+   * @apiUse EndpointDelete
+   *
+   * @apiUse InvalidSubscriptionResponse
+   */
+  app.del({name: 'delete item custom field', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
+    checkSubscription, item.deleteCustomField)
 }
