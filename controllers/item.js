@@ -65,14 +65,14 @@ item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters, sortBy
 item.get = endpoint.get('item', 'barcode',
   {modify: item.withFieldsAndFilters, messages})
 item.create = endpoint.create('item', 'barcode',
-                              {resModify: item.withFieldsAndFilters})
+  {resModify: item.withFieldsAndFilters})
 item.update = endpoint.update('item', 'barcode',
-                              {resModify: item.withFieldsAndFilters})
+  {resModify: item.withFieldsAndFilters})
 item.delete = endpoint.delete('item', 'barcode'
 )
 item.getRentals = endpoint.getAll('rental', {modify: item.paginateRentals})
 item.getActiveRental = endpoint.get('rental', 'barcode',
-                                    {modify: item.withActiveRental})
+  {modify: item.withActiveRental})
 item.getStatus = endpoint.get('itemStatus', 'barcode', {hasOrganizationID: false})
 
 // Custom fields
@@ -281,7 +281,7 @@ item.mount = app => {
    * }
    */
   app.get({name: 'get item rentals', path: 'item/:barcode/rentals'}, auth.verify, item.getRentals)
-    /**
+  /**
    * @api {get} /item/:barcode/rental/active Get active rental of an item
    * @apiName GetItemActiveRental
    * @apiGroup Item

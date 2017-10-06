@@ -32,8 +32,8 @@ test('Get all', async t => {
     'responds with an object')
   // Two items inserted, so should be two or more in the table
   t.true(res.send.calledWithMatch(sinon.match(response =>
-                                              response.results.length >= 2)),
-    'responds with the right number of items')
+    response.results.length >= 2)),
+  'responds with the right number of items')
   t.true(next.called, 'calls next handler')
   t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 
@@ -69,8 +69,8 @@ test('Get all with pagination', async t => {
     'responds with an object')
   // Two items inserted, so should be two or more in the table
   t.true(res.send.calledWithMatch(sinon.match(response =>
-                                              response.results.length >= 2)),
-    'responds with the right number of items')
+    response.results.length >= 2)),
+  'responds with the right number of items')
   t.true(next.called, 'calls next handler')
   t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 })

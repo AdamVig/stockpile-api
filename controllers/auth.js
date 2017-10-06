@@ -182,7 +182,7 @@ auth.refresh = (req, res, next) => {
     return db('refreshToken')
       .where('userID', req.body.userID)
       .first()
-      .pluck('refreshToken')  // Get just the refresh token column
+      .pluck('refreshToken') // Get just the refresh token column
       .then(([storedToken]) => {
         if (req.body.refreshToken === storedToken) {
           return db('user').where('userID', req.body.userID).first()

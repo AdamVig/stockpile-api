@@ -181,7 +181,7 @@ kit.mount = app => {
    * }
    */
   app.get({name: 'get all kit models', path: 'kit/:kitID/model'}, auth.verify, kit.getAllKitModels)
-   /**
+  /**
    * @api {put} /kit/:kitID/model Create kit model
    * @apiName CreateKitModel
    * @apiGroup Kit

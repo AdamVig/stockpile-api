@@ -8,7 +8,7 @@ const knex = require('./fixtures/knex-instance')
 
 test.before('Create organization', async t => {
   const [organizationID] = await knex('organization')
-        .insert(fixt.organization)
+    .insert(fixt.organization)
   fixt.user.organizationID = organizationID
   fixt.userIncomplete.organizationID = organizationID
   fixt.authUser.organizationID = organizationID
@@ -40,8 +40,8 @@ test('Registers a user', async t => {
   await auth.register(req, res, next)
 
   const row = await knex(fixt.table)
-          .where(fixt.primaryKey, res.send.args[0][1].userID)
-          .first()
+    .where(fixt.primaryKey, res.send.args[0][1].userID)
+    .first()
 
   t.truthy(row, 'user was created')
   t.true(res.send.calledOnce, 'response sent')
@@ -63,9 +63,9 @@ test('Returns error when registering user with missing data', async t => {
   await auth.register(req, res, next)
 
   const row = await knex(fixt.table)
-          .where('firstName', fixt.userIncomplete.firstName)
-          .where('lastName', fixt.userIncomplete.lastName)
-          .first()
+    .where('firstName', fixt.userIncomplete.firstName)
+    .where('lastName', fixt.userIncomplete.lastName)
+    .first()
 
   t.falsy(row, 'user not created')
   t.false(res.send.called, 'does not send response')
@@ -109,7 +109,7 @@ test('Authenticates a user', async t => {
   await auth.authenticate(reqNoPassword, null, nextNoPassword)
   t.true(nextNoPassword.calledWithMatch(
     sinon.match.instanceOf(restify.BadRequestError)),
-    'throws error when request is missing fields')
+  'throws error when request is missing fields')
 
   const reqBadEmail = {
     body: fixt.authUserBadEmail
@@ -118,7 +118,7 @@ test('Authenticates a user', async t => {
   await auth.authenticate(reqBadEmail, null, nextBadEmail)
   t.true(nextBadEmail.calledWithMatch(
     sinon.match.instanceOf(restify.UnauthorizedError)),
-    'throws error when user does not exist')
+  'throws error when user does not exist')
 })
 
 test('Returns error when email and password do not match', async t => {
