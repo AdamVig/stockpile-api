@@ -14,7 +14,7 @@
     "lint": "eslint . --ignore-path .gitignore",
     "docs": "npm run apidoc && npm run jsdoc",
     "apidoc": "apidoc --input controllers/ --input services/ --output docs/apidoc",
-    "jsdoc": "jsdoc --configure .jsdoc.json"
+    "jsdoc": "jsdoc --configure .jsdoc.json -r"
   },
   "dependencies": {
     "bcrypt": "^1.0.2",
@@ -24,6 +24,7 @@
     "dotenv-safe": "^4.0.3",
     "jsonwebtoken": "^8.0.1",
     "knex": "^0.13.0",
+    "mailgun.js": "2.0.1",
     "moment": "2.18.1",
     "mysql": "^2.14.1",
     "passport": "^0.4.0",
@@ -48,6 +49,7 @@
     "jsdoc": "3.5.5",
     "nodemon": "^1.11.0",
     "nyc": "11.2.1",
+    "proxyquire": "1.8.0",
     "sinon": "^4.0.1"
   },
   "apidoc": {

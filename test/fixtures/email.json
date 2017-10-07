@@ -1,0 +1,47 @@
+{
+  "createHtmlEmail": {
+    "content": {
+      "title": "Test Title",
+      "body": "First Line\nSecond Line\n\nSecond Section\nSecond Line of Second Section",
+      "cta": "Click Here!",
+      "link": "https://stockpileapp.co"
+    }
+  },
+  "createHtmlEmailNoCta": {
+    "content": {
+      "title": "Test Title",
+      "body": "First Line\nSecond Line\n\nSecond Section\nSecond Line of Second Section"
+    }
+  },
+  "createTextEmail": {
+    "content": {
+      "title": "Welcome to Stockpile!",
+      "body": "Congratulations on joining Stockpile.\nClick below to check out our website!",
+      "cta": "Click Here!",
+      "link": "https://stockpileapp.co"
+    },
+    "expected": "Welcome to Stockpile!\n\nCongratulations on joining Stockpile.\nClick below to check out our website!\n\nClick Here!\nhttps://stockpileapp.co\n"
+  },
+  "sendMessage": {
+    "sender": "noreply@stockpileapp.co",
+    "to": "adam@stockpileapp.co",
+    "subject": "Stockpile Test Message",
+    "content": {
+      "title": "Test Title",
+      "body": "First Line\nSecond Line\n\nSecond Section\nSecond Line of Second Section",
+      "cta": "Click Here!",
+      "link": "https://stockpileapp.co"
+    },
+    "replyTo": "info@stockpileapp.co"
+  },
+  "send": {
+    "to": "hey-info@stockpileapp.co",
+    "subject": "Test Email",
+    "content": {
+      "title": "Test Title",
+      "body": "First Line\nSecond Line\n\nSecond Section\nSecond Line of Second Section",
+      "cta": "Click Here!",
+      "link": "https://stockpileapp.co"
+    }
+  }
+}
