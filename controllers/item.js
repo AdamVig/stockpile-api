@@ -106,9 +106,13 @@ item.withCustomFields = (req, queryBuilder) => {
         .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
         // Get values
         .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
-        // Only get rows for this item
-        .where('itemCustomField.barcode', req.params.barcode)
-        .where('customFieldCategory.categoryID', null)
+        // Only get item custom fields for this item
+        .where(function () {
+          this.where('itemCustomField.barcode', req.params.barcode)
+            // Include unset item custom fields to avoid losing custom fields without values
+            .orWhere('itemCustomField.barcode', null)
+        })
+        .andWhere('customFieldCategory.categoryID', null)
         .andWhere('customField.organizationID', req.user.organizationID)
     })
 }
