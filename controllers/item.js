@@ -83,7 +83,13 @@ item.forItem = (req, queryBuilder) => {
 }
 // Add custom fields to "get all items" query
 item.withCustomFields = (req, queryBuilder) => {
-  const selectColumns = ['customField.*', 'category.name as categoryName', 'itemCustomField.value']
+  const selectColumns = [
+    'customField.name as customFieldName',
+    'customField.customFieldID',
+    'customField.organizationID',
+    'category.name as categoryName',
+    'itemCustomField.value'
+  ]
   return queryBuilder
     .select(selectColumns)
     // Get custom fields for the item's category
@@ -101,7 +107,7 @@ item.withCustomFields = (req, queryBuilder) => {
         .from('customField')
         // Join all custom fields with all categories (`categoryID = null` if no categories are specified)
         .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
-        // Get category
+        // Get nonexistent category so that the columns are the same as the previous query and the union succeeds
         .leftJoin('category', 'customFieldCategory.categoryID', 'category.categoryID')
         // Get values
         .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
@@ -344,7 +350,7 @@ item.mount = app => {
    *     {
    *       "categoryName": "",
    *       "customFieldID": 0,
-   *       "name": "",
+   *       "customFieldName": "",
    *       "organizationID": 0,
    *       "value": "",
    *       "sortIndex": 0

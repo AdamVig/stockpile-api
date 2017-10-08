@@ -23,6 +23,32 @@ category.getAll = endpoint.getAll('category', {
 })
 category.get = endpoint.get('category', 'categoryID', {messages})
 
+category.withCustomFields = (req, queryBuilder) => {
+  const selectColumns = [
+    'customField.name as customFieldName',
+    'customField.customFieldID',
+    'customField.organizationID'
+  ]
+  return queryBuilder
+    .select(selectColumns)
+    // Get custom fields for the item's category
+    .join('customFieldCategory', 'category.categoryID', 'customFieldCategory.categoryID')
+    .join('customField', 'customFieldCategory.customFieldID', 'customField.customFieldID')
+    // Only get rows for this category
+    .where('category.categoryID', req.params.categoryID)
+    // Get custom fields that apply to items in all categories
+    .union(function () {
+      this.select(selectColumns)
+        .from('customField')
+        // Join all custom fields with all categories (`categoryID = null` if no categories are specified)
+        .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
+        .where('customFieldCategory.categoryID', null)
+        .andWhere('customField.organizationID', req.user.organizationID)
+    })
+}
+// Use `getAll` so all rows are returned
+category.getCustomFields = endpoint.getAll('category', {modify: category.withCustomFields})
+
 category.mount = app => {
   /**
    * @apiDefine Pagination
@@ -110,4 +136,26 @@ category.mount = app => {
    * @apiUse InvalidSubscriptionResponse
    */
   app.del({name: 'delete category', path: 'category/:categoryID'}, auth.verify, checkSubscription, category.delete)
+  /**
+   * @api {get} /category/:categoryID/custom-field Get category custom fields
+   * @apiName GetAllCategoryCustomFields
+   * @apiGroup Category
+   * @apiVersion 2.0.0
+   *
+   * @apiExample {json} Response Format
+   * {
+   *   "results": [
+   *     {
+   *       "customFieldID": 0,
+   *       "customFieldName": "",
+   *       "organizationID": 0,
+   *       "sortIndex": 0
+   *     }
+   *   ]
+   * }
+   *
+   * @apiUse InvalidSubscriptionResponse
+   */
+  app.get({name: 'get all category custom fields', path: 'category/:categoryID/custom-field'}, auth.verify,
+    checkSubscription, category.getCustomFields)
 }
