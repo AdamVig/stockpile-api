@@ -111,6 +111,8 @@ item.withCustomFields = (req, queryBuilder) => {
         .leftJoin('category', 'customFieldCategory.categoryID', 'category.categoryID')
         // Get values
         .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
+        // Only get rows for this item
+        .where('itemCustomField.barcode', req.params.barcode)
         .where('customFieldCategory.categoryID', null)
         .andWhere('customField.organizationID', req.user.organizationID)
     })
