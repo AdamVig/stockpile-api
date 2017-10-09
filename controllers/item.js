@@ -104,13 +104,10 @@ item.withCustomFields = (req, queryBuilder) => {
         .from('customField')
         // Join all custom fields with all categories (`categoryID = null` if no categories are specified)
         .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
-        // Get values
-        .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
-        // Only get item custom fields for this item
-        .where(function () {
-          this.where('itemCustomField.barcode', req.params.barcode)
-            // Include unset item custom fields to avoid losing custom fields without values
-            .orWhere('itemCustomField.barcode', null)
+        // Get item custom fields for this item
+        .leftJoin('itemCustomField', function () {
+          this.on('customField.customFieldID', 'itemCustomField.customFieldID')
+            .on('itemCustomField.barcode', db.raw('?', [req.params.barcode]))
         })
         .andWhere('customFieldCategory.categoryID', null)
         .andWhere('customField.organizationID', req.user.organizationID)
