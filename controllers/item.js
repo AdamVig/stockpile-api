@@ -94,10 +94,11 @@ item.withCustomFields = (req, queryBuilder) => {
     // Get custom fields for the item's category
     .join('customFieldCategory', 'item.categoryID', 'customFieldCategory.categoryID')
     .join('customField', 'customFieldCategory.customFieldID', 'customField.customFieldID')
-    // Get values
-    .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
-    // Only get rows for this item
-    .where('item.barcode', req.params.barcode)
+    // Get item custom fields for this item
+    .leftJoin('itemCustomField', function () {
+      this.on('customField.customFieldID', 'itemCustomField.customFieldID')
+        .on('itemCustomField.barcode', db.raw('?', [req.params.barcode]))
+    })
     // Get custom fields that apply to items in all categories
     .union(function () {
       this.select(selectColumns)
