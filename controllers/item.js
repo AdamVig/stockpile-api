@@ -87,7 +87,6 @@ item.withCustomFields = (req, queryBuilder) => {
     'customField.name as customFieldName',
     'customField.customFieldID',
     'customField.organizationID',
-    'category.name as categoryName',
     'itemCustomField.value'
   ]
   return queryBuilder
@@ -95,8 +94,6 @@ item.withCustomFields = (req, queryBuilder) => {
     // Get custom fields for the item's category
     .join('customFieldCategory', 'item.categoryID', 'customFieldCategory.categoryID')
     .join('customField', 'customFieldCategory.customFieldID', 'customField.customFieldID')
-    // Get category
-    .join('category', 'customFieldCategory.categoryID', 'category.categoryID')
     // Get values
     .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
     // Only get rows for this item
@@ -107,13 +104,15 @@ item.withCustomFields = (req, queryBuilder) => {
         .from('customField')
         // Join all custom fields with all categories (`categoryID = null` if no categories are specified)
         .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
-        // Get nonexistent category so that the columns are the same as the previous query and the union succeeds
-        .leftJoin('category', 'customFieldCategory.categoryID', 'category.categoryID')
         // Get values
         .leftJoin('itemCustomField', 'customField.customFieldID', 'itemCustomField.customFieldID')
-        // Only get rows for this item
-        .where('itemCustomField.barcode', req.params.barcode)
-        .where('customFieldCategory.categoryID', null)
+        // Only get item custom fields for this item
+        .where(function () {
+          this.where('itemCustomField.barcode', req.params.barcode)
+            // Include unset item custom fields to avoid losing custom fields without values
+            .orWhere('itemCustomField.barcode', null)
+        })
+        .andWhere('customFieldCategory.categoryID', null)
         .andWhere('customField.organizationID', req.user.organizationID)
     })
 }
@@ -342,15 +341,10 @@ item.mount = app => {
    * @apiPermission User
    * @apiVersion 2.0.0
    *
-   * @apiDescription The `categoryName` is the name of the item's category, and also the category that the custom field
-   *   applies to. When `categoryName` is `null`, the custom field applies to all categories. When `value` is `null`, no
-   *   value has been set for this custom field for this item.
-   *
    * @apiExample {json} Response Format
    * {
    *   "results": [
    *     {
-   *       "categoryName": "",
    *       "customFieldID": 0,
    *       "customFieldName": "",
    *       "organizationID": 0,
