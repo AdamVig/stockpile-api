@@ -146,11 +146,16 @@ item.mount = app => {
    *
    * @apiExample {json} Response Format
    * {
-   *   "organizationID": 0,
-   *   "modelID": 0,
+   *   "available": 1,
+   *   "barcode": "",
+   *   "brand": "",
+   *   "brandID": 0,
+   *   "category": "",
    *   "categoryID": 0,
-   *   "barcode": "234234",
-   *   "notes": ""
+   *   "model": "",
+   *   "modelID": 0,
+   *   "notes": "",
+   *   "organizationID": 0
    * }
    */
 
@@ -183,11 +188,16 @@ item.mount = app => {
    * {
    *   results: [
    *     {
-   *       "organizationID": 0,
-   *       "modelID": 0,
+   *       "available": 1,
+   *       "barcode": "",
+   *       "brand": "",
+   *       "brandID": 0,
+   *       "category": "",
    *       "categoryID": 0,
-   *       "barcode": "234234",
+   *       "model": "",
+   *       "modelID": 0,
    *       "notes": "",
+   *       "organizationID": 0
    *       "sortIndex": 0
    *     }
    *   ]

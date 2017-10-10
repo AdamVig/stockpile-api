@@ -117,7 +117,6 @@ customField.mount = app => {
    *       "customFieldID": 0,
    *       "organizationID": 0,
    *       "name": "",
-   *       "categoryID": 0,
    *       "sortIndex": 0
    *     }
    *   ]
