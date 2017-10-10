@@ -24,30 +24,20 @@ category.getAll = endpoint.getAll('category', {
 category.get = endpoint.get('category', 'categoryID', {messages})
 
 category.withCustomFields = (req, queryBuilder) => {
-  const selectColumns = [
-    'customField.name as customFieldName',
-    'customField.customFieldID',
-    'customField.organizationID'
-  ]
   return queryBuilder
-    .select(selectColumns)
-    // Get custom fields for the item's category
-    .join('customFieldCategory', 'category.categoryID', 'customFieldCategory.categoryID')
-    .join('customField', 'customFieldCategory.customFieldID', 'customField.customFieldID')
-    // Only get rows for this category
-    .where('category.categoryID', req.params.categoryID)
-    // Get custom fields that apply to items in all categories
-    .union(function () {
-      this.select(selectColumns)
-        .from('customField')
-        // Join all custom fields with all categories (`categoryID = null` if no categories are specified)
-        .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
-        .where('customFieldCategory.categoryID', null)
-        .andWhere('customField.organizationID', req.user.organizationID)
+    .select('customField.name as customFieldName',
+      'customField.customFieldID',
+      'customField.organizationID')
+    // Join custom field categories with their custom fields; include custom fields with no categories
+    .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
+    // Only get custom fields that are specifically for this category or that apply to all categories
+    .where(function () {
+      this.where('customFieldCategory.categoryID', req.params.categoryID)
+        .orWhereNull('customFieldCategory.categoryID')
     })
 }
 // Use `getAll` so all rows are returned
-category.getCustomFields = endpoint.getAll('category', {modify: category.withCustomFields})
+category.getCustomFields = endpoint.getAll('customField', {modify: category.withCustomFields})
 
 category.mount = app => {
   /**

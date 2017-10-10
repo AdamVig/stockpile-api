@@ -69,13 +69,9 @@ test('For item', t => {
 })
 test('With custom fields', t => {
   const queryBuilder = {
-    andWhere: sinon.stub().returnsThis(),
-    from: sinon.stub().returnsThis(),
     join: sinon.stub().returnsThis(),
     leftJoin: sinon.stub().returnsThis(),
-    modify: sinon.stub().returnsThis(),
     select: sinon.stub().returnsThis(),
-    union: sinon.stub().returnsThis(),
     where: sinon.stub().returnsThis()
   }
   const result = item.withCustomFields(fixt.reqForItem, queryBuilder)
