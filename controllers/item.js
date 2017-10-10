@@ -85,17 +85,21 @@ item.forItem = (req, queryBuilder) => {
 item.withCustomFields = (req, queryBuilder) => {
   return queryBuilder
     .select(
+      'item.barcode',
+      'item.categoryID',
       'customField.name as customFieldName',
       'customField.customFieldID',
-      'customField.organizationID',
-      'itemCustomField.value'
+      'customField.organizationID'
+      , 'itemCustomField.value'
     )
     // Join custom fields with their categories (`categoryID = null` if no categories are specified)
     .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
     // Get items that match each custom field
     .join('item', function () {
-      this.on('customFieldCategory.categoryID', 'item.categoryID')
-        .orOnNull('customFieldCategory.categoryID')
+      this.on(function () {
+        this.andOn('customFieldCategory.categoryID', 'item.categoryID')
+          .orOnNull('customFieldCategory.categoryID')
+      }).andOn('customField.organizationID', 'item.organizationID')
     })
     // Get item custom fields for this item and custom field
     .leftJoin('itemCustomField', function () {
@@ -343,6 +347,8 @@ item.mount = app => {
    * {
    *   "results": [
    *     {
+   *       "barcode": "",
+   *       "categoryID": 0,
    *       "customFieldID": 0,
    *       "customFieldName": "",
    *       "organizationID": 0,
