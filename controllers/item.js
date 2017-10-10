@@ -337,6 +337,8 @@ item.mount = app => {
    * {
    *   "results": [
    *     {
+   *       "barcode": "",
+   *       "categoryID": 0,
    *       "customFieldID": 0,
    *       "customFieldName": "",
    *       "organizationID": 0,
