@@ -77,7 +77,7 @@ externalRenter.mount = app => {
    * @apiUse ExternalRenterResponse
    * @apiUse InvalidSubscriptionResponse
    */
-  app.put({name: 'create external renter', path: 'externalRenter'}, auth.verify, checkSubscription,
+  app.put({name: 'create external renter', path: 'external-renter'}, auth.verify, checkSubscription,
     externalRenter.create)
   /**
    * @api {put} /external-renter/:externalRenterID Update an external renter
