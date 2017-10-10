@@ -11,6 +11,9 @@ const externalRenter = module.exports
 endpoint.addAllMethods(externalRenter, 'externalRenter', 'externalRenterID')
 externalRenter.get = endpoint.get('externalRenter', 'externalRenterID',
   {messages})
+externalRenter.getAll = endpoint.getAll('externalRenter', {
+  sortBy: [{column: 'externalRenter.name', ascending: true}]
+})
 
 externalRenter.mount = app => {
   /**
