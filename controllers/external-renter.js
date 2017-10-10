@@ -105,6 +105,6 @@ externalRenter.mount = app => {
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse
    */
-  app.del({name: 'delete external renter', path: 'external-renter/:externalRenterID'}, auth.verify, checkSubscription,
-    externalRenter.delete)
+  app.del({name: 'delete external renter', path: 'external-renter/:externalRenterID'}, auth.verify, auth.checkAdmin,
+    checkSubscription, externalRenter.delete)
 }
