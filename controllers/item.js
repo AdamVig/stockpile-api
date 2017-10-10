@@ -83,38 +83,28 @@ item.forItem = (req, queryBuilder) => {
 }
 // Add custom fields to "get all items" query
 item.withCustomFields = (req, queryBuilder) => {
-  const selectColumns = [
-    'customField.name as customFieldName',
-    'customField.customFieldID',
-    'customField.organizationID',
-    'itemCustomField.value'
-  ]
   return queryBuilder
-    .select(selectColumns)
-    // Get custom fields for the item's category
-    .join('customFieldCategory', 'item.categoryID', 'customFieldCategory.categoryID')
-    .join('customField', 'customFieldCategory.customFieldID', 'customField.customFieldID')
-    // Get item custom fields for this item
+    .select(
+      'customField.name as customFieldName',
+      'customField.customFieldID',
+      'customField.organizationID',
+      'itemCustomField.value'
+    )
+    // Join custom fields with their categories (`categoryID = null` if no categories are specified)
+    .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
+    // Get items that match each custom field
+    .join('item', function () {
+      this.on('customFieldCategory.categoryID', 'item.categoryID')
+        .orOnNull('customFieldCategory.categoryID')
+    })
+    // Get item custom fields for this item and custom field
     .leftJoin('itemCustomField', function () {
       this.on('customField.customFieldID', 'itemCustomField.customFieldID')
-        .on('itemCustomField.barcode', db.raw('?', [req.params.barcode]))
+        .on('item.barcode', 'itemCustomField.barcode')
     })
-    // Get custom fields that apply to items in all categories
-    .union(function () {
-      this.select(selectColumns)
-        .from('customField')
-        // Join all custom fields with all categories (`categoryID = null` if no categories are specified)
-        .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
-        // Get item custom fields for this item
-        .leftJoin('itemCustomField', function () {
-          this.on('customField.customFieldID', 'itemCustomField.customFieldID')
-            .on('itemCustomField.barcode', db.raw('?', [req.params.barcode]))
-        })
-        .andWhere('customFieldCategory.categoryID', null)
-        .andWhere('customField.organizationID', req.user.organizationID)
-    })
+    .where('item.barcode', req.params.barcode)
 }
-item.getCustomFields = endpoint.getAll('item', {
+item.getCustomFields = endpoint.getAll('customField', {
   modify: item.withCustomFields
 })
 item.getCustomField = endpoint.get('itemCustomField', 'customFieldID', {
