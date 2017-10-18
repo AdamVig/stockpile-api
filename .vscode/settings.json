@@ -1,0 +1,4 @@
+{
+  // Apply linter settings to files on save
+  "eslint.autoFixOnSave": true
+}
