@@ -38,7 +38,8 @@ model.getAll = endpoint.getAll('model', {
   sortBy: [
     {column: 'brand.name', ascending: true},
     {column: 'model.name', ascending: true}
-  ]
+  ],
+  searchColumns: ['model.name']
 })
 model.get = endpoint.get('model', 'modelID', {messages, modify: model.withBrand})
 model.create = endpoint.create('model', 'modelID', {messages, resModify: model.withBrand})
@@ -71,6 +72,7 @@ model.mount = app => {
    * @apiVersion 2.0.0
    *
    * @apiUse Pagination
+   * @apiUse Search
    *
    * @apiExample {json} Response Format
    * {

@@ -13,7 +13,10 @@ const messages = {
 }
 
 endpoint.addAllMethods(customField, 'customField', 'customFieldID', messages)
-customField.getAll = endpoint.getAll('customField', {sortBy: [{column: 'customField.name', ascending: true}]})
+customField.getAll = endpoint.getAll('customField', {
+  sortBy: [{column: 'customField.name', ascending: true}],
+  searchColumns: ['customField.name']
+})
 
 // Add category name
 customField.withNames = (req, queryBuilder) => {
@@ -109,6 +112,7 @@ customField.mount = app => {
    * @apiVersion 2.0.0
    *
    * @apiUse Pagination
+   * @apiUse Search
    *
    * @apiExample {json} Response Format
    * {

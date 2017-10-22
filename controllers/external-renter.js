@@ -12,7 +12,8 @@ endpoint.addAllMethods(externalRenter, 'externalRenter', 'externalRenterID')
 externalRenter.get = endpoint.get('externalRenter', 'externalRenterID',
   {messages})
 externalRenter.getAll = endpoint.getAll('externalRenter', {
-  sortBy: [{column: 'externalRenter.name', ascending: true}]
+  sortBy: [{column: 'externalRenter.name', ascending: true}],
+  searchColumns: ['externalRenter.name']
 })
 
 externalRenter.mount = app => {
@@ -34,6 +35,8 @@ externalRenter.mount = app => {
    * @apiName GetCategories
    * @apiGroup ExternalRenter
    * @apiVersion 2.0.0
+   *
+   * @apiUse Search
    *
    * @apiExample {json} Response Format
    * {
