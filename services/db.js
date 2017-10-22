@@ -169,10 +169,13 @@ module.exports.get = (table, column, value, organizationID, modify = () => {}) =
  * @param {function} [modify=noop] Modify the query
  * @param {object[]} [sortBy=[]] List of sorting criteria, ordered by priority (first is highest priority)
  * @param {string} sortBy.column Column to sort by
+ * @param {object} [search]
+ * @param {string[]} search.columns List of columns to search
+ * @param {string} search.value Value to search columns for
  * @param {boolean} sortBy.ascending Whether to sort in ascending or descending order
  * @return {Promise.<array>} Resolved by all rows from table
  */
-module.exports.getAll = (table, organizationID, modify = () => {}, sortBy = []) => {
+module.exports.getAll = (table, organizationID, modify = () => {}, sortBy = [], search = {}) => {
   const query = knex(table)
     .where(module.exports.buildWhere(table, null, null, organizationID))
     .modify(modify)
@@ -180,6 +183,16 @@ module.exports.getAll = (table, organizationID, modify = () => {}, sortBy = []) 
   // Sort query by each dimension specified in list of sort criteria, in order
   for (const sortCriterion of sortBy) {
     query.orderBy(sortCriterion.column, sortCriterion.ascending ? 'asc' : 'desc')
+  }
+
+  // Add search criteria if specified
+  if (search.value && search.value.trim()) {
+    const value = search.value.toLowerCase()
+    query.where(function () {
+      for (const column of search.columns) {
+        this.orWhere(column, 'like', `%${value}%`)
+      }
+    })
   }
 
   return query

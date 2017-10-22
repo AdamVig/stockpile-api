@@ -20,6 +20,7 @@ test.before('Set up test table', async t => {
 
 test('Get all', async t => {
   const req = {
+    params: {},
     user: {organizationID: fixt.organizationID}
   }
   const res = {
@@ -65,12 +66,28 @@ test('Get all with pagination', async t => {
 
   t.true(res.links.calledOnce, 'sets link header')
   t.true(res.send.calledOnce, 'sends one response')
-  t.true(res.send.calledWithMatch(sinon.match.object),
-    'responds with an object')
-  // Two items inserted, so should be two or more in the table
-  t.true(res.send.calledWithMatch(sinon.match(response =>
-    response.results.length >= 2)),
-  'responds with the right number of items')
+  t.true(res.send.calledWithMatch(sinon.match(response => response.results.length >= 2)),
+    'responds with the right number of items')
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
+})
+
+test('Get all with search', async t => {
+  const req = {
+    params: fixt.getAllWithSearch.req.params,
+    user: {organizationID: fixt.organizationID}
+  }
+  const res = {
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+  const searchColumns = fixt.getAllWithSearch.searchColumns
+
+  await endpoint.getAll(fixt.table, {searchColumns})(req, res, next)
+
+  t.true(res.send.calledOnce, 'sends one response')
+  t.true(res.send.calledWithMatch(sinon.match(response => response.results.length === 1)),
+    'responds with the right number of items')
   t.true(next.called, 'calls next handler')
   t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'no errors')
 })
