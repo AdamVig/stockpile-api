@@ -61,7 +61,11 @@ const sortBy = [
   {column: 'brand', ascending: true},
   {column: 'model', ascending: true}
 ]
-item.getAll = endpoint.getAll('item', {modify: item.withFieldsAndFilters, sortBy})
+item.getAll = endpoint.getAll('item', {
+  modify: item.withFieldsAndFilters,
+  sortBy,
+  searchColumns: ['brand.name', 'model.name']
+})
 item.get = endpoint.get('item', 'barcode',
   {modify: item.withFieldsAndFilters, messages})
 item.create = endpoint.create('item', 'barcode',
@@ -173,6 +177,8 @@ item.mount = app => {
    * @apiDescription This endpoint can be filtered using the query parameters
    * specified below. Any of the filters can be applied at the same time in
    * any order.
+   *
+   * @apiUse Search
    *
    * @apiParam (Filter) {Number} [brandID] Return items with only this brandID
    * @apiParam (Filter) {Number} [modelID] Return items with only this modelID

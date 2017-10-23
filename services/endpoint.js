@@ -13,21 +13,37 @@ const paginate = require('./paginate')
 
 /**
  * Get all rows from a table, paginating or modifying query if appropriate
+ *
+ * @apiDefine Search
+ *
+ * @apiParam (Search) {string} [search] Value to search for
+ * @apiParamExample Search
+ * ?search=value
+ *
  * @param {string} tableName Name of a database table
  * @param {function} [modify] Modify the query
  * @param {object} [messages] Custom messages for endpoint actions and errors
  * @param {boolean} [hasOrganizationID=true] If the table has an
  *   `organizationID` column or not (used in building where clauses)
  * @param {object[]} [sortBy] List of sorting criteria, ordered by priority (first is highest priority)
+ * @param {string[]} [searchColumns] List of columns to search
  * @param {string} sortBy.column Column to sort by
  * @param {boolean} sortBy.ascending Whether to sort in ascending or descending order
  * @return {function} Endpoint handler
  */
 module.exports.getAll =
-  (tableName, {modify, messages, hasOrganizationID = true, sortBy} = {}) => {
+  (tableName, {modify, messages, hasOrganizationID = true, sortBy, searchColumns} = {}) => {
     return (req, res, next) => {
+      let search
+      if (req.params.search) {
+        search = {
+          columns: searchColumns,
+          value: req.params.search
+        }
+      }
+
       return db.getAll(tableName, hasOrganizationID && req.user.organizationID,
-        module.exports.bindModify(modify, req), sortBy)
+        module.exports.bindModify(modify, req), sortBy, search)
         .then(results => {
           // Add a sort index to each result
           results = results.map((result, i) => {

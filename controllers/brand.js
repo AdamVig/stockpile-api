@@ -19,7 +19,8 @@ brand.withPagination = (req, queryBuilder) => {
 
 brand.getAll = endpoint.getAll('brand', {
   modify: brand.withPagination,
-  sortBy: [{column: 'brand.name', ascending: true}]
+  sortBy: [{column: 'brand.name', ascending: true}],
+  searchColumns: ['brand.name']
 })
 brand.get = endpoint.get('brand', 'brandID', {messages})
 
@@ -50,6 +51,7 @@ brand.mount = app => {
    * @apiVersion 2.0.0
    *
    * @apiUse Pagination
+   * @apiUse Search
    *
    * @apiExample {json} Response Format
    * {

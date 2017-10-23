@@ -111,5 +111,15 @@
     "limit": 5,
     "offset": 2
   },
-  "paginationPath": "/test"
+  "paginationPath": "/test",
+  "getAllWithSearch": {
+    "req": {
+      "params": {
+        "search": "row1"
+      }
+    },
+    "searchColumns": [
+      "name"
+    ]
+  }
 }

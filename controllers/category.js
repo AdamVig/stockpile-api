@@ -19,7 +19,8 @@ category.withPagination = (req, queryBuilder) => {
 
 category.getAll = endpoint.getAll('category', {
   modify: category.withPagination,
-  sortBy: [{column: 'category.name', ascending: true}]
+  sortBy: [{column: 'category.name', ascending: true}],
+  searchColumns: ['category.name']
 })
 category.get = endpoint.get('category', 'categoryID', {messages})
 
@@ -65,6 +66,7 @@ category.mount = app => {
    * @apiVersion 2.0.0
    *
    * @apiUse Pagination
+   * @apiUse Search
    *
    * @apiExample {json} Response Format
    * {

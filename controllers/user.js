@@ -22,7 +22,10 @@ user.removePasswordAddRole = (req, queryBuilder) => {
     .modify(paginate.paginateQuery, req, 'user')
 }
 
-user.getAll = endpoint.getAll('user', {modify: user.removePasswordAddRole})
+user.getAll = endpoint.getAll('user', {
+  modify: user.removePasswordAddRole,
+  searchColumns: ['user.firstName', 'user.lastName']
+})
 user.get = endpoint.get('userInfo', 'userID', {messages})
 user.delete = endpoint.delete('userInfo', 'userID')
 user.update = endpoint.update('user', 'userID',
@@ -92,6 +95,7 @@ user.mount = app => {
    * @apiVersion 2.0.0
    *
    * @apiUse Pagination
+   * @apiUse Search
    *
    * @apiExample {json} Response Format
    * {

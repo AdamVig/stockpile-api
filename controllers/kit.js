@@ -27,7 +27,8 @@ kit.withKitID = (req, queryBuilder) => {
 
 endpoint.addAllMethods(kit, 'kit', 'kitID')
 kit.getAll = endpoint.getAll('kit', {
-  sortBy: [{column: 'kit.name', ascending: true}]
+  sortBy: [{column: 'kit.name', ascending: true}],
+  searchColumns: ['kit.name']
 })
 
 kit.getAllKitModels = endpoint.getAll('kitModel', {
@@ -89,6 +90,8 @@ kit.mount = app => {
    * @apiGroup Kit
    * @apiPermission User
    * @apiVersion 2.0.0
+   *
+   * @apiUse Search
    *
    * @apiExample {json} Response Format
    * {
