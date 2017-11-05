@@ -63,6 +63,14 @@ test('Add user ID', t => {
     'next called with error')
 })
 
+test('With external renter', t => {
+  const queryBuilder = {
+    join: sinon.stub().returnsThis()
+  }
+  const result = rental.withExternalRenter(null, queryBuilder)
+  t.true(result === queryBuilder, 'returns query builder')
+})
+
 test('Create rental', async t => {
   fixt.create.req.user.organizationID = fixt.organization.organizationID
   fixt.create.req.user.userID = fixt.user.userID

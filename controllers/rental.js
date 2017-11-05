@@ -9,9 +9,15 @@ const paginate = require('../services/paginate')
 
 const rental = module.exports
 
-rental.paginate = (req, queryBuilder) => {
+rental.paginateWithExternalRenter = (req, queryBuilder) => {
   return queryBuilder
+    .join('externalRenter', 'rental.externalRenterId', 'externalRenter.externalRenterId')
     .modify(paginate.paginateQuery, req, 'rental')
+}
+
+rental.withExternalRenter = (req, queryBuilder) => {
+  return queryBuilder
+    .join('externalRenter', 'rental.externalRenterId', 'externalRenter.externalRenterId')
 }
 
 // Get user ID from token and add to request body
@@ -38,9 +44,9 @@ const messages = {
   missing: 'Rental does not exist'
 }
 
-rental.getAll = endpoint.getAll('rental', {modify: rental.paginate})
-rental.get = endpoint.get('rental', 'rentalID', {messages})
-rental.update = endpoint.update('rental', 'rentalID', {messages})
+rental.getAll = endpoint.getAll('rental', {modify: rental.paginateWithExternalRenter})
+rental.get = endpoint.get('rental', 'rentalID', {messages, modify: rental.withExternalRenter})
+rental.update = endpoint.update('rental', 'rentalID', {messages, resModify: rental.withExternalRenter})
 rental.delete = endpoint.delete('rental', 'rentalID', {messages})
 rental.create = (req, res, next) => {
   if (req.body && req.body.items) {
@@ -92,7 +98,10 @@ rental.mount = app => {
    *   "barcode": "",
    *   "userID": 0,
    *   "notes": "",
-   *   "externalRenterID": 0
+   *   "externalRenterID": 0,
+   *   "name": "",
+   *   "phone": "",
+   *   "email": ""
    * }
    */
 
@@ -116,7 +125,10 @@ rental.mount = app => {
    *     "barcode": "",
    *     "userID": 0,
    *     "notes": "",
-   *     "externalRenterID": 0
+   *     "externalRenterID": 0,
+   *     "name": "",
+   *     "phone": "",
+   *     "email": ""
    *   ]
    * }
    */
