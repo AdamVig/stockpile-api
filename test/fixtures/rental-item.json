@@ -1,0 +1,8 @@
+{
+  "req": {
+    "params": {
+      "rentalId": 0,
+      "barcode": ""
+    }
+  }
+}

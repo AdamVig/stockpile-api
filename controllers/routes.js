@@ -9,6 +9,7 @@ const main = require('./main')
 const model = require('./model')
 const organization = require('./organization')
 const rental = require('./rental')
+const rentalItem = require('./rental-item')
 const subscription = require('./subscription')
 const user = require('./user')
 
@@ -25,6 +26,7 @@ module.exports = app => {
   model.mount(app)
   organization.mount(app)
   rental.mount(app)
+  rentalItem.mount(app)
   subscription.mount(app)
   user.mount(app)
 

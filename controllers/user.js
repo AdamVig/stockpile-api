@@ -92,7 +92,7 @@ user.mount = app => {
    * @apiName GetUsers
    * @apiGroup User
    * @apiPermission Administrator
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse Pagination
    * @apiUse Search
@@ -118,7 +118,7 @@ user.mount = app => {
    * @apiName GetUser
    * @apiGroup User
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse UserResponse
    */
@@ -128,7 +128,7 @@ user.mount = app => {
    * @apiName UpdateUser
    * @apiGroup User
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiParam {String{0...255}} [firstName] First name
    * @apiParam {String{0...255}} [lastName] Last name
@@ -145,7 +145,7 @@ user.mount = app => {
    * @apiName DeleteUser
    * @apiGroup User
    * @apiPermission Admin
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription Only administrators can actually delete users. In general,
    *   users should not be deleted, but archived. To archive a user, set the
@@ -161,7 +161,7 @@ user.mount = app => {
    * @apiName ChangeUserPassword
    * @apiGroup User
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiParam {String} currentPassword Current password
    * @apiParam {String} newPassword New password
@@ -175,7 +175,7 @@ user.mount = app => {
    * @apiName GetUserRentals
    * @apiGroup User
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiExample {json} Response Format
    * {

@@ -60,8 +60,8 @@
       "body": {
         "organizationID": 0,
         "userID": 0,
-        "endDate": "",
-        "startDate": "",
+        "end": "",
+        "start": "",
         "items": []
       },
       "user": {
@@ -75,14 +75,51 @@
       "body": {
         "organizationID": 0,
         "userID": 0,
-        "endDate": "",
-        "startDate": "",
+        "end": "",
+        "start": "",
         "barcode": ""
       },
       "user": {
         "organizationID": 0,
         "userID": 0
       }
+    }
+  },
+  "createv2": {
+    "req": {
+      "body": {
+        "organizationID": 0,
+        "userID": 0,
+        "endDate": "",
+        "startDate": "",
+        "returnDate": null,
+        "items": []
+      },
+      "user": {
+        "organizationID": 0,
+        "userID": 0
+      }
+    }
+  },
+  "updatev2": {
+    "req": {
+      "body": {
+        "returnDate": null,
+        "notes": "Test"
+      },
+      "params": {
+        "rentalID": 0
+      },
+      "user": {
+        "organizationID": 0,
+        "userID": 0
+      }
+    },
+    "rental": {
+      "organizationID": 0,
+      "userID": 0,
+      "end": "",
+      "start": ""
     }
   }
 }

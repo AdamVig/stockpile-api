@@ -69,7 +69,7 @@ model.mount = app => {
    * @api {get} /model Get all models
    * @apiName GetModels
    * @apiGroup Model
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse Pagination
    * @apiUse Search
@@ -94,7 +94,7 @@ model.mount = app => {
    * @apiName GetModel
    * @apiGroup Model
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse ModelResponse
    */
@@ -104,7 +104,7 @@ model.mount = app => {
    * @apiName CreateModel
    * @apiGroup Model
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription A model represents a real-world model like Macbook Pro or
    *   T5i. Each model has a brand associated with it, like Apple or
@@ -122,7 +122,7 @@ model.mount = app => {
    * @apiName UpdateModel
    * @apiGroup Model
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiParam {String{0...255}} [name] Name of model
    * @apiParam {Number} [brandID] ID of a brand
@@ -136,7 +136,7 @@ model.mount = app => {
    * @apiName DeleteModel
    * @apiGroup Model
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse
@@ -147,7 +147,7 @@ model.mount = app => {
    * @apiName GetModelKits
    * @apiGroup Model
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiExample {json} Response Format
    * {

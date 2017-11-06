@@ -20,6 +20,7 @@ const app = module.exports = restify.createServer({
   // Default versions for routes without explicit version set; should contain all past major versions
   version: [
     '1.0.0',
+    '2.0.0',
     config.version
   ]
 })
