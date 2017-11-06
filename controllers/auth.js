@@ -36,7 +36,7 @@ auth.mount = app => {
    * @api {post} /auth Authenticate a user
    * @apiName Authenticate
    * @apiGroup Authentication
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription Log a user in and receive an access token to use in further
    *   requests (`token` in the response). Provides a `refreshToken` to use to
@@ -61,7 +61,7 @@ auth.mount = app => {
    * @api {post} /auth/refresh Refresh access token
    * @apiName Refresh
    * @apiGroup Authentication
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription When an access token expires, it is necessary to get a
    *   new access token in order to continue making requests.
@@ -77,7 +77,7 @@ auth.mount = app => {
    * @api {post} /auth/register Register a user
    * @apiName Register
    * @apiGroup Authentication
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription See the guide on authentication at the top of these docs
    *   for an explanation of the registration and authentication process.
@@ -105,7 +105,7 @@ auth.mount = app => {
    * @api {head} /auth/verify Verify authentication
    * @apiName Verify
    * @apiGroup Authentication
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription This endpoint is for checking whether a token is valid.
    *   Since it uses the `HEAD` method, it cannot take a body or parameters and

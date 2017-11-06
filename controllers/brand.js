@@ -48,7 +48,7 @@ brand.mount = app => {
    * @apiName GetBrands
    * @apiGroup Brand
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse Pagination
    * @apiUse Search
@@ -71,7 +71,7 @@ brand.mount = app => {
    * @apiName GetBrand
    * @apiGroup Brand
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse BrandResponse
    */
@@ -81,7 +81,7 @@ brand.mount = app => {
    * @apiName CreateBrand
    * @apiGroup Brand
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription A brand represents a real-world brand like Apple or Canon.
    *   Each model must be associated with a brand.
@@ -97,7 +97,7 @@ brand.mount = app => {
    * @apiName UpdateBrand
    * @apiGroup Brand
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiParam {String{0...255}} [name] Name of brand
    *
@@ -110,7 +110,7 @@ brand.mount = app => {
    * @apiName DeleteBrand
    * @apiGroup Brand
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse

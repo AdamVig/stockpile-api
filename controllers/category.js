@@ -63,7 +63,7 @@ category.mount = app => {
    * @api {get} /category Get all categories
    * @apiName GetCategories
    * @apiGroup Category
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse Pagination
    * @apiUse Search
@@ -85,7 +85,7 @@ category.mount = app => {
    * @api {get} /category/:categoryID Get category
    * @apiName GetCategory
    * @apiGroup Category
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse CategoryResponse
    */
@@ -94,7 +94,7 @@ category.mount = app => {
    * @api {put} /category Create a category
    * @apiName CreateCategory
    * @apiGroup Category
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription Each item must belong to a category. Categories can be used
    *   to group items that are similar. Custom fields can be assigned to
@@ -110,7 +110,7 @@ category.mount = app => {
    * @api {put} /category/:categoryID Update a category
    * @apiName UpdateCategory
    * @apiGroup Category
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiParam {String{0...255}} [name] Name of category
    *
@@ -122,7 +122,7 @@ category.mount = app => {
    * @api {delete} /category/:categoryID Delete a category
    * @apiName DeleteCategory
    * @apiGroup Category
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse
@@ -132,7 +132,7 @@ category.mount = app => {
    * @api {get} /category/:categoryID/custom-field Get category custom fields
    * @apiName GetAllCategoryCustomFields
    * @apiGroup Category
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiExample {json} Response Format
    * {
