@@ -174,7 +174,7 @@ item.mount = app => {
    * @apiName GetItems
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription This endpoint can be filtered using the query parameters
    * specified below. Any of the filters can be applied at the same time in
@@ -221,7 +221,7 @@ item.mount = app => {
    * @apiName GetItem
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse ItemResponse
    */
@@ -231,7 +231,7 @@ item.mount = app => {
    * @apiName CreateItem
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription An item represents a physical object owned by the
    *   organization. Items must have physical barcodes in order for the
@@ -251,7 +251,7 @@ item.mount = app => {
    * @apiName UpdateItem
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiParam {Number} [modelID] ID of model
    * @apiParam {Number} [categoryID] ID of category
@@ -267,7 +267,7 @@ item.mount = app => {
    * @apiName DeleteItem
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse
@@ -278,7 +278,7 @@ item.mount = app => {
    * @apiName GetItemRentals
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse Pagination
    *
@@ -303,7 +303,7 @@ item.mount = app => {
    * @apiName GetItemActiveRental
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiExample {json} Response Format
    * {
@@ -326,7 +326,7 @@ item.mount = app => {
    * @apiName GetItemStatus
    * @apiGroup Item
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription An item's status is either available or unavailable. In the
    *   response from this endpoint, the `available` property will equal either
@@ -349,7 +349,7 @@ item.mount = app => {
    * @apiName GetItemCustomFields
    * @apiGroup ItemCustomField
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiExample {json} Response Format
    * {
@@ -373,7 +373,7 @@ item.mount = app => {
    * @apiName GetItemCustomField
    * @apiGroup ItemCustomField
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiExample {json} Response Format
    * {
@@ -390,7 +390,7 @@ item.mount = app => {
    * @apiName UpdateItemCustomField
    * @apiGroup ItemCustomField
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription Sets the value for a custom field for an item.
    *
@@ -412,7 +412,7 @@ item.mount = app => {
    * @apiName DeleteItemCustomField
    * @apiGroup ItemCustomField
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiDescription Unset the value of a custom field for an item.
    *

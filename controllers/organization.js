@@ -29,7 +29,7 @@ organization.mount = app => {
    * @apiName GetOrganization
    * @apiGroup Organization
    * @apiPermission User
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse OrganizationResponse
    */
@@ -39,7 +39,7 @@ organization.mount = app => {
    * @apiName UpdateOrganization
    * @apiGroup Organization
    * @apiPermission Administrator
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiParam {String} name Name of organization
    *
@@ -53,7 +53,7 @@ organization.mount = app => {
    * @apiName DeleteOrganization
    * @apiGroup Organization
    * @apiPermission Administrator
-   * @apiVersion 2.0.0
+   * @apiVersion 3.0.0
    *
    * @apiUse EndpointDelete
    * @apiUse InvalidSubscriptionResponse
