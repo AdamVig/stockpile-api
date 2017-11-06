@@ -93,8 +93,9 @@ item.withCustomFields = (req, queryBuilder) => {
       'item.categoryID',
       'customField.name as customFieldName',
       'customField.customFieldID',
-      'customField.organizationID'
-      , 'itemCustomField.value'
+      'customField.organizationID',
+      'itemCustomField.value',
+      'itemCustomField.updated'
     )
     // Join custom fields with their categories (`categoryID = null` if no categories are specified)
     .leftJoin('customFieldCategory', 'customField.customFieldID', 'customFieldCategory.customFieldID')
@@ -127,10 +128,11 @@ item.updateCustomField = (req, res, next) => {
   return db.raw('replace into itemCustomField (??) values (?)', [columns, values])
     .then(() => db('itemCustomField')
       .where({barcode: req.params.barcode, customFieldID: req.params.customFieldID}).first()
-    ).then(({value}) => {
+    ).then(({value, updated}) => {
       res.send({
         message: 'Updated item custom field',
-        value
+        value,
+        updated
       })
     })
     .then(next)
@@ -359,6 +361,7 @@ item.mount = app => {
    *       "customFieldName": "",
    *       "organizationID": 0,
    *       "value": "",
+   *       "updated": "2017-11-07T02:42:31.000Z",
    *       "sortIndex": 0
    *     }
    *   ]
@@ -376,7 +379,8 @@ item.mount = app => {
    * {
    *   "barcode": "",
    *   "customFieldID": 0,
-   *   "value": ""
+   *   "value": "",
+   *   "updated": "2017-11-07T02:42:31.000Z"
    * }
    */
   app.get({name: 'get item custom field', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,
@@ -395,7 +399,8 @@ item.mount = app => {
    * @apiExample {json} Response Format
    * {
    *   "message": "Updated item custom field",
-   *   "value": ""
+   *   "value": "",
+   *   "updated": "2017-11-07T02:42:31.000Z"
    * }
    *
    * @apiUse InvalidSubscriptionResponse
