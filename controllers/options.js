@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const cors = require('./cors')
 
@@ -13,7 +13,7 @@ options.handle = (req, res, err, callback) => {
 
   // If not OPTIONS request, rethrow error
   } else {
-    res.send(new restify.MethodNotAllowedError())
+    res.send(new errors.MethodNotAllowedError())
     return callback()
   }
 }

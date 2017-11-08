@@ -1,5 +1,5 @@
+const errors = require('restify-errors')
 const test = require('ava')
-const restify = require('restify')
 const sinon = require('sinon')
 
 const checkSubscription = require('../services/check-subscription')
@@ -87,7 +87,7 @@ test('Check expired subscription', async t => {
 
   t.true(next.calledOnce, 'calls next handler')
   t.false(fixt.expired.req.log.warn.called, 'does not log warning')
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.PaymentRequiredError)), 'throws payment required error')
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.PaymentRequiredError)), 'throws payment required error')
 })
 
 test('Check canceled subscription', async t => {
@@ -97,7 +97,7 @@ test('Check canceled subscription', async t => {
 
   t.true(next.calledOnce, 'calls next handler')
   t.false(fixt.canceled.req.log.warn.called, 'does not log warning')
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.PaymentRequiredError)), 'throws payment required error')
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.PaymentRequiredError)), 'throws payment required error')
 })
 
 test('Check subscription with missing subscription', async t => {
@@ -110,7 +110,7 @@ test('Check subscription with missing subscription', async t => {
 
   t.true(next.calledOnce, 'calls next handler')
   t.false(fixt.missing.req.log.warn.called, 'does not log warning')
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.PaymentRequiredError)), 'throws payment required error')
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.PaymentRequiredError)), 'throws payment required error')
 })
 
 test('Check subscription with no request body', async t => {

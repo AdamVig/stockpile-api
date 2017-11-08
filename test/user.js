@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 const sinon = require('sinon')
 const test = require('ava')
 
@@ -58,7 +58,7 @@ test('Change password', async t => {
     .where('userID', fixt.user.userID)
     .first()
   t.true(nextWrong.calledWithMatch(
-    sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
+    sinon.match.instanceOf(errors.BadRequestError)), 'throws bad request error')
   t.false(resWrong.send.calledOnce, 'response not sent')
   t.true(notUpdatedUser.password === fixt.user.password,
     'password is not updated')

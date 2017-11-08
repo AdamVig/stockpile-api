@@ -6,7 +6,7 @@
  * @exports services/endpoint
  */
 
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const db = require('../services/db')
 const paginate = require('./paginate')
@@ -229,18 +229,18 @@ module.exports.chooseMessage = (type, messages = {}) => {
 module.exports.chooseError = (err, messages) => {
   switch (err.code) {
     case 'ER_BAD_FIELD_ERROR':
-      return new restify.BadRequestError(
+      return new errors.BadRequestError(
         module.exports.chooseMessage('badRequest', messages))
     case 'ER_DUP_ENTRY':
-      return new restify.ConflictError(
+      return new errors.ConflictError(
         module.exports.chooseMessage('conflict', messages))
     case 'ER_NOT_FOUND':
-      return new restify.NotFoundError(
+      return new errors.NotFoundError(
         module.exports.chooseMessage('missing', messages))
     case 'ER_SIGNAL_EXCEPTION':
-      return new restify.BadRequestError(err.sqlMessage)
+      return new errors.BadRequestError(err.sqlMessage)
     default:
-      return new restify.InternalServerError(
+      return new errors.InternalServerError(
         module.exports.chooseMessage('default', messages))
   }
 }

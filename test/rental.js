@@ -1,5 +1,5 @@
 const moment = require('moment')
-const restify = require('restify')
+const errors = require('restify-errors')
 const sinon = require('sinon')
 const test = require('ava')
 
@@ -111,7 +111,7 @@ test('Create rental (missing list of items)', async t => {
   }
   const next = sinon.spy()
   await rental.create(fixt.createMissingList.req, res, next)
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)), 'throws error')
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.BadRequestError)), 'throws error')
   t.false(res.send.called, 'does not send response')
 })
 

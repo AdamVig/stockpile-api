@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const auth = require('./auth')
 const checkSubscription = require('../services/check-subscription')
@@ -47,7 +47,7 @@ kit.createKitModel = (req, res, next) => {
       null,
       {hasOrganizationID: false, resModify: kit.withModelDetails})(req, res, next)
   } else {
-    return next(new restify.BadRequestError('missing modelID in body'))
+    return next(new errors.BadRequestError('missing modelID in body'))
   }
 }
 

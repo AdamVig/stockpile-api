@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 const sinon = require('sinon')
 const test = require('ava')
 
@@ -47,7 +47,7 @@ test('With names', t => {
 test('Update categories with no body', async t => {
   const next = sinon.spy()
   await customFieldController.updateCategories(fixt.updateCategoriesNoBody.req, null, next)
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.BadRequestError)), 'throws bad request error')
 })
 
 // Tests that update categories must be run serially because they create deadlock when run asynchronously
@@ -55,13 +55,13 @@ test('Update categories with no body', async t => {
 test.serial('Update categories on nonexistent custom field', async t => {
   const next = sinon.spy()
   await customFieldController.updateCategories(fixt.updateCategoriesMissingField.req, null, next)
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.BadRequestError)), 'throws bad request error')
 })
 
 test.serial('Add nonexistent category to custom field', async t => {
   const next = sinon.spy()
   await customFieldController.updateCategories(fixt.addMissingCategory.req, null, next)
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.BadRequestError)), 'throws bad request error')
 })
 
 test.serial('Update categories on custom field', async t => {

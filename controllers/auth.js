@@ -3,7 +3,7 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const passportJWT = require('passport-jwt')
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const db = require('../services/db')
 const userController = require('./user')
@@ -160,16 +160,16 @@ auth.authenticate = (req, res, next) => {
               return next()
             })
         } else {
-          return next(new restify.UnauthorizedError(
+          return next(new errors.UnauthorizedError(
             'Email and password combination is incorrect'))
         }
       })
       .catch(() => {
-        return next(new restify.UnauthorizedError(
+        return next(new errors.UnauthorizedError(
           'Email and password combination is incorrect'))
       })
   } else {
-    return next(new restify.BadRequestError('Missing email or password'))
+    return next(new errors.BadRequestError('Missing email or password'))
   }
 }
 
@@ -193,11 +193,11 @@ auth.refresh = (req, res, next) => {
               return next()
             })
         } else {
-          return next(new restify.UnauthorizedError('Refresh token is invalid'))
+          return next(new errors.UnauthorizedError('Refresh token is invalid'))
         }
       })
   } else {
-    return next(new restify.BadRequestError(
+    return next(new errors.BadRequestError(
       'Request must contain refresh token and user ID'))
   }
 }
@@ -221,7 +221,7 @@ auth.register = (req, res, next) => {
       .then(next)
       .catch(console.error)
   } else {
-    return next(new restify.BadRequestError())
+    return next(new errors.BadRequestError())
   }
 }
 
@@ -243,7 +243,7 @@ auth.checkUserExists = function checkUserExists (req, res, next) {
     res.send(200)
     return next()
   } else {
-    return next(new restify.NotFoundError())
+    return next(new errors.NotFoundError())
   }
 }
 
@@ -253,7 +253,7 @@ auth.checkAdmin = function checkAdmin (req, res, next) {
   if (req.user.roleID === adminRoleID) {
     return next()
   } else {
-    return next(new restify.ForbiddenError('Must be an administrator'))
+    return next(new errors.ForbiddenError('Must be an administrator'))
   }
 }
 

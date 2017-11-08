@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 const sinon = require('sinon')
 const test = require('ava')
 
@@ -27,6 +27,6 @@ test('Responds with 405 METHOD NOT ALLOWED when method is not OPTIONS', t => {
   const callback = sinon.spy()
   options.handle(fixt.req, res, null, callback)
   t.true(res.send.called, 'response sent')
-  t.true(res.send.calledWithMatch(new restify.MethodNotAllowedError()),
+  t.true(res.send.calledWithMatch(new errors.MethodNotAllowedError()),
     'responds with Restify 405 error')
 })

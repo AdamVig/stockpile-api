@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const auth = require('./auth')
 const checkSubscription = require('../services/check-subscription')
@@ -41,7 +41,7 @@ user.changeUserPassword = function changeUserPassword (req, res, next) {
       if (matches) {
         return auth.hashPassword(req.body.newPassword)
       } else {
-        throw new restify.BadRequestError('Wrong password')
+        throw new errors.BadRequestError('Wrong password')
       }
     })
     .then(hashedPassword => {

@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 const sinon = require('sinon')
 const test = require('ava')
 
@@ -71,7 +71,7 @@ test('Returns error when registering user with missing data', async t => {
   t.false(res.send.called, 'does not send response')
   t.true(
     next.calledWithMatch(
-      sinon.match.instanceOf(restify.BadRequestError)),
+      sinon.match.instanceOf(errors.BadRequestError)),
     'returns error')
 })
 
@@ -108,7 +108,7 @@ test('Authenticates a user', async t => {
   const nextNoPassword = sinon.spy()
   await auth.authenticate(reqNoPassword, null, nextNoPassword)
   t.true(nextNoPassword.calledWithMatch(
-    sinon.match.instanceOf(restify.BadRequestError)),
+    sinon.match.instanceOf(errors.BadRequestError)),
   'throws error when request is missing fields')
 
   const reqBadEmail = {
@@ -117,7 +117,7 @@ test('Authenticates a user', async t => {
   const nextBadEmail = sinon.spy()
   await auth.authenticate(reqBadEmail, null, nextBadEmail)
   t.true(nextBadEmail.calledWithMatch(
-    sinon.match.instanceOf(restify.UnauthorizedError)),
+    sinon.match.instanceOf(errors.UnauthorizedError)),
   'throws error when user does not exist')
 })
 
@@ -179,7 +179,7 @@ test('Refresh token with invalid refresh token', async t => {
   await auth.refresh(fixt.refreshTokenInvalidReq, res, next)
 
   t.true(
-    next.calledWithMatch(sinon.match.instanceOf(restify.UnauthorizedError)),
+    next.calledWithMatch(sinon.match.instanceOf(errors.UnauthorizedError)),
     'throws error')
   t.false(res.send.called, 'response not sent')
 
@@ -192,7 +192,7 @@ test('Refresh token with wrong fields', t => {
   const next = sinon.spy()
   auth.refresh(fixt.refreshTokenReqWrongFields, null, next)
 
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)),
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.BadRequestError)),
     'throws error when wrong fields provided')
 })
 
@@ -228,7 +228,7 @@ test('Check user exists', t => {
   auth.checkUserExists(reqWithUser, res, next)
   t.true(res.send.calledWith(200), 'success response sent')
   auth.checkUserExists(req, res, next)
-  t.true(next.calledWith(sinon.match.instanceOf(restify.NotFoundError)),
+  t.true(next.calledWith(sinon.match.instanceOf(errors.NotFoundError)),
     'error passed to next handler')
 })
 
