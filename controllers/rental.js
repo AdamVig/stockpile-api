@@ -49,6 +49,10 @@ rental.get = endpoint.get('rental', 'rentalID', {messages, modify: rental.withEx
 rental.delete = endpoint.delete('rental', 'rentalID', {messages})
 rental.create = (req, res, next) => {
   if (req.body && req.body.items) {
+    if (req.user) {
+      req.body.organizationID = req.user.organizationID
+    }
+
     return db.transaction(trx => {
       const items = req.body.items
       delete req.body.items
