@@ -54,8 +54,9 @@ item.paginateRentals = (req, queryBuilder) => {
 // Get active rental associated with item
 item.withActiveRental = (req, queryBuilder) => {
   return queryBuilder
-    .where('rental.returnDate', null)
-    .orderBy('rental.startDate', 'ascending')
+    .join('rental', 'rentalItem.rentalID', 'rental.rentalID')
+    .where('rentalItem.returned', null)
+    .orderBy('rental.start', 'ascending')
 }
 const sortBy = [
   {column: 'brand', ascending: true},
@@ -75,8 +76,10 @@ item.update = endpoint.update('item', 'barcode',
 item.delete = endpoint.delete('item', 'barcode'
 )
 item.getRentals = endpoint.getAll('rental', {modify: item.paginateRentals})
-item.getActiveRental = endpoint.get('rental', 'barcode',
-  {modify: item.withActiveRental})
+item.getActiveRental = endpoint.get('rentalItem', 'barcode', {
+  modify: item.withActiveRental,
+  hasOrganizationID: false
+})
 item.getStatus = endpoint.get('itemStatus', 'barcode', {hasOrganizationID: false})
 
 // Custom fields

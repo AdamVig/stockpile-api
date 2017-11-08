@@ -53,8 +53,9 @@ test('Paginate rentals', t => {
 
 test('With active rental', t => {
   const queryBuilder = {
-    orderBy: sinon.stub().returnsThis(),
-    where: sinon.stub().returnsThis()
+    join: sinon.stub().returnsThis(),
+    where: sinon.stub().returnsThis(),
+    orderBy: sinon.stub().returnsThis()
   }
   const result = item.withActiveRental(fixt.activeRentalReq, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
