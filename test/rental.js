@@ -54,12 +54,14 @@ test.before(async t => {
 
   // Set rental dates
   const dateFormat = 'YYYY/MM/DD'
-  const startDate = moment().format(dateFormat)
-  const endDate = moment().add(10, 'days').format(dateFormat)
+  const startDate = moment().utc().add(1, 'minutes').format(dateFormat)
+  const endDate = moment().utc().add(10, 'days').format(dateFormat)
   fixt.create.req.body.start = startDate
   fixt.create.req.body.end = endDate
   fixt.updatev2.rental.start = startDate
   fixt.updatev2.rental.end = endDate
+  fixt.updatev2.req.body.startDate = startDate
+  fixt.updatev2.req.body.endDate = endDate
   fixt.createv2.req.body.startDate = startDate
   fixt.createv2.req.body.endDate = endDate
   fixt.updatev2.req.body.returnDate = endDate
@@ -124,6 +126,7 @@ test('Create rental (v1)', async t => {
 })
 
 test('Create rental (v2)', async t => {
+  fixt.createv2.req.user.organizationID = fixt.organization.organizationID
   const res = {
     send: sinon.spy()
   }

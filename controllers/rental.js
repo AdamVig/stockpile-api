@@ -103,12 +103,16 @@ rental.update.versions = [
   },
   // Version 2: changes incoming property names to match database schema
   (req, res, next) => {
-    req.body.start = req.body.startDate
-    delete req.body.startDate
-    req.body.end = req.body.endDate
-    delete req.body.endDate
+    if (req.body.startDate) {
+      req.body.start = req.body.startDate
+      delete req.body.startDate
+    }
+    if (req.body.endDate) {
+      req.body.end = req.body.endDate
+      delete req.body.endDate
+    }
 
-    let setReturnDate = Promise.resolve()
+    let setReturnDate
 
     // Add return date to each item
     if (req.body.returnDate) {
@@ -119,13 +123,13 @@ rental.update.versions = [
 
     delete req.body.returnDate
 
-    let updateRental = Promise.resolve()
-
-    // Update rental if there are any properties that need to be updated
-    if (Object.keys(req.body).length > 0) {
-      const options = {messages, resModify: rental.withExternalRenter}
-      updateRental = endpoint.update('rental', 'rentalID', options)(req, res, next)
+    // Add no-op change if no properties to be updated so that `endpoint.update` will succeed
+    if (Object.keys(req.body).length === 0) {
+      req.body.rentalID = req.params.rentalID
     }
+
+    const options = {messages, resModify: rental.withExternalRenter}
+    const updateRental = endpoint.update('rental', 'rentalID', options)(req, res, next)
 
     return setReturnDate
       .then(() => updateRental)

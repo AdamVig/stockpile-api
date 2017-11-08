@@ -104,6 +104,8 @@
   "updatev2": {
     "req": {
       "body": {
+        "startDate": "",
+        "endDate": "",
         "returnDate": null,
         "notes": "Test"
       },
