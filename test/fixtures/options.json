@@ -1,8 +1,0 @@
-{
-  "reqOptions": {
-    "method": "OPTIONS"
-  },
-  "req": {
-    "method": "PATCH"
-  }
-}
