@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 const sinon = require('sinon')
 const test = require('ava')
 
@@ -47,6 +47,6 @@ test('Create kit model with no model ID', async t => {
   }
   const next = sinon.spy()
   await kit.createKitModel(req, res, next)
-  t.true(next.calledWithMatch(sinon.match.instanceOf(restify.BadRequestError)),
+  t.true(next.calledWithMatch(sinon.match.instanceOf(errors.BadRequestError)),
     'throws bad request error')
 })

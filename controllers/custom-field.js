@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const auth = require('./auth')
 const checkSubscription = require('../services/check-subscription')
@@ -82,13 +82,13 @@ customField.updateCategories = (req, res, next) => {
     }).catch(err => {
       // Return useful error when custom field does not exist
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-        return next(new restify.BadRequestError('Custom field does not exist'))
+        return next(new errors.BadRequestError('Custom field does not exist'))
       } else {
         return next(err)
       }
     })
   } else {
-    return next(new restify.BadRequestError('Missing list of categories'))
+    return next(new errors.BadRequestError('Missing list of categories'))
   }
 }
 

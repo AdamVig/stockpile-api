@@ -4,7 +4,7 @@ require('dotenv-safe').load({
 })
 
 const moment = require('moment')
-const restify = require('restify')
+const errors = require('restify-errors')
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
 const auth = require('./auth')
@@ -171,18 +171,18 @@ subscription.subscription = (req, res, next) => {
     }).catch(err => {
       // A declined card error
       if (err.type === 'StripeCardError') {
-        return next(new restify.PaymentRequiredError(err.message))
+        return next(new errors.PaymentRequiredError(err.message))
       } else {
         /**
          * Handle any other types of unexpected errors: StripeAPIError, StripeConnectionError,
          * StripeInvalidRequestError, and StripeAuthenticationError
          * See https://stripe.com/docs/api#errors for full reference
          */
-        return next(new restify.InternalServerError(err.message))
+        return next(new errors.InternalServerError(err.message))
       }
     })
   } else {
-    return next(new restify.BadRequestError('Missing user or organization'))
+    return next(new errors.BadRequestError('Missing user or organization'))
   }
 }
 
@@ -195,7 +195,7 @@ subscription.subscriptionHook = (req, res, next) => {
 
   // Throw error and do not continue if customer is undefined
   if (!customer) {
-    next(new restify.BadRequestError('could not get Stripe customer from webhook request'))
+    next(new errors.BadRequestError('could not get Stripe customer from webhook request'))
     return
   }
 

@@ -1,11 +1,10 @@
+const corsMiddleware = require('restify-cors-middleware')
 const restify = require('restify')
 const restifyLinks = require('restify-links')
 
 const auth = require('./controllers/auth')
 const config = require('./package')
-const cors = require('./controllers/cors')
 const filterRequestBody = require('./services/filter-request-body')
-const options = require('./controllers/options')
 const log = require('./services/log')
 
 // Load environment variables, throw error if any variables are missing
@@ -26,11 +25,11 @@ const app = module.exports = restify.createServer({
 })
 
 // Assign a unique request ID to each request
-app.use(restify.requestLogger())
+app.use(restify.plugins.requestLogger())
 
 // Parse incoming request body and query parameters
-app.use(restify.bodyParser({mapParams: false}))
-app.use(restify.queryParser())
+app.use(restify.plugins.bodyParser())
+app.use(restify.plugins.queryParser())
 
 // Set name for links middleware
 const links = restifyLinks()
@@ -39,23 +38,35 @@ app.use(links)
 
 app.use(filterRequestBody())
 
-// Handle OPTIONS requests and method not allowed errors
-app.on('MethodNotAllowed', options.handle)
-
 // Log incoming requests
 app.use(log.onRequest)
 
 // Parse auth header
 app.use(auth.initialize)
 
-// Handle CORS
-app.use(cors.handle)
-
 // Log errors
 app.on('restifyError', log.onError)
+app.on('uncaughtException', log.onError)
 
 // Log outgoing responses
 app.on('after', log.onResponse)
+
+// Handle CORS
+const cors = corsMiddleware({
+  origins: [
+    'http://localhost:8080' // origin of WKWebView on iOS
+  ],
+  allowHeaders: [
+    'accept',
+    'accept-version',
+    'authorization',
+    'content-type',
+    'request-id',
+    'origin'
+  ]
+})
+app.pre(cors.preflight)
+app.use(cors.actual)
 
 // Load all routes
 require('./controllers/routes')(app)

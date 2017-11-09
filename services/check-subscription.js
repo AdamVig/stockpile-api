@@ -1,4 +1,4 @@
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const db = require('./db')
 const subscriptionController = require('../controllers/subscription')
@@ -30,7 +30,7 @@ module.exports = function checkSubscription (req, res, next) {
           subscription.subscriptionStatusID !== subscriptionController.subscriptionStatus.TRIAL &&
           subscription.subscriptionStatusID !== subscriptionController.subscriptionStatus.VALID
         ) {
-          return next(new restify.PaymentRequiredError('subscription is invalid'))
+          return next(new errors.PaymentRequiredError('subscription is invalid'))
 
         // Otherwise, pass through successfully because subscription must be valid
         } else {
@@ -38,7 +38,7 @@ module.exports = function checkSubscription (req, res, next) {
         }
       }).catch(err => {
         if (err.code === 'ER_NOT_FOUND') {
-          return next(new restify.PaymentRequiredError('organization has no subscription'))
+          return next(new errors.PaymentRequiredError('organization has no subscription'))
         } else {
           req.log.warn({err}, 'checkSubscription failed')
           return next()

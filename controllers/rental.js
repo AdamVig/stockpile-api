@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const restify = require('restify')
+const errors = require('restify-errors')
 
 const auth = require('./auth')
 const checkSubscription = require('../services/check-subscription')
@@ -74,7 +74,7 @@ rental.create = (req, res, next) => {
       return next()
     }).catch(err => endpoint.handleError(err, undefined, next, req))
   } else {
-    return next(new restify.BadRequestError('Missing list of items'))
+    return next(new errors.BadRequestError('Missing list of items'))
   }
 }
 // Legacy versions of the 'create rental' endpoint

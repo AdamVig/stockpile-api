@@ -3,7 +3,7 @@ require('dotenv-safe').load({
   allowEmptyValues: true
 })
 
-const restify = require('restify')
+const errors = require('restify-errors')
 const sinon = require('sinon')
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
 const test = require('ava')
@@ -83,7 +83,7 @@ test('Without user or organization', async t => {
   await subscriptionController.subscription(req, res, next)
 
   t.true(next.calledWithMatch(
-    sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
+    sinon.match.instanceOf(errors.BadRequestError)), 'throws bad request error')
   t.false(res.send.called, 'response not sent')
 })
 
@@ -95,7 +95,7 @@ test('With missing user data', async t => {
   await subscriptionController.subscription(fixt.missing.req, res, next)
 
   t.true(next.calledWithMatch(
-    sinon.match.instanceOf(restify.InternalServerError)), 'throws internal server error')
+    sinon.match.instanceOf(errors.InternalServerError)), 'throws internal server error')
   t.false(res.send.called, 'response not sent')
 })
 
@@ -107,7 +107,7 @@ test('With declined card', async t => {
   await subscriptionController.subscription(fixt.declined.req, res, next)
 
   t.true(next.calledWithMatch(
-    sinon.match.instanceOf(restify.PaymentRequiredError)), 'throws payment required error')
+    sinon.match.instanceOf(errors.PaymentRequiredError)), 'throws payment required error')
   t.false(res.send.called, 'response not sent')
 })
 
@@ -116,7 +116,7 @@ test('Subscription hook with missing customer', async t => {
   await subscriptionController.subscriptionHook(fixt.hookMissingCustomerReq, null, next)
 
   t.true(next.calledWithMatch(
-    sinon.match.instanceOf(restify.BadRequestError)), 'throws bad request error')
+    sinon.match.instanceOf(errors.BadRequestError)), 'throws bad request error')
 })
 
 test('Subscription canceled', async t => {
