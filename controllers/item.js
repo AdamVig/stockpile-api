@@ -40,7 +40,7 @@ item.withFieldsAndFilters = (req, queryBuilder) => {
     .select('itemStatus.available as available')
 
   // Add filters to query
-    .modify(filterQuery(req, filterParams))
+    .modify(filterQuery, req, filterParams)
 
   // Add pagination
     .modify(paginate.paginateQuery, req, 'item')
