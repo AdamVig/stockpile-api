@@ -24,14 +24,14 @@ rentalItem.withItemDetails = (req, queryBuilder) => {
     .modify(rentalItem.forRental.bind(null, req))
 }
 
-rentalItem.getAll = endpoint.getAll('rentalItem', {modify: rentalItem.withItemDetails, hasOrganizationId: false})
-rentalItem.get = endpoint.get('rentalItem', 'barcode', {modify: rentalItem.withItemDetails, hasOrganizationId: false})
+rentalItem.getAll = endpoint.getAll('rentalItem', {modify: rentalItem.withItemDetails, hasOrganizationID: false})
+rentalItem.get = endpoint.get('rentalItem', 'barcode', {modify: rentalItem.withItemDetails, hasOrganizationID: false})
 rentalItem.update = endpoint.update('rentalItem', 'barcode', {
   modify: rentalItem.forRental,
   resModify: rentalItem.withItemDetails,
-  hasOrganizationId: false
+  hasOrganizationID: false
 })
-rentalItem.delete = endpoint.delete('rentalItem', 'barcode', {modify: rentalItem.forRental, hasOrganizationId: false})
+rentalItem.delete = endpoint.delete('rentalItem', 'barcode', {modify: rentalItem.forRental, hasOrganizationID: false})
 
 rentalItem.mount = app => {
   /**
