@@ -296,6 +296,7 @@ item.mount = app => {
    *     "barcode": "",
    *     "userID": 0,
    *     "notes": "",
+   *     "isReservation": 0,
    *     "externalRenterID": 0
    *   ]
    * }
@@ -318,6 +319,7 @@ item.mount = app => {
    *   "barcode": "",
    *   "userID": 0,
    *   "notes": "",
+   *   "isReservation": 0,
    *   "externalRenterID": 0
    * }
    *

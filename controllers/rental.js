@@ -155,6 +155,7 @@ rental.mount = app => {
    *   "start": "2017-02-22T05:00:00.000Z",
    *   "userID": 0,
    *   "notes": "",
+   *   "isReservation": 0,
    *   "externalRenterID": 0,
    *   "name": "",
    *   "phone": "",
@@ -180,6 +181,7 @@ rental.mount = app => {
    *     "start": "2017-02-22T05:00:00.000Z",
    *     "userID": 0,
    *     "notes": "",
+   *     "isReservation": 0,
    *     "externalRenterID": 0,
    *     "name": "",
    *     "phone": "",
@@ -279,6 +281,7 @@ rental.mount = app => {
    * @apiParam {Number} [externalRenterID] ID of external renter
    * @apiParam {Number} [organizationID] ID of organization (automatically taken from token, but can be overridden)
    * @apiParam {String{0..1000}} [notes] Notes about rental
+   * @apiParam {Boolean} [isReservation=false] Whether rental is a reservation or not
    * @apiParam {Object[]} items List of items to rent
    * @apiParam {String} items.barcode Barcode of an item
    * @apiParam {String} [items.returned] Date item is returned (YYYY-MM-DD), defaults to `null` (`null` means that item
@@ -347,8 +350,8 @@ rental.mount = app => {
    * @apiParam {String} [end] Date rental is due (YYYY-MM-DD)
    * @apiParam {String{0..1000}} [notes] Notes about rental
    * @apiParam {Number} [externalRenterID] ID of external renter
-   * @apiParam {Number} [organizationID] ID of organization (automatically taken
-   *   from token, but can be overridden)
+   * @apiParam {Number} [organizationID] ID of organization (automatically taken from token, but can be overridden)
+   * @apiParam {Boolean} [isReservation=false] Whether rental is a reservation or not
    *
    * @apiUse RentalResponse
    * @apiUse InvalidSubscriptionResponse
