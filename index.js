@@ -29,7 +29,7 @@ app.use(restify.plugins.requestLogger())
 
 // Parse incoming request body and query parameters
 app.use(restify.plugins.bodyParser())
-app.use(restify.plugins.queryParser())
+app.use(restify.plugins.queryParser({mapParams: true}))
 
 // Set name for links middleware
 const links = restifyLinks()
