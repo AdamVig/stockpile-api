@@ -55,7 +55,7 @@
     "sinon": "^4.0.1"
   },
   "apidoc": {
-    "url": "https://stockpile.adamvig.com/api",
+    "url": "https://stockpileapp.co/api",
     "title": "Stockpile API Docs",
     "order": [
       "Main"
