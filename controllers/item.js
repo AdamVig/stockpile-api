@@ -88,12 +88,18 @@ item.forItem = (req, queryBuilder) => {
     // Only get rows for this item
     .where('barcode', req.params.barcode)
 }
+item.withFieldType = (req, queryBuilder) => {
+  return queryBuilder
+    .join('fieldType', 'customField.fieldTypeID', 'fieldType.fieldTypeID')
+    .select('fieldType.*')
+}
 item.withCustomFieldDetails = (req, queryBuilder) => {
   return queryBuilder
     .select('itemCustomField.*')
     .join('customField', 'itemCustomField.customFieldID', 'customField.customFieldID')
     .select('customField.name as customFieldName', 'customField.showTimestamp')
     .modify(item.forItem.bind(null, req))
+    .modify(item.withFieldType.bind(null, req))
 }
 // Add custom fields to "get all items" query
 item.withCustomFields = (req, queryBuilder) => {
@@ -122,15 +128,58 @@ item.withCustomFields = (req, queryBuilder) => {
       this.on('customField.customFieldID', 'itemCustomField.customFieldID')
         .on('item.barcode', 'itemCustomField.barcode')
     })
+    .modify(item.withFieldType.bind(null, req))
     .where('item.barcode', req.params.barcode)
 }
-item.getCustomFields = endpoint.getAll('customField', {
-  modify: item.withCustomFields
-})
-item.getCustomField = endpoint.get('itemCustomField', 'customFieldID', {
-  modify: item.withCustomFieldDetails,
-  hasOrganizationID: false
-})
+
+// Field type table for local reference
+const fieldType = {
+  text: 1,
+  number: 2,
+  currency: 3
+}
+
+// Convert value to correct type based on field type
+const typeCastValue = (fieldTypeID, value) => {
+  if (fieldTypeID === fieldType.number) {
+    return Number.parseInt(value, 10)
+  } else if (fieldTypeID === fieldType.currency) {
+    return Number.parseFloat(value)
+  } else {
+    return value
+  }
+}
+
+// Override `res.send` to typecast before sending response
+const typeCastSend = (res) => {
+  const originalSend = res.send
+  return function send (code, body, headers) {
+    let actualBody = body
+
+    // Get body if passed as first parameter
+    if (typeof code === 'object') {
+      actualBody = code
+    }
+
+    actualBody.value = typeCastValue(actualBody.fieldTypeID, actualBody.value)
+
+    return originalSend.call(res, code, body, headers)
+  }
+}
+
+item.getCustomFields = (req, res, next) => {
+  res.send = typeCastSend(res)
+  return endpoint.getAll('customField', {
+    modify: item.withCustomFields
+  })(req, res, next)
+}
+item.getCustomField = (req, res, next) => {
+  res.send = typeCastSend(res)
+  return endpoint.get('itemCustomField', 'customFieldID', {
+    modify: item.withCustomFieldDetails,
+    hasOrganizationID: false
+  })(req, res, next)
+}
 item.updateCustomField = (req, res, next) => {
   const columns = ['barcode', 'customFieldID', 'value']
   const values = [req.params.barcode, req.params.customFieldID, req.body.value]
@@ -138,11 +187,13 @@ item.updateCustomField = (req, res, next) => {
   // Insert or update item custom field value
   return db.raw('replace into itemCustomField (??) values (?)', [columns, values])
     .then(() => db('itemCustomField')
-      .where({barcode: req.params.barcode, customFieldID: req.params.customFieldID}).first()
-    ).then(({value, updated}) => {
+      .where('itemCustomField.customFieldID', req.params.customFieldID)
+      .modify(item.withCustomFieldDetails.bind(null, req))
+      .first()
+    ).then(({ value, updated, fieldTypeID }) => {
       res.send({
         message: 'Updated item custom field',
-        value,
+        value: typeCastValue(fieldTypeID, value),
         updated
       })
     })
@@ -379,6 +430,8 @@ item.mount = app => {
    *       "value": "",
    *       "updated": "2017-11-07T02:42:31.000Z",
    *       "showTimestamp": 1,
+   *       "fieldTypeID": 1,
+   *       "fieldTypeName": "text",
    *       "sortIndex": 0
    *     }
    *   ]
@@ -400,6 +453,8 @@ item.mount = app => {
    *   "value": "",
    *   "updated": "2017-11-07T02:42:31.000Z",
    *   "showTimestamp": 1,
+   *   "fieldTypeID": 1,
+   *   "fieldTypeName": "text"
    * }
    */
   app.get({name: 'get item custom field', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,

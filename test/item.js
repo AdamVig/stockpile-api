@@ -69,6 +69,15 @@ test('For item', t => {
   t.true(result === queryBuilder, 'returns query builder')
 })
 
+test('With field type', t => {
+  const queryBuilder = {
+    join: sinon.stub().returnsThis(),
+    select: sinon.stub().returnsThis()
+  }
+  const result = item.withFieldType(null, queryBuilder)
+  t.true(result === queryBuilder, 'returns query builder')
+})
+
 test('With custom field details', t => {
   const queryBuilder = {
     join: sinon.stub().returnsThis(),
@@ -83,6 +92,7 @@ test('With custom fields', t => {
   const queryBuilder = {
     join: sinon.stub().returnsThis(),
     leftJoin: sinon.stub().returnsThis(),
+    modify: sinon.stub().returnsThis(),
     select: sinon.stub().returnsThis(),
     where: sinon.stub().returnsThis()
   }

@@ -12,11 +12,20 @@ const messages = {
   delete: 'Deleted custom field'
 }
 
-endpoint.addAllMethods(customField, 'customField', 'customFieldID', messages)
+customField.withFieldType = (req, queryBuilder) => {
+  return queryBuilder
+    .join('fieldType', 'customField.fieldTypeID', 'fieldType.fieldTypeID')
+}
+
 customField.getAll = endpoint.getAll('customField', {
   sortBy: [{column: 'customField.name', ascending: true}],
-  searchColumns: ['customField.name']
+  searchColumns: ['customField.name'],
+  modify: customField.withFieldType
 })
+customField.get = endpoint.get('customField', 'customFieldID', {modify: customField.withFieldType, messages})
+customField.update = endpoint.update('customField', 'customFieldID', {resModify: customField.withFieldType, messages})
+customField.create = endpoint.create('customField', 'customFieldID', {resModify: customField.withFieldType, messages})
+customField.delete = endpoint.delete('customField', 'customFieldID', {messages})
 
 // Add category name
 customField.withNames = (req, queryBuilder) => {
@@ -101,7 +110,9 @@ customField.mount = app => {
    *   "customFieldID": 0,
    *   "organizationID": 0,
    *   "name": "",
-   *   "showTimestamp": 1
+   *   "showTimestamp": 1,
+   *   "fieldTypeID": 1,
+   *   "fieldTypeName": "text"
    * }
    */
 
@@ -123,6 +134,8 @@ customField.mount = app => {
    *       "organizationID": 0,
    *       "name": "",
    *       "showTimestamp": 1,
+   *       "fieldTypeID": 1,
+   *       "fieldTypeName": "text",
    *       "sortIndex": 0
    *     }
    *   ]
@@ -156,6 +169,7 @@ customField.mount = app => {
    *
    * @apiParam {String{0...255}} name Name of custom field, **must be unique**
    * @apiParam {boolean} [showTimestamp=true] Whether or not to show when values of this custom field were last updated
+   * @apiParam {Number=1,2,3} [fieldTypeID=1] Field type: text = 1, currency = 2, number = 3
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *
@@ -171,6 +185,7 @@ customField.mount = app => {
    *
    * @apiParam {String{0...255}} [name] Name of custom field
    * @apiParam {boolean} [showTimestamp=true] Whether or not to show when values of this custom field were last updated
+   * @apiParam {Number=1,2,3} [fieldTypeID=1] Field type: text = 1, currency = 2, number = 3
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *
