@@ -100,7 +100,8 @@ customField.mount = app => {
    * {
    *   "customFieldID": 0,
    *   "organizationID": 0,
-   *   "name": ""
+   *   "name": "",
+   *   "showTimestamp": 1
    * }
    */
 
@@ -121,6 +122,7 @@ customField.mount = app => {
    *       "customFieldID": 0,
    *       "organizationID": 0,
    *       "name": "",
+   *       "showTimestamp": 1,
    *       "sortIndex": 0
    *     }
    *   ]
@@ -153,6 +155,7 @@ customField.mount = app => {
    *   `categoryID` value).
    *
    * @apiParam {String{0...255}} name Name of custom field, **must be unique**
+   * @apiParam {boolean} [showTimestamp=true] Whether or not to show when values of this custom field were last updated
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *
@@ -167,6 +170,7 @@ customField.mount = app => {
    * @apiVersion 3.0.0
    *
    * @apiParam {String{0...255}} [name] Name of custom field
+   * @apiParam {boolean} [showTimestamp=true] Whether or not to show when values of this custom field were last updated
    * @apiParam {Number} [organizationID] ID of organization (automatically taken
    *   from token, but can be overridden)
    *

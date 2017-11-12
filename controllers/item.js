@@ -88,6 +88,13 @@ item.forItem = (req, queryBuilder) => {
     // Only get rows for this item
     .where('barcode', req.params.barcode)
 }
+item.withCustomFieldDetails = (req, queryBuilder) => {
+  return queryBuilder
+    .select('itemCustomField.*')
+    .join('customField', 'itemCustomField.customFieldID', 'customField.customFieldID')
+    .select('customField.name as customFieldName', 'customField.showTimestamp')
+    .modify(item.forItem.bind(null, req))
+}
 // Add custom fields to "get all items" query
 item.withCustomFields = (req, queryBuilder) => {
   return queryBuilder
@@ -97,6 +104,7 @@ item.withCustomFields = (req, queryBuilder) => {
       'customField.name as customFieldName',
       'customField.customFieldID',
       'customField.organizationID',
+      'customField.showTimestamp',
       'itemCustomField.value',
       'itemCustomField.updated'
     )
@@ -120,7 +128,7 @@ item.getCustomFields = endpoint.getAll('customField', {
   modify: item.withCustomFields
 })
 item.getCustomField = endpoint.get('itemCustomField', 'customFieldID', {
-  modify: item.forItem,
+  modify: item.withCustomFieldDetails,
   hasOrganizationID: false
 })
 item.updateCustomField = (req, res, next) => {
@@ -356,6 +364,9 @@ item.mount = app => {
    * @apiPermission User
    * @apiVersion 3.0.0
    *
+   * @description Every item custom field will always return an `updated` timestamp, but users can set whether the
+   * client should show the timestamp for a custom field by setting `showTimestamp` on a custom field.
+   *
    * @apiExample {json} Response Format
    * {
    *   "results": [
@@ -367,6 +378,7 @@ item.mount = app => {
    *       "organizationID": 0,
    *       "value": "",
    *       "updated": "2017-11-07T02:42:31.000Z",
+   *       "showTimestamp": 1,
    *       "sortIndex": 0
    *     }
    *   ]
@@ -384,8 +396,10 @@ item.mount = app => {
    * {
    *   "barcode": "",
    *   "customFieldID": 0,
+   *   "customFieldName": "",
    *   "value": "",
-   *   "updated": "2017-11-07T02:42:31.000Z"
+   *   "updated": "2017-11-07T02:42:31.000Z",
+   *   "showTimestamp": 1,
    * }
    */
   app.get({name: 'get item custom field', path: 'item/:barcode/custom-field/:customFieldID'}, auth.verify,

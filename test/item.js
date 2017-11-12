@@ -68,6 +68,17 @@ test('For item', t => {
   const result = item.forItem(fixt.reqForItem, queryBuilder)
   t.true(result === queryBuilder, 'returns query builder')
 })
+
+test('With custom field details', t => {
+  const queryBuilder = {
+    join: sinon.stub().returnsThis(),
+    modify: sinon.stub().returnsThis(),
+    select: sinon.stub().returnsThis()
+  }
+  const result = item.withCustomFieldDetails(fixt.reqForItem, queryBuilder)
+  t.true(result === queryBuilder, 'returns query builder')
+})
+
 test('With custom fields', t => {
   const queryBuilder = {
     join: sinon.stub().returnsThis(),
