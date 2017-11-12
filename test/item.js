@@ -8,6 +8,8 @@ const item = require('../controllers/item')
 test.before(async t => {
   const [organizationID] = await knex('organization').insert(fixt.updateCustomField.organization)
   fixt.updateCustomField.organization.organizationID = organizationID
+  fixt.getCustomField.req.user.organizationID = organizationID
+  fixt.getCustomFields.req.user.organizationID = organizationID
 
   fixt.updateCustomField.category.organizationID = organizationID
   const [categoryID] = await knex('category').insert(fixt.updateCustomField.category)
@@ -27,10 +29,19 @@ test.before(async t => {
   fixt.updateCustomField.item.modelID = modelID
   await knex('item').insert(fixt.updateCustomField.item)
 
+  fixt.getCustomFields.item.organizationID = organizationID
+  fixt.getCustomFields.item.categoryID = categoryID
+  fixt.getCustomFields.item.modelID = modelID
+  await knex('item').insert(fixt.getCustomFields.item)
+
   fixt.updateCustomField.customField.organizationID = organizationID
   const [customFieldID] = await knex('customField').insert(fixt.updateCustomField.customField)
   fixt.updateCustomField.customField.customFieldID = customFieldID
   fixt.updateCustomField.req.params.customFieldID = customFieldID
+  fixt.getCustomFields.itemCustomField.customFieldID = customFieldID
+  fixt.getCustomField.req.params.customFieldID = customFieldID
+
+  await knex('itemCustomField').insert(fixt.getCustomFields.itemCustomField)
 })
 
 test('With fields and filters', t => {
@@ -113,6 +124,32 @@ test('Update item custom field', async t => {
   t.true(next.called, 'calls next handler')
   t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'does not throw error')
 })
+test('Get all item custom fields', async t => {
+  fixt.getCustomFields.req.log = {
+    error: sinon.spy()
+  }
+  const res = {
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+  await item.getCustomFields(fixt.getCustomFields.req, res, next)
+
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'does not throw error')
+})
+test('Get item custom field', async t => {
+  fixt.getCustomField.req.log = {
+    error: sinon.spy()
+  }
+  const res = {
+    send: sinon.spy()
+  }
+  const next = sinon.spy()
+  await item.getCustomField(fixt.getCustomField.req, res, next)
+
+  t.true(next.called, 'calls next handler')
+  t.false(next.calledWithMatch(sinon.match.instanceOf(Error)), 'does not throw error')
+})
 test('Update item custom field with invalid data', async t => {
   fixt.updateCustomFieldInvalid.req.log = {
     error: sinon.spy()
@@ -132,8 +169,13 @@ test.after.always(async t => {
     barcode: fixt.updateCustomField.item.barcode,
     customFieldID: fixt.updateCustomField.customField.customFieldID
   }).del()
+  await knex('itemCustomField').where({
+    barcode: fixt.getCustomFields.item.barcode,
+    customFieldID: fixt.getCustomFields.itemCustomField.customFieldID
+  }).del()
   await knex('customField').where(fixt.updateCustomField.customField).del()
   await knex('item').where(fixt.updateCustomField.item).del()
+  await knex('item').where(fixt.getCustomFields.item).del()
   await knex('model').where(fixt.updateCustomField.model).del()
   await knex('brand').where(fixt.updateCustomField.brand).del()
   await knex('category').where(fixt.updateCustomField.category).del()
