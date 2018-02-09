@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "apidoc": "0.17.6",
-    "ava": "0.24.0",
+    "ava": "^0.25.0",
     "codacy-coverage": "^2.0.2",
     "coveralls": "^3.0.0",
     "docco": "^0.7.0",
