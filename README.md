@@ -20,7 +20,7 @@ The scripts below are defined in `package.json`.
  * `npm test` test code using [Ava](https://github.com/avajs/ava)
  * `npm run dev` run the app in development
  * `npm run lint` lint code using [ESLint](http://eslint.org/) + [StandardJS](http://standardjs.com/)
- * `npm run docs` generate documentation using [Docco](https://jashkenas.github.io/docco/)
+ * `npm run docs` generate documentation using JSDoc and apiDoc
 
 ## File Structure
 - `.editorconfig` editor configuration to ensure consistent indentation and line-endings
