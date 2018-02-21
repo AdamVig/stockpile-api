@@ -31,7 +31,7 @@
     "pm2": "^2.7.2",
     "restify": "^6.3.2",
     "restify-cors-middleware": "^1.0.1",
-    "restify-errors": "^5.0.0",
+    "restify-errors": "^6.0.0",
     "restify-links": "^1.1.0",
     "stripe": "^5.1.1"
   },
