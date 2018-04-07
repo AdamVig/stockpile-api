@@ -17,7 +17,7 @@
     "jsdoc": "jsdoc --configure .jsdoc.json -r"
   },
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.0",
     "bunyan": "^1.8.12",
     "bunyan-format": "^0.2.1",
     "dotenv-safe": "^4.0.3",
